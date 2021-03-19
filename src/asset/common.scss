@@ -1,0 +1,122 @@
+@import './icon.css';
+#app{
+  height: 100vh;
+}
+body{
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+input::-webkit-outer-spin-button, 
+input::-webkit-inner-spin-button,
+input{
+  appearance: none !important;
+  -moz-appearance:textfield;
+}
+@keyframes initMove{
+  0%{transform: translateY(0)}
+  50%{transform: translateY(3%);}
+  100%{transform: translateY(0);}
+}
+@keyframes sliderUp{
+  from {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+html{
+    &::after{
+    background: linear-gradient(300deg, #ffddca 0%, #fffeea 100%);
+    content: '';
+    position: fixed;
+    left: 0;
+    right:0;
+    bottom: 0;
+    top:0;
+    z-index:-2;
+  }
+  &::before{
+    content: '';
+    position: fixed;
+    left: 0;
+    right:0;
+    bottom: 0;
+    top:0;
+    z-index: -1;
+    background: url('./images/bg.jpg') repeat; 
+    background-size: 280px;
+    opacity: .1;
+  }
+}
+.img{
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position:center center;
+}
+
+a{
+  text-decoration: none;
+  color: blue;
+}
+.f{
+  display: flex;
+  &-1{
+    flex:1;
+  }
+  &-c{
+    display: flex;
+    align-items: center;
+    &-sb{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    &-c{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &-col{
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+.c{
+  &-input{
+    outline: none;
+    border:none;
+    font-size: 16px;
+  }
+}
+
+.button{
+  &-link{
+    font-size:12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    &:hover{
+      opacity: .4;
+    }
+    i{
+      font-size: 14px;
+      margin-right: 5px;
+    }
+  }
+  &-min{
+    padding:6px 10px;
+    cursor: pointer;
+    background: #333;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 5px;
+    &:hover{
+      color: #fff;
+      background: #222;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+.home{
+  height:calc(100vh - 230px);
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  padding: 0 100px;
+  margin:0 auto;
+  // background: url(../../asset/images/saly.png) no-repeat center right;
+  background-size: 800px;
+  position: relative;
+  min-width: 600px;
+  p{
+    line-height: 1.8;
+    font-size: 14px;
+  }
+  .imgs{
+    position: absolute;
+    right:0;
+    bottom:-10%;
+    left:0;
+    top:-10%;
+    background-repeat: no-repeat;
+    background-size:800px;
+    background-position: right center;
+    animation:  initMove 5s infinite;
+    z-index: -1;
+  }
+}
+.swap-button{
+  background: #003adb;
+  color: #fff;
+  border-radius:2px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding:0 0;
+  border-radius: 3px;
+  height: 50px;
+  margin-top:20px;
+  transition: .4s;
+  position: relative;
+  margin-top:30px;
+}

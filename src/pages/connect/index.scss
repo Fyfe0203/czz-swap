@@ -1,0 +1,136 @@
+.mask{
+  position: fixed;
+  left: 0;
+  right:0;
+  top:0;
+  bottom: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 1000;
+}
+.pending{
+  position: absolute;
+  left: 0;
+  right:0;
+  top:0;
+  bottom: 0;
+  background: rgba(255, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  border-radius: 90px;
+  justify-content: center;
+  color: #fff;
+  .ico{
+    color: #fff;
+    font-size: 20px;
+  }
+  span{
+    margin-left: 4px;
+  }
+}
+.c{
+  &-wallet{
+    position: relative;
+    background: #fff;
+    border-radius: 100px;
+    font-size: 12px;
+    &-icon{
+      width: 14px;
+      height: 14px;
+      border-radius: 90px;
+      overflow: hidden;
+      margin-right: 4px;
+    }
+  }
+  &-balance{
+    font-weight: 800;
+    margin-right: 4px;
+    padding:6px 10px;
+  }
+  &-accounts{
+    background: #333;
+    color: #fff;
+    padding:6px 10px;
+    border-radius: 90px;
+    cursor: pointer;
+    transition: .3s;
+    &:hover{
+      background: rgb(70, 70, 70);
+    }
+  }
+}
+.c-connect{
+  &-link{
+    font-size: 12px;
+    cursor: pointer;
+    transition: .2s;
+    position: relative;
+    padding:6px 10px;
+    &.network{
+      font-size: 12px;
+      font-weight: 800;
+      margin-right: 10px;
+      padding:6px 10px;
+    }
+    &:hover{
+      background: rgba(168, 168, 168, 0.199);
+      color: #444;
+    }
+  }
+}
+.connect{
+  &-list{
+    display: flex;
+    padding: 20px 0;
+  }
+  &-block{
+    background: rgba(90,90,90,.1);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    h4{
+      color: #888;
+      font-size: 12px;
+    }
+  }
+  &-mask{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  &-button{
+    font-size: 13px;
+  }
+  &-item{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    &:hover{
+      background: rgba(0,0,0,.1);
+    }
+    .img{
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position:center center;
+      width: 70px;
+      height: 70px;
+      margin-bottom: 10px;
+    }
+  }
+  &-list{
+    background: #fff;
+  }
+  &-bar{
+    margin-top:20px;
+    &>div{
+      margin-right: 15px;
+    }
+  }
+}
