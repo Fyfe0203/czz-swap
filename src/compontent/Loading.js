@@ -23,6 +23,7 @@ const LoadingBox = styled.div`
   margin-left:5px;
   font-size:12px;
 `
+
 const Text = styled.div`
   margin-left:5px;
   font-size:14px;

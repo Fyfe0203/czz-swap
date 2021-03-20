@@ -6,7 +6,8 @@ import Web3 from "web3"
 import useGlobal from './useGlobal'
 import BigNumber from 'bignumber.js'
 import JSBI from 'jsbi'
-import { Token,TokenAmount } from '@uniswap/sdk'
+import { Token, TokenAmount } from '@uniswap/sdk'
+import useLocalStorage from './useLocalStorage'
 
 export default function useGetTokenValue() {
   const { setPoolsList, poolsList, currentProvider, accounts, setPending, pending, swapSetting } = useGlobal()
@@ -16,6 +17,7 @@ export default function useGetTokenValue() {
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
   const [isApprove, setIsApprove] = useState(true)
+  const [recent,setRecent] = useLocalStorage([],'recent')
 
   // const getReceived = async () => {
   //   const receivedAmount = Number(poolsList[0].tokenValue) - (poolsList[0].tokenValue * Number(tolerance))
@@ -23,10 +25,10 @@ export default function useGetTokenValue() {
   // }
   // approve && authorization
   const approveActions = async () => {
+    const {symbol,router:spender,explorerUrl,tokenValue} = poolsList[0]
     try {
       setApproveLoading(true)
       setPending([...pending,'approve'])
-      const {symbol,router:spender} = poolsList[0]
       const res = await approve({ provider: currentProvider, tokenAddress: symbol?.tokenAddress, spender, accounts })
       console.log('approve result ======',res)
       setIsApprove(res)
@@ -36,10 +38,14 @@ export default function useGetTokenValue() {
       message({
         icon: 'award',
         title:`Approvd White ${symbol?.symbol}`,
-        content: <a target="_blank" href={ `https://ropsten.etherscan.io/tx/${res.transactionHash}`}>View on Etherscan</a>
+        content: <a target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Etherscan</a>
       })
+      // set approve history success 
+      setRecent(item => [...item,{type:'Approvd',symbol:symbol?.symbol,"status":1,"value":tokenValue,"explorerUrl":`${explorerUrl}tx/${res.transactionHash}`,...res}])
     } catch (error) {
       console.log(error)
+      // set approve history failed
+      setRecent(item => [...item,{"types":'Approvd',symbol,"status":0}])
     } finally {
       setAuthorization(true)
       setApproveLoading(false)
@@ -84,7 +90,7 @@ export default function useGetTokenValue() {
   }
 
   const swapTokenValue =useCallback( async (tokenValue) => {
-    if (tokenValue && !loading) {
+    if (tokenValue > 0 && !loading) {
       setLoading(false)
       // debugger
       try {
@@ -92,6 +98,7 @@ export default function useGetTokenValue() {
         setLoading(true)
         console.log("From Amount ====", tokenValue)
         const inAmount = decToBn(Number(tokenValue)).toString()
+        // debugger
         const inAmountRes = await swapBurnAmount(poolsList[0], inAmount, true)
         const changeAmount = new BigNumber(Number(inAmountRes)).toString()
         const result = await swapBurnAmount(poolsList[1], changeAmount)

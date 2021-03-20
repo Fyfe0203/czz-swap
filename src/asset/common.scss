@@ -28,7 +28,8 @@ input{
 }
 html{
     &::after{
-    background: linear-gradient(300deg, #ffddca 0%, #fffeea 100%);
+    // background: linear-gradient(300deg, #ffddca 0%, #fffeea 100%);
+    background: linear-gradient(300deg,#ffa86ddb,#ffecd6);
     content: '';
     position: fixed;
     left: 0;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback} from 'react'
+import React, { useState, useEffect} from 'react'
 import useGlobal from '../../hooks/useGlobal'
 import SwapSelect from './SwapSelect'
 import { getBalance } from '../../utils/erc20'
@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { getBalanceNumber } from '../../utils'
 import Web3 from 'web3'
+
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const AmountInput = styled.input``
@@ -16,14 +17,13 @@ export default function SwapItem({pools,exchange,type}) {
   const enforcer = (nextUserInput) => {
     if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
       valChange(nextUserInput)
-      // amountInput.current.value = nextUserInput
     }
   }
 
   const valChange = tokenValue => {
     const list = Array.from(poolsList)
     list.splice(type, 1, { ...pools, tokenValue })
-    // list.splice(type === 0 ? 1 : 0, 1, { ...poolsList[type === 0 ? 1 : 0], tokenValue: '' })
+    list.splice(type === 0 ? 1 : 0, 1, { ...poolsList[type === 0 ? 1 : 0], tokenValue: '' })
     setPoolsList(list)
   }
   
@@ -38,15 +38,6 @@ export default function SwapItem({pools,exchange,type}) {
   useEffect(() => {
     balanceGet(accounts,pools)
   }, [accounts, pools])
-
-  // const amountInput = useRef()
-  // const amoutnRes = () => {
-  //   if (type === 1) amountInput.current.value = poolsList[1].tokenValue
-  // }
-
-  // useEffect(() => {
-  //   amoutnRes()
-  // }, [poolsList[1].tokenValue])
   
   return (
     <div className="swap-item">

@@ -134,3 +134,37 @@
     }
   }
 }
+.recent{
+  &-head{
+    padding:10px 0;
+  }
+  &-title{
+    font-size: 14px;
+  }
+  &-list{
+    margin:0 -20px;
+  }
+  &-clear{
+    color: blue;
+    cursor: pointer;
+    font-size: 12px;
+    background: blue;
+    color: #fff;
+    padding:5px 10px;
+    border-radius:5px;
+  }
+  &-item{
+    font-size: 12px;
+    padding:6px 20px;
+    display: flex;
+    justify-content: space-between;
+    .ico{
+      font-size: 16px;
+    }
+    a{
+      &:hover{
+        color: #333;
+      }
+    }
+  }
+}

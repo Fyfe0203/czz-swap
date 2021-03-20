@@ -7,13 +7,13 @@ import Pending from './Pending'
 import NetworkError from './NetworkError'
 import Web3 from 'web3'
 import BigNumber from 'bignumber.js'
-import { Jazzicon } from '@ukstv/jazzicon-react';
+import { Jazzicon } from '@ukstv/jazzicon-react'
+import Recent from './Recent'
 import './index.scss'
 // https://chainid.network/chains.json
 
 export default function Connect(props) {
-  const { accounts, updateAccounts, setWallet, wallet, networkStatus, networks, pending } = useGlobal()
-  
+  const { accounts, updateAccounts, setWallet, wallet, networkStatus, networks, pending,poolsList } = useGlobal()
   const [connectText, setConnectText] = useState(null)
   const getNetworkAndChainId = useCallback( async () => {
     try {
@@ -42,6 +42,7 @@ export default function Connect(props) {
     initialize()
     getNetworkAndChainId()
   }, [window.ethereum])
+
 
   const connectMetamask = async () => {
     try {
@@ -102,6 +103,7 @@ export default function Connect(props) {
   useEffect(() => {
     networkChange()
   }, [wallet])
+  
   const accountBlock = (
     <Fragment>
       <div className="c-wallet c-connect-link network">{ currentNetwork?.networkName}</div>
@@ -123,7 +125,8 @@ export default function Connect(props) {
   const accountError = (<div className="c-wallet c-connect-link" onClick={() => setShowModal(!showModal)}>Connect to a wallet</div>)
   const accountsButton = accounts ? accountBlock : accountError
 
-  const modalContent = (<div className="connect-list">{
+  const modalContent = (
+    <div className="connect-list">{
     walletList.map((item, index) => {
       return (
         <div key={index} className="connect-item f-c" onClick={() => item.actions()}>
@@ -135,26 +138,28 @@ export default function Connect(props) {
   }</div>)
 
   const accountsContent = (
-    <div className="connect-block">
-      <div className="f-c-sb">
-        <h4>Connected with MetaMask</h4>
-        <div className="f-c">
-          <div className="button-min" onClick={closeWallet}>Disconnect</div>
-        </div>
-      </div>
-      <div className="f-c-sb">
-        <div>
-          <h3>{formatAddress(accounts)}</h3>
-          <div className="f-c connect-bar">
-            <CopyButton toCopy={accounts}>copy Address</CopyButton>
-            <a className="button-link" href={ `https://etherscan.io/address/${accounts}`}>
-              <i className="ico-external-link" />View on Etherscan
-            </a>
+    <Fragment>
+      <div className="connect-block">
+        <div className="f-c-sb">
+          <h4>Connected with MetaMask</h4>
+          <div className="f-c">
+            <div className="button-min" onClick={closeWallet}>Disconnect</div>
           </div>
         </div>
-      
+        <div className="f-c-sb">
+          <div>
+            <h3>{formatAddress(accounts)}</h3>
+            <div className="f-c connect-bar">
+              <CopyButton toCopy={accounts}>copy Address</CopyButton>
+              <a className="button-link" href={ `https://etherscan.io/address/${accounts}`}>
+                <i className="ico-external-link" />View on Etherscan
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+      <Recent />
+    </Fragment>
   )
   return (
     <div className="c-connect">
