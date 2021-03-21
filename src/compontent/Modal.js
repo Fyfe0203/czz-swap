@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react'
 
 export default function Modal(props) {
-  const { visible = false } = props
+  const { visible = false, ...rest } = props
   return (
     <Fragment>
       {visible &&
         <div className="mask f-c-c">
-        <div className="modal">
+        <div className="modal" {...rest}>
           <div className="f-c-sb modal-header">
             <h2 className="modal-title">
               {props?.title}

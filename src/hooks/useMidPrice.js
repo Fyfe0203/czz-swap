@@ -100,7 +100,6 @@ export default function useMidPrice(pools) {
 
   const changeStatus = val => {
     let price = Number(val)
-    // debugger
     if(price > 15) {
       setSwapStatus(3)
     }else if (price > 5 && price < 15) {

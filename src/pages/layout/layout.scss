@@ -72,6 +72,12 @@ body{
     &>a{
       padding: 0 8px;
       color: #181E3C;
+      display: flex;
+      align-items: center;
+      i{
+        font-size: 18px;
+        margin-right:4px;
+      }
       &:hover{
         color:darken(#181818,10%);
       }

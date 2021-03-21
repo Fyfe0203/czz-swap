@@ -1,8 +1,10 @@
-import React, { Fragment,useEffect } from 'react'
+import React, { Fragment,useEffect, useState } from 'react'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { Scrollbars } from 'rc-scrollbars'
+import useGlobal from '../../hooks/useGlobal'
 
 export default function Recent() {
+  const { accounts } = useGlobal()
   const [recent, setRecent] = useLocalStorage([], 'recent')
   const status = ['loader', 'check-circle', 'octagon']
 

@@ -13,7 +13,7 @@ import './index.scss'
 // https://chainid.network/chains.json
 
 export default function Connect(props) {
-  const { accounts, updateAccounts, setWallet, wallet, networkStatus, networks, pending,poolsList } = useGlobal()
+  const { accounts, updateAccounts, setWallet, wallet, networkStatus, networks, pending } = useGlobal()
   const [connectText, setConnectText] = useState(null)
   const getNetworkAndChainId = useCallback( async () => {
     try {

@@ -15,7 +15,7 @@ export default function App() {
   })
   
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<PageLoading />}>
       <AppProvider>
         <BrowserRouter>
           <Header />
