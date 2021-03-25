@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import { Select, Input } from '../../compontent'
+import { Input } from '../../compontent'
 import styled from 'styled-components'
 
 function TabSelect(props) {
-  const { title, unit, list, value } = props
+  const { title, unit, value } = props
   const [current,setCurrent] = useState(0)
   const valChange = v => {
     setCurrent(null)
@@ -80,32 +80,32 @@ function TabSelect(props) {
 //     </div>
 //   )  
 // }
-const routerList = [
-  {
-    networkId:'3',
-    name: 'SushiSwap',
-    router: '0x2323...293842',
-    weth: '0x2398...2983'
-  },
-  {
-    networkId:'3',
-    name: 'UNI',
-    router: '0x2323...293842',
-    weth: '0x2398...2983'
-  },
-  {
-    networkId:'256',
-    name: 'Mdex',
-    router: '0x2323...293842',
-    weth: '0x2398...2983'
-  },
-  {
-    networkId:'256',
-    name: 'DogeSwap',
-    router: '0x2323...293842',
-    weth: '0x2398...2983'
-  }
-]
+// const routerList = [
+//   {
+//     networkId:'3',
+//     name: 'SushiSwap',
+//     router: '0x2323...293842',
+//     weth: '0x2398...2983'
+//   },
+//   {
+//     networkId:'3',
+//     name: 'UNI',
+//     router: '0x2323...293842',
+//     weth: '0x2398...2983'
+//   },
+//   {
+//     networkId:'256',
+//     name: 'Mdex',
+//     router: '0x2323...293842',
+//     weth: '0x2398...2983'
+//   },
+//   {
+//     networkId:'256',
+//     name: 'DogeSwap',
+//     router: '0x2323...293842',
+//     weth: '0x2398...2983'
+//   }
+// ]
 
 export default function Setting(props) {
   const { poolsList, wallet, swapSetting, setSwapSetting } = useGlobal()

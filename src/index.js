@@ -1,11 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { Suspense, lazy} from 'react'
+import ReactDOM from 'react-dom'
+import reportWebVitals from './reportWebVitals'
+import { PageLoading } from './compontent'
+import './asset/common.scss'
+const App = lazy(() => import('./App'))
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Suspense fallback={ <PageLoading />}>
+      <App />
+    </Suspense>
   </React.StrictMode>,
   document.getElementById('root')
 );
