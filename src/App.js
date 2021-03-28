@@ -5,6 +5,9 @@ import Header from './pages/layout/Header'
 import Footer from './pages/layout/Footer'
 import routes from './routes'
 import PageLoading from './compontent/PageLoading'
+import { ThemeProvider } from 'styled-components'
+import theme from './theme'
+import './asset/common.scss'
 
 export default function App() {
   const pages = routes.map((item, index) => {
@@ -14,17 +17,19 @@ export default function App() {
   
   return (
     <Suspense fallback={<PageLoading />}>
-      <AppProvider>
-        <BrowserRouter>
-          <Header />
-            <Switch>
-              <Suspense fallback={<PageLoading />}>
-                {pages}
-              </Suspense>
-            </Switch>
-          <Footer />
-        </BrowserRouter>
-      </AppProvider>
+      <ThemeProvider theme={ theme }>
+        <AppProvider>
+          <BrowserRouter>
+            <Header />
+              <Switch>
+                <Suspense fallback={<PageLoading />}>
+                  {pages}
+                </Suspense>
+              </Switch>
+            <Footer />
+          </BrowserRouter>
+        </AppProvider>
+      </ThemeProvider>
     </Suspense>
   )
 }

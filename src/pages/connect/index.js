@@ -1,72 +1,29 @@
-import React, { useState,useEffect, useCallback, Fragment } from 'react'
-import { Modal } from '../../compontent/index'
+import React, { useState,useEffect, Fragment } from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import { formatAddress, getBalanceNumber } from '../../utils'
-import { CopyButton ,Loading} from '../../compontent'
+import { formatAddress, getBalanceNumber,  } from '../../utils'
+import { CopyButton ,Loading, Modal} from '../../compontent'
 import Pending from './Pending'
 import NetworkError from './NetworkError'
 import Web3 from 'web3'
 import BigNumber from 'bignumber.js'
 import { Jazzicon } from '@ukstv/jazzicon-react'
 import Recent from './Recent'
+import NetworkModal from '../swap/NetworkModal'
 import './index.scss'
 // https://chainid.network/chains.json
+import { OnboardingButton } from './ConnectButton'
+import useWallet from '../../hooks/useWallet'
 
 export default function Connect(props) {
-  const { accounts, updateAccounts, setWallet, wallet, networkStatus, networks, pending } = useGlobal()
-  const [connectText, setConnectText] = useState(null)
-  const getNetworkAndChainId = useCallback( async () => {
-    try {
-      const chainId = await window.ethereum.request({
-        method: 'eth_chainId',
-      })
-      const networkId = await window.ethereum.request({
-        method: 'net_version',
-      })
-      setWallet({chainId, networkId})
-    } catch (err) {
-      console.error(err)
-    }
-  },[window.ethereum])
+  const { accounts, wallet, networkStatus, networks, pending } = useGlobal()
+  const { connectWallet, buttonText } = useWallet()
 
-  const initialize = () => {
-    const isMetaMaskInstalled = () => {
-      const { ethereum } = window
-      return Boolean(ethereum && ethereum.isMetaMask)
-    }
-    accountsChange()
-    setConnectText(!isMetaMaskInstalled() ? 'Install MetaMask!' : 'Connect MetaMask')
-  }
-
-  useEffect(() => {
-    initialize()
-    getNetworkAndChainId()
-  }, [window.ethereum])
-
-
-  const connectMetamask = async () => {
-    try {
-      const res = await window.ethereum.request({ method: 'eth_requestAccounts' })
-      updateAccounts(res[0])
-      setShowModal(false)
-    } catch(error) {
-      console.warn(error)
-    }
-  }
-
-  const accountsChange = () => {
-    if (window.ethereum) { 
-      window.ethereum.on('chainChanged', (chainId) => {
-        getNetworkAndChainId()
-      })
-    }
-  }
   const walletList = [
     {
       icon:require('../../asset/svg/metamask-fox.svg'),
       name: 'metaMask',
-      actions: connectMetamask,
-      connectText
+      actions: connectWallet,
+      // connectText
     },
     {
       icon:require('../../asset/svg/walletConnectIcon.svg'),
@@ -77,10 +34,11 @@ export default function Connect(props) {
     }
   ]
 
-  const closeWallet = async() => {}
-
+  const disConnect = async () => {}
+  
   const [showModal, setShowModal] = useState(false)
   const [showAccount, setShowAccount] = useState(false)
+  const [networkVisible, setNetworkVisible] = useState(false)
   const [currentNetwork, setCurrentNetwork] = useState([])
   const [balance, setBalance] = useState(null)
   const [networkLoading, setNetworkLoading] = useState(false)
@@ -110,14 +68,15 @@ export default function Connect(props) {
       <div className="c-wallet f-c">
         {networkLoading && <Loading size="small" mask={true} style={{borderRadius:90}} />}
           <div className="f-c" onClick={() => setShowAccount(!showModal)}>
-            <div className="c-balance">{balance} { currentNetwork?.symbol}</div>
+            <div className="c-balance">{balance} { currentNetwork?.symbol }</div>
             <div className="c-accounts f-c">
             <div className="c-wallet-icon">
               <Jazzicon address={accounts} />
             </div>
-            {formatAddress(accounts)}</div>
-            {pending.length ? <Pending /> : null}
-            {!networkStatus ? <NetworkError /> :null}
+            { buttonText }
+          </div>
+          {pending.length ? <Pending /> : null}
+          {!networkStatus ? <NetworkError /> :null}
         </div>
       </div>
     </Fragment>
@@ -131,7 +90,7 @@ export default function Connect(props) {
       return (
         <div key={index} className="connect-item f-c" onClick={() => item.actions()}>
           <div className="img" style={{backgroundImage:`url(${item.icon.default})`}} alt={item.name} />
-          <div className="connect-button f-1">{item.connectText}</div>
+          <div className="connect-button f-1">{buttonText}</div>
         </div>
       )
     })
@@ -143,7 +102,7 @@ export default function Connect(props) {
         <div className="f-c-sb">
           <h4>Connected with MetaMask</h4>
           <div className="f-c">
-            <div className="button-min" onClick={closeWallet}>Disconnect</div>
+            <div className="button-min" onClick={disConnect}>Disconnect</div>
           </div>
         </div>
         <div className="f-c-sb">
@@ -165,8 +124,10 @@ export default function Connect(props) {
     <div className="c-connect">
       <div className="connect-mask">
         {accountsButton}
+        <OnboardingButton />
         <Modal title="Connect Wallet" visible={showModal} onClose={setShowModal}>{ modalContent }</Modal>
         <Modal title="Account" visible={showAccount} onClose={setShowAccount}>{ accountsContent } </Modal>
+        <Modal title="Connect to NetWork" visible={networkVisible} onClose={setNetworkVisible}><NetworkModal /></Modal>
       </div>
     </div>
   )

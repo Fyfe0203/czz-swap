@@ -10,8 +10,7 @@ import { Token, TokenAmount } from '@uniswap/sdk'
 import useLocalStorage from './useLocalStorage'
 
 export default function useGetTokenValue() {
-  const { setPoolsList, poolsList, currentProvider, accounts, setPending, pending, swapSetting } = useGlobal()
-  const { tolerance } = swapSetting
+  const { currentProvider, accounts, setPending, pending, from, to, setState } = useGlobal()
   const [loading,setLoading] = useState(false)
   // const [value, setValue] = useState(0)
   const [approveLoading,setApproveLoading] = useState(false)
@@ -38,13 +37,13 @@ export default function useGetTokenValue() {
   }
 
   // const getReceived = async () => {
-  //   const receivedAmount = Number(poolsList[0].tokenValue) - (poolsList[0].tokenValue * Number(tolerance))
+  //   const receivedAmount = Number(from.tokenValue) - (from.tokenValue * Number(tolerance))
   //   const res = await swapTokenValue(receivedAmount)
   // }
 
   // approve && authorization
   const approveActions = async () => {
-    const {symbol,router:spender,explorerUrl,tokenValue} = poolsList[0]
+    const {symbol,router:spender,explorerUrl,tokenValue} = from
     const recentInfo = {content:`Approved ${symbol?.symbol}`}
     try {
       setApproveLoading(true)
@@ -75,7 +74,7 @@ export default function useGetTokenValue() {
 
   // allowance authorization
   const allowanceAction = async (tokenValue) => {
-    const {provider,symbol,router:spender} = poolsList[0]
+    const {provider,symbol,router:spender} = from
     const allowanceTotal = await allowance({ provider, tokenAddress: symbol?.tokenAddress, spender, accounts })
     const amountToken = decToBn(tokenValue).toNumber()
     const allonceNum = decToBn(allowanceTotal).toNumber()
@@ -86,6 +85,14 @@ export default function useGetTokenValue() {
      message({
       title: 'Network Error',
       content: 'chain network connect failed',
+      icon:'wifi-off'
+    })
+  }
+
+  const lessValue = () => {
+    message({
+      title: 'illiquid',
+      content: 'The deal is illiquid',
       icon:'wifi-off'
     })
   }
@@ -107,31 +114,37 @@ export default function useGetTokenValue() {
     }
   }
 
-  const swapTokenValue =useCallback( async (tokenValue) => {
-    if (tokenValue > 0 && !loading) {
+  const swapTokenValue = async (from) => {
+    if (from && from.symbol && from.tokenValue && Number(from.tokenValue) > 0 && !loading) {
       setLoading(false)
-      // debugger
       try {
         // debugger
         setLoading(true)
         setStatus('FINDING_PRICE')
-        console.log("From Amount ====", tokenValue)
-        const inAmount = decToBn(Number(tokenValue)).toString()
+        const inAmount = decToBn(Number(from.tokenValue), from.symbol.decimals).toString()
+        console.log('inAmount == ',inAmount)
         // debugger
-        const inAmountRes = await swapBurnAmount(poolsList[0], inAmount, true)
+        const inAmountRes = await swapBurnAmount(from, inAmount, true)
         const changeAmount = new BigNumber(Number(inAmountRes)).toString()
-        const result = await swapBurnAmount(poolsList[1], changeAmount)
-        const token = new Token(poolsList[1].networkId, poolsList[1].symbol.tokenAddress, 18)
+        console.log('inAmountExchangeValue == ', changeAmount)
+        if (changeAmount === 0) {
+          lessValue()
+          return 0
+        }
+        const result = await swapBurnAmount(to, changeAmount)
+        const token = new Token(to.networkId, to.symbol.tokenAddress, to.symbol.decimals)
         const result_1 = JSBI.BigInt(result)
         const amounts = new TokenAmount(token, result_1)
         // const outAmount = getBalanceNumber(amount).toFixed(4)
         const outAmount = amounts.toSignificant(6)
-        const allowanceResult = await allowanceAction(tokenValue)
-        let list = Array.from(poolsList)
-        list[1].tokenValue = outAmount
-        setPoolsList(list)
+        const allowanceResult = await allowanceAction(from.tokenValue)
+        let newTo = {...to,tokenValue:outAmount}
+        setState({to:newTo})
+        // let list = Array.from(poolsList)
+        // list[1].tokenValue = outAmount
+        // setPoolsList(list)
         setAuthorization(allowanceResult)
-        console.log("SWAP AMOUNT==>", tokenValue, "<==>", outAmount)
+        console.log("SWAP AMOUNT == >", from.tokenValue, "< == >", outAmount)
       } catch (error) {
         console.log('swap token value error::', error)
         setLoading(false)
@@ -139,19 +152,19 @@ export default function useGetTokenValue() {
         setLoading(false)
       }
     }
-  },[poolsList[0].tokenValue,poolsList[1].symbol,poolsList[0].symbol])
+  }
   
   // Get token Value Effect
   useEffect(() => {
-    if (poolsList[1].symbol && poolsList[0].symbol && poolsList[0].tokenValue ) {
+    if (from.symbol && from.tokenValue && to.symbol) {
       setStatus(swapStatus['NONE_TO_TOKEN'])
-      swapTokenValue(poolsList[0].tokenValue)
+      swapTokenValue(from)
     } else {
-      if(!poolsList[0].symbol) setStatus('NONE_FROM_TOKEN')
-      if(!poolsList[1].symbol) setStatus('NONE_TO_TOKEN')
-      if(!poolsList[0].tokenValue) setStatus('NONE_AMOUNT')
+      if(!from.symbol) setStatus('NONE_FROM_TOKEN')
+      if(!to.symbol) setStatus('NONE_TO_TOKEN')
+      if(!from.tokenValue) setStatus('NONE_AMOUNT')
     }
-  }, [poolsList[0].tokenValue,poolsList[1].symbol,poolsList[0].symbol])
+  }, [from?.tokenValue,to?.symbol,from?.symbol])
 
   return {loading,authorization,isApprove,approveActions,approveLoading,status,swapStatus}
 }

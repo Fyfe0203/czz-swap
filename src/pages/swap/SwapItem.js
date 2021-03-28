@@ -10,10 +10,10 @@ import Web3 from 'web3'
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const AmountInput = styled.input``
+
 export default function SwapItem({pools,exchange,type}) {
   const [ balance,setBalance ] = useState(0)
-  const { poolsList, setPoolsList, accounts } = useGlobal()
-
+  const { from, to, setState, accounts } = useGlobal()
   const enforcer = (nextUserInput) => {
     if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
       valChange(nextUserInput)
@@ -21,14 +21,11 @@ export default function SwapItem({pools,exchange,type}) {
   }
 
   const valChange = tokenValue => {
-    const list = Array.from(poolsList)
-    list.splice(type, 1, { ...pools, tokenValue })
-    list.splice(type === 0 ? 1 : 0, 1, { ...poolsList[type === 0 ? 1 : 0], tokenValue: '' })
-    setPoolsList(list)
+    setState({from:{...from,tokenValue}})
   }
   
   const balanceGet = async () => {
-    if (accounts && pools) {
+    if (accounts && pools && pools.provider) {
       const res = pools.symbol ? await getBalance(pools.provider, pools.symbol?.tokenAddress, accounts) : await new Web3(pools.provider).eth.getBalance(accounts)
       const balances = getBalanceNumber(new BigNumber(Number(res))).toFixed(4)
       setBalance(balances)
@@ -42,7 +39,7 @@ export default function SwapItem({pools,exchange,type}) {
   return (
     <div className="swap-item">
       <div className="f-c-sb swap-head">
-        <div className="swap-info">{`${type === 0 ? 'From':'To'} (${pools.type})`}</div>
+        <div className="swap-info">{`${type === 0 ? 'From':'To'} ${pools.symbolName ? pools.symbolName : ''}`}</div>
         <div className="f-c swap-info">
         Balance:{balance} {exchange}
         </div>
@@ -50,10 +47,10 @@ export default function SwapItem({pools,exchange,type}) {
       <div className="swap-block f-c">
         <div className="swap-init f-1">
           <AmountInput placeholder="0.0"
-            value={ poolsList[type].tokenValue }
-            className="swap-input"
+            value={ pools?.tokenValue }
+            className={`swap-input ${pools?.tokenValue?.length > 12 ? 'max' : ''}`}
             onChange={e => enforcer(e.target.value.replace(/,/g, '.'))}
-            disabled={ type ===1}
+            disabled={ type ===1 }
             inputMode="decimal"
             title="Token Amount"
             autoComplete="off"
@@ -64,9 +61,8 @@ export default function SwapItem({pools,exchange,type}) {
             maxLength={79}
             spellCheck="false"/>
         </div>
-        <SwapSelect types={ type } />
+        <SwapSelect types={type} pool={pools} />
       </div>
     </div>
   )
 }
-

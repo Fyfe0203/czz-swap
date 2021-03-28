@@ -140,7 +140,6 @@
     padding:20px 0 10px;
   }
   &-input{
-    padding: 12px 0;
     font-size: 28px;
     font-weight: 700;
     color: #181E3C;
@@ -149,6 +148,9 @@
     background: transparent;
     width: 100%;
     font-family: "Inter var", sans-serif;
+    &.max{
+      font-size: 20px;
+    }
   }
   &-info{
     font-size: 12px;
@@ -389,18 +391,25 @@
   &-network{
     display: flex;
     align-items: center;
-    border-bottom:3px solid #eee;
     margin-bottom: 10px;
     font-size: 14px;
-    padding:0 20px;
     &>div{
-      padding: 10px 12px;
+      padding:20px 15px 10px;
+      font-weight: 800;
       cursor: pointer;
-      border-bottom: 3px solid #eee;
-      margin-bottom: -3px;
+      font-size: 14px;
+      position: relative;
       &.selected{
         color: blue;
-        border-bottom-color: blue;
+        &::after{
+          content: '';
+          background: blue;
+          position: absolute;
+          height: 3px;
+          left:24%;
+          right:24%;
+          bottom: 0;
+        }
       }
     }
   }
@@ -433,7 +442,6 @@
     }
   }
   &-list{
-    margin:0 -20px;
     &-title{
       font-weight: 800;
       margin:20px 0 10px;
@@ -457,7 +465,7 @@
     background: rgba($color: #555, $alpha: .1);
     border-radius: 5px;
     padding: 0 15px;
-    margin:10px 0 10px;
+    margin:15px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -478,9 +486,10 @@
       margin-right: 10px;
     }
     input{
-      padding:13px 0;
+      padding:10px 0;
       background: transparent;
       width:100%;
+      font-size: 14px;
     }
   }
   &-item{

@@ -1,15 +1,11 @@
-import { useEffect, useState} from 'react'
+import { useEffect } from 'react'
 import useGlobal from './useGlobal'
-import useGetTokenValue from './useGetTokenValue'
-import useMidPrice from './useMidPrice'
+import useWallet from './useWallet'
 
 export default function useSwap() {
-  const { poolsList } = useGlobal()
-  const { loading:tokenLoading, authorization, approveActions, approveLoading } = useGetTokenValue()
-  const {loading: pirceLoading, impactPrice, swapStatus, swapStatusList} = useMidPrice(poolsList)
-  const [actions,setActions] = useState(null)
-  const [status, setStatus] = useState(null)
-  
+  const { from, accounts, setState, networks } = useGlobal()
+  const { wallet } = useWallet()
+  const { networkId } = wallet
   const swapStatus = {
     NONE_AMOUNT: "Enter a Amount",
     NONE_FROM_TOKEN: 'Select a Token',
@@ -25,10 +21,18 @@ export default function useSwap() {
     SWAP_FAILED: 'Swap Failed',
     NONE_BALANCE: 'Insufficient ETH balance',
   }
+  
+  const initSwap = () => {
+    const currentNetwork =  networks.filter(i => i.networkId === networkId)
+    const fromState = accounts && networkId ? currentNetwork : networks[0]
+    debugger
+    // const symbol = accounts ? 
+    setState({ from: {...from,...fromState} })
+  }
 
   useEffect(() => {
-    
-  }, [poolsList[0].tokenValue,poolsList[1].tokenValue])
+    initSwap()
+  }, [])
   
   return [swapStatus]
 }

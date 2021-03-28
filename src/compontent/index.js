@@ -7,6 +7,7 @@ import Loading from './Loading'
 import Input from './Input'
 import Select from './Select'
 import LinkItem from './LinkItem'
+import Button from './Button'
 import './style.scss'
 
-export { Modal,PageLoading,PageNotFound,CopyButton,Loading,Message,message ,Select, Input,LinkItem}
+export { Modal,PageLoading,PageNotFound,CopyButton,Loading,Message,message ,Select, Input,LinkItem,Button}

@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect} from 'react'
-import { Modal, Loading, message,LinkItem } from '../../compontent/index'
+import { Modal, Loading, message,LinkItem,Button } from '../../compontent'
 import useGetTokenValue from '../../hooks/useGetTokenValue'
 import useSwapAndBurn from '../../hooks/useSwapAndBurn'
 import useGlobal from '../../hooks/useGlobal'
+import useSwap from '../../hooks/useSwap'
 import useMidPrice from '../../hooks/useMidPrice'
 import Setting from './Setting'
 import SwapItem from './SwapItem'
@@ -25,24 +26,27 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const context = useGlobal()
-  const {accounts, poolsList, setPoolsList,changePools, networkStatus} = context
+  const { accounts, networkStatus, from, to, setState } = useGlobal()
+  const { } = useSwap()
   const { loading, authorization, approveActions, approveLoading } = useGetTokenValue()
-  const {loading: pirceLoading, impactPrice, swapStatus, swapStatusList} = useMidPrice(poolsList)
+  const {loading: pirceLoading, impactPrice, swapStatus, swapStatusList} = useMidPrice()
   const {loading: swapLoading, hash, fetchSwap} = useSwapAndBurn()
   const [setting,setSetting] = useState(false)
   const [buttonLoading,setButtonLoading] = useState(false)
-  const { connectWallet, loading: walletLoading } = useWallet()
-  const [from, to] = poolsList
+  const { connectWallet, loading: walletLoading, wallet } = useWallet()
   
   useEffect(() => {
     setButtonLoading(loading || pirceLoading)
   }, [loading, pirceLoading])
-  
+  useEffect(() => {
+    setState({aaa:'3'})
+  }, [])
+
   const reverseExchange = () => {
-    const list = poolsList.reverse()
-    setPoolsList(list)
-    changePools()
+    setState({
+      from:{...to,tokenValue:from.tokenValue},
+      to:{...from,tokenValue:''}
+    })
   }
   
   const networkMessage = () => {
@@ -56,27 +60,16 @@ export default function Swap() {
   const swapActions = () => {
     networkStatus ?  setConfirmStatus(true) : networkMessage()
   }
-  
   const exchangeButton = (<div className="swap-exchange f-c"><div onClick={ reverseExchange } className="ico ico-repeat" /></div>)
-
-  const approveButton = (
-    <Fragment>
-      <div className="swap-button" onClick={approveLoading ? null : approveActions}>{approveLoading ? <Loading mask={true} size="small" /> : 'Approve'}</div>
-    </Fragment>
-  )
-
-  const swapWarnButton = (
-    <Fragment>
-      <div className={`swap-button button-${swapStatus} error`}>{swapStatusList[swapStatus]}</div>
-    </Fragment>
-  )
+  const approveButton = <div className="swap-button" onClick={approveLoading ? null : approveActions}>{approveLoading ? <Loading mask={true} size="small" /> : 'Approve'}</div>
+  const swapWarnButton = <div className={`swap-button button-${swapStatus} error`}>{swapStatusList[swapStatus]}</div>
+  const connectWalletButton = <div className="swap-button disable" onClick={connectWallet}>Connect Wallet</div>
 
   const swapingButton = (
     <Fragment>
       {accounts ?
         <div className={`swap-button button-${buttonLoading ? '' : swapStatus} ${!accounts ? 'disable' : ''}`} onClick={buttonLoading ? null : swapActions}>
-          {buttonLoading ? <Loading text="Finding Best Price" size="small" /> : swapStatusList[swapStatus]}</div> :
-        <div className="swap-button disable" onClick={connectWallet}>Connect Wallet</div>
+          {buttonLoading ? <Loading text="Finding Best Price" size="small" /> : swapStatusList[swapStatus]}</div> : connectWalletButton
       }
     </Fragment>
   )
@@ -85,9 +78,9 @@ export default function Swap() {
   
   const swapFooter = (
     <div className="swap-footer">
-      <div className="f-c"><span>Minimun received</span> <span><b>{poolsList[1].tokenValue}</b> { poolsList[1].symbol?.symbol}</span></div>
+      <div className="f-c"><span>Minimun received</span> <span><b>{to.tokenValue}</b> { to.symbol?.symbol}</span></div>
       <div className="f-c"><span>Price Impact</span> <span className={ `price-${swapStatus}` }>{impactPrice} %</span> </div>
-      <div className="f-c"><span>Liquidity Provider Fee</span><span><b>{poolsList[0].tokenValue && new BigNumber(Number(poolsList[0].tokenValue)).times(new BigNumber(0.0007)).toNumber()}</b> { poolsList[0].symbol?.symbol}</span> </div>
+      <div className="f-c"><span>Liquidity Provider Fee</span><span><b>{from.tokenValue && new BigNumber(Number(from.tokenValue)).times(new BigNumber(0.0007)).toNumber()}</b> { from.symbol?.symbol}</span> </div>
     </div>
   )
 
@@ -109,8 +102,10 @@ export default function Swap() {
       setSubmitStatus(true)
     }
   }, [hash])
+
   // This swap has a price impact of at least 5%. Please confirm that you would like to continue whit this swap
   // Output is estimated.You will recive at least 0.23 HT or the transaction will revert.
+
   const [submitStatus, setSubmitStatus] = useState(false)
   const transactionSubmit = (
     <div style={{paddingBottom:15}}>
@@ -128,7 +123,9 @@ export default function Swap() {
     <div>
       <div className="confirm-pool">
         <i className="ico ico-arrow-down" />
-        {poolsList.map((item, index) => <SwapConfirmItem key={index} index={ index } item={item} status={swapStatus}/>) }
+        <SwapConfirmItem index={0} item={from} status={swapStatus} />
+        <SwapConfirmItem index={1} item={to} status={swapStatus}/>
+        {/* {poolsList.map((item, index) => <SwapConfirmItem key={index} index={ index } item={item} status={swapStatus}/>) } */}
       </div>
       <div className="confirm-warn-text">
         {`Output is estimated.You will recive at least ${to.tokenValue} ${to.symbol?.symbol} or the transaction will revert.`}
@@ -137,7 +134,7 @@ export default function Swap() {
       {swapFooter}
     </div>
   )
-
+  
   return (
     <Fragment>
       <div className="swap-wrap">
@@ -145,19 +142,12 @@ export default function Swap() {
             <div className="f-c-sb">
               <h2 className="swap-title">SWAP</h2>
               <div className="swap-setting ico-settings" onClick={ ()=>setSetting(true)} />
-            </div>
-            {
-              poolsList.map((item, index) => {
-                return (
-                  <Item className="swap-id" key={ index }>
-                    <SwapItem pools={item} type={ index } exchange={index === 1 && exchangeButton} key={ index } />
-                  </Item>
-                )
-              })
-            }
-            <SwapBar className="swap-bar">
-              {swapButton}
-            </SwapBar>
+          </div>
+          <Item className="swap-id"> <SwapItem pools={from} type={ 0 }  /></Item>
+          <Item className="swap-id"> <SwapItem pools={to} type={1} exchange={ exchangeButton } /></Item>
+          <SwapBar className="swap-bar">
+            {swapButton}
+          </SwapBar>
           {impactPrice ? swapFooter : null}
         </SwapPanel>
         </div>

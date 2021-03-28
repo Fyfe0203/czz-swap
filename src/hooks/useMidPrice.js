@@ -43,10 +43,9 @@ export const fetchPairData = async (tokenA, tokenB, factoryAddress, initCodeHash
     console.log(error)
   }
 }
-export default function useMidPrice(pools) {
-  const { poolsList } = useGlobal()
+export default function useMidPrice() {
+  const { from, to } = useGlobal()
   const [loading, setLoading] = useState(false)
-  const [from, to] = poolsList
   const [impactPrice, setImpactPrice] = useState(0)
   const [swapStatus, setSwapStatus] = useState(0)
 
@@ -72,13 +71,13 @@ export default function useMidPrice(pools) {
   }
   const fetchPrice = useCallback(async () => {
     // debugger
-    if (poolsList[1].tokenValue) {
+    if (from.tokenValue) {
       try {
         setLoading(true)
         const ethRes = await fetchPair(from)
         const czzRes = await fetchPair(to)
         const midPrice = ethRes / czzRes
-        const price = Number((((Number(pools[0].tokenValue) * midPrice) - Number(pools[1].tokenValue)) / (Number(pools[0].tokenValue) * midPrice)) * 100).toFixed(2)
+        const price = Number((((Number(from.tokenValue) * midPrice) - Number(to.tokenValue)) / (Number(from.tokenValue) * midPrice)) * 100).toFixed(2)
         setImpactPrice(price)
         changeStatus(price)
         setLoading(false)
@@ -89,7 +88,7 @@ export default function useMidPrice(pools) {
         setLoading(false)
       }
     }
-  }, [poolsList[1].tokenValue])
+  }, [from.tokenValue])
   
   const swapStatusList = [
     'Swap Now',
@@ -113,7 +112,7 @@ export default function useMidPrice(pools) {
 
   useEffect(() => {
     fetchPrice()
-  }, [poolsList[1].tokenValue])
+  }, [from.tokenValue])
   
   return {loading, impactPrice, swapStatusList, swapStatus}
 }
