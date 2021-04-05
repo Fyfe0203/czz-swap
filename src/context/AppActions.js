@@ -1,6 +1,5 @@
 
 export default function actions(state, dispatch) {
-  console.log('state====',state)
   return {
     toggleTheme() {
      dispatch({

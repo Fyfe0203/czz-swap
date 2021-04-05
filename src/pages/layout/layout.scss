@@ -10,7 +10,7 @@ body{
   &-header{
     display: flex;
     align-items: center;
-    padding:10px 30px;
+    padding:15px 30px;
     justify-content: space-between;
     // background: linear-gradient(180deg, rgba(9, 9, 9, 0.377) 0%, rgba(255, 255, 255, 0) 100%);
     .logo{
@@ -20,7 +20,7 @@ body{
         font-size: 0;
         overflow: hidden;
         height: 40px;
-        width: 160px;
+        width: 120px;
         display: block;
       }
     }

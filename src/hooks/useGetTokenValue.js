@@ -101,11 +101,10 @@ export default function useGetTokenValue() {
     }
   }
 
-  const swapTokenValue = useCallback( async (from) => {
-    if (from && from.currency && from.tokenValue && Number(from.tokenValue) > 0 && !loading) {
+  const swapTokenValue = async (from) => {
+    if (from && from.currency && to.currency && from.tokenValue && Number(from.tokenValue) > 0) {
       setLoading(false)
       try {
-        // debugger
         setLoading(true)
         setButtonText('FINDING_PRICE_ING')
         const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
@@ -116,6 +115,7 @@ export default function useGetTokenValue() {
         console.log('inAmountExchangeValue == ', changeAmount)
         if (changeAmount === 0) {
           setButtonText('NONE_TRADE')
+          setLoading(false)
           return false
         }
         const result = await swapBurnAmount(to, changeAmount)
@@ -127,16 +127,16 @@ export default function useGetTokenValue() {
         let newTo = {...to,tokenValue:outAmount}
         setState({to:newTo})
         setAuthorization(allowanceResult)
+        setLoading(false)
         console.log("SWAP AMOUNT == >", from.tokenValue, "< == >", outAmount)
       } catch (error) {
-        console.log('swap token value error::', error)
         setButtonText('NONE_TRADE')
         setLoading(false)
       } finally {
         setLoading(false)
       }
     }
-  },[from.tokenValue])
+  }
   
   // Get token Value Effect
   useEffect(() => {

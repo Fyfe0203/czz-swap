@@ -70,7 +70,7 @@ export default function useMidPrice() {
   }
   const fetchPrice = useCallback(async () => {
     // debugger
-    if (from.tokenValue) {
+    if (from.tokenValue && to.tokenValue) {
       try {
         setLoading(true)
         const ethRes = await fetchPair(from)
@@ -87,7 +87,7 @@ export default function useMidPrice() {
         setLoading(false)
       }
     }
-  }, [from.tokenValue])
+  }, [from.tokenValue,to.tokenValue])
   
   const swapStatusList = [
     'Swap Now',
@@ -111,7 +111,7 @@ export default function useMidPrice() {
 
   useEffect(() => {
     fetchPrice()
-  }, [from.tokenValue])
+  }, [from.tokenValue,to.tokenValue])
   
   return {loading, impactPrice, swapStatusList, swapStatus}
 }
