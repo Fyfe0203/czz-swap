@@ -76,7 +76,8 @@ export default function useMidPrice() {
         const ethRes = await fetchPair(from)
         const czzRes = await fetchPair(to)
         const midPrice = ethRes / czzRes
-        const price = Number((((Number(from.tokenValue) * midPrice) - Number(to.tokenValue)) / (Number(from.tokenValue) * midPrice)) * 100).toFixed(2)
+        console.log('midPrice',midPrice)
+        const price = Number(((midPrice - to.tokenValue) / midPrice) * 100).toFixed(2)
         setImpactPrice(price)
         changeStatus(price)
         setLoading(false)
@@ -106,7 +107,7 @@ export default function useMidPrice() {
       setSwapStatus(1)
     } else if (price < 3) {
       setSwapStatus(0)
-    } 
+    }
   }
 
   useEffect(() => {
