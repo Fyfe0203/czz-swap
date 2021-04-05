@@ -21,7 +21,7 @@ const SwapConfirmItem = ({item,status,index}) => {
       <div className="img" style={{ backgroundImg: `url(${item.img})` }} />
       <div className="confirm-symbol">
         <b style={{color: status>0 && index === 1 ? 'red' : ''}}>{item.tokenValue}</b>
-        <span>{item.symbol.symbol}</span>
+        <span>{item.currency.symbol}</span>
       </div>
     </div>
   )
@@ -143,7 +143,7 @@ export default function Swap() {
           <Item className="swap-id"> <SwapItem pool={to} type={1} exchange={ exchangeButton } /></Item>
           <SwapBar className="swap-bar">
             {swapButton}
-            {<Button>{ status[swapButtonText]}</Button>}
+            {/* {<Button>{ status[swapButtonText]}</Button>} */}
           </SwapBar>
           {impactPrice ? swapFooter : null}
         </SwapPanel>

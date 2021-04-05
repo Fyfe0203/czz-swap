@@ -27,7 +27,6 @@ export function getAddress(tokenA, tokenB, factoryAddreaa, initCodeHash) {
 
 export const fetchPairData = async (tokenA, tokenB, factoryAddress, initCodeHash, provider) => {
   const address = getAddress(tokenA, tokenB, factoryAddress, initCodeHash)
-  console.log(address)
   const infoContract = new Web3(provider)
   const lpContract = new infoContract.eth.Contract(
       IUniswapV2Pair,

@@ -18,7 +18,7 @@ import useWallet from '../../hooks/useWallet'
 
 export default function Connect(props) {
   const { accounts, wallet, networkStatus, networks, pending } = useGlobal()
-  const { connectWallet, buttonText, disConnect,initWallet } = useWallet()
+  const { connectWallet, buttonText, disConnect } = useWallet()
 
   const walletList = [
     {
@@ -63,10 +63,6 @@ export default function Connect(props) {
     networkChange()
   }, [wallet])
 
-  useEffect(() => {
-    initWallet()
-  }, [])
-  
   const accountBlock = (
     <Fragment>
       {currentNetwork.networkName && <div className="c-wallet c-connect-link network">{ currentNetwork?.networkName}</div>}

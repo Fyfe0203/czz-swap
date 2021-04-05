@@ -26,7 +26,7 @@ export default function SwapItem({ pool, exchange, type, status = () => { }}) {
   
   const balanceGet = async () => {
     if (accounts && pool && pool.provider) {
-      const res = pool.symbol ? await getBalance(pool.provider, pool.currency?.tokenAddress, accounts) : await new Web3(pool.provider).eth.getBalance(accounts)
+      const res = pool.currency ? await getBalance(pool.provider, pool.currency?.tokenAddress, accounts) : await new Web3(pool.provider).eth.getBalance(accounts)
       const balances = getBalanceNumber(new BigNumber(Number(res))).toFixed(4)
       status(balances === 0 && type === 0 ? 'NONE_BALANCE' : null)
       setBalance(balances)
@@ -35,7 +35,7 @@ export default function SwapItem({ pool, exchange, type, status = () => { }}) {
 
   useEffect(() => {
     balanceGet(accounts,pool)
-  }, [accounts, pool])
+  }, [accounts, pool.currency])
   
   return (
     <div className="swap-item">

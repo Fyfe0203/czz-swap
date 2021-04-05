@@ -4,7 +4,7 @@ import useGlobal from './useGlobal'
 import { formatAddress } from '../utils'
 
 export default function useWallet() {
-  const { wallet, accounts, from, updateAccounts, setState } = useGlobal()
+  const { setState,from,wallet,accounts,updateAccounts } = useGlobal()
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
   const ONBOARD_TEXT = 'Click here to install MetaMask!'
@@ -129,7 +129,7 @@ export default function useWallet() {
       address,
       symbol,
       decimals,
-      // image
+      image:'https://cryptologos.cc/logos/global-social-chain-gsc-logo.svg'
     }
     try {
       const success = await window.ethereum.request({
@@ -161,5 +161,15 @@ export default function useWallet() {
     }
   }, [accounts])
 
-  return {wallet,connectWallet,loading,addEthereum,newLoading,buttonText,disConnect,initWallet}
+  useEffect(() => {
+    initWallet()
+  }, [])
+  
+  useEffect(() => {
+    if(window.ethereum && from.currency)(
+      handlenNewChainId(window.ethereum.chainId)
+    )
+  }, [from.currency])
+
+  return {connectWallet,loading,addEthereum,newLoading,buttonText,disConnect}
 }

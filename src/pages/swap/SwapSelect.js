@@ -6,7 +6,7 @@ import { Scrollbars } from 'rc-scrollbars'
 
 export default function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
-  const { pools, networks, setState, from, to ,wallet} = useGlobal()
+  const { pools, networks, setState, from, to } = useGlobal()
   const { currency } = pool
 
   const normalFilter = token => token?.systemType === pool.networkType
