@@ -68,7 +68,7 @@ export default function useMidPrice() {
       console.log(error)
     }
   }
-  const fetchPrice = useCallback(async () => {
+  const fetchPrice = async () => {
     // debugger
     if (from.tokenValue && to.tokenValue) {
       try {
@@ -88,7 +88,7 @@ export default function useMidPrice() {
         setLoading(false)
       }
     }
-  }, [from.tokenValue,to.tokenValue])
+  }
   
   const swapStatusList = [
     'Swap Now',
