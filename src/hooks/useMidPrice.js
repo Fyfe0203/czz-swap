@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback} from 'react'
+import { useEffect, useState } from 'react'
 import { Token, Route, TokenAmount, Pair} from '@uniswap/sdk'
 import { getCreate2Address } from '@ethersproject/address'
 import { pack, keccak256 } from '@ethersproject/solidity'
@@ -69,14 +69,15 @@ export default function useMidPrice() {
     }
   }
   const fetchPrice = async () => {
-    // debugger
+    
     if (from.tokenValue && to.tokenValue) {
       try {
         setLoading(true)
         const ethRes = await fetchPair(from)
         const czzRes = await fetchPair(to)
         const midPrice = ethRes / czzRes
-        console.log('midPrice',midPrice)
+        console.log('midPrice', midPrice)
+        debugger
         const price = Number(((midPrice - to.tokenValue) / midPrice) * 100).toFixed(2)
         setImpactPrice(price)
         changeStatus(price)
@@ -112,7 +113,7 @@ export default function useMidPrice() {
 
   useEffect(() => {
     fetchPrice()
-  }, [from.tokenValue,to.tokenValue])
+  }, [to.tokenValue])
   
   return {loading, impactPrice, swapStatusList, swapStatus}
 }
