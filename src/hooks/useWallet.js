@@ -1,55 +1,85 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect,  useRef } from 'react'
 import MetaMaskOnboarding from '@metamask/onboarding'
 import useGlobal from './useGlobal'
 import { formatAddress } from '../utils'
 
 export default function useWallet() {
+  const { wallet, accounts, from, updateAccounts, setState } = useGlobal()
   const [loading, setLoading] = useState(false)
-  const [networkStatus, setNetworkStatus] = useState(false)
-  const { wallet, setWallet, poolsList, accounts, updateAccounts } = useGlobal()
   const onboarding = useRef()
-  const [isDisabled, setDisabled] = useState(false)
-
   const ONBOARD_TEXT = 'Click here to install MetaMask!'
   const CONNECT_TEXT = 'Connect'
-  const CONNECTED_TEXT = 'Connected'
-
   const [buttonText, setButtonText] = useState(ONBOARD_TEXT)
+  var storage = window.localStorage
 
   const handleNewAccounts = newAccounts => {
     updateAccounts(newAccounts[0])
+    storage.setItem('address',newAccounts[0])
   }
 
-  const initAccounts = async() => {
-    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      const newAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-      handleNewAccounts(newAccounts)
+  const handlenNewChainId = chainId => {
+    setState({
+      wallet: {
+        ...wallet,
+        networkId: parseInt(chainId, 16),
+        chainId
+      },
+      networkStatus:chainId === from.chainId
+    })
+  }
+
+  const initWallet = () => {
+    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined' && MetaMaskOnboarding.isMetaMaskInstalled() && storage.getItem('address')) {
+      window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
+        handleNewAccounts(accounts)
+        handlenNewChainId(window.ethereum.chainId)
+      })
+      window.ethereum.on('chainIdChanged', handlenNewChainId)
+      window.ethereum.on('chainChanged', handlenNewChainId)
       window.ethereum.on('accountsChanged', handleNewAccounts)
+      window.ethereum.on('connect', () => {
+        console.log('connect')
+      })
+      window.ethereum.on('disconnect', () => {
+        console.log('wallet disconnect')
+      })
+      window.ethereum.on('message', message => {
+        console.log('wallet message', message)
+      })
+      window.ethereum.on('notification', message => {
+        console.log('wallet notification', message)
+      })
+      return () => {
+        window.ethereum.off('accountsChanged', handleNewAccounts)
+      }
+    }
+  }
+  // network chainchange
+  
+  const disConnect = async () => {
+    if (window.ethereum.on) { 
+      await window.ethereum.request({
+        method: "eth_requestAccounts",
+        params: [
+          {
+            eth_accounts: {}
+          }
+        ]
+      })
+      storage.removeItem('address')
+      setState({
+        accounts: null,
+        wallet: {},
+      })
     }
   }
 
-  // network chainchange
-  const getNetworkAndChainId = useCallback( async () => {
-    try {
-      const chainId = await window.ethereum.request({
-        method: 'eth_chainId',
-      })
-      const networkId = await window.ethereum.request({
-        method: 'net_version',
-      })
-      setWallet({chainId, networkId})
-    } catch (err) {
-      console.error(err)
-    }
-  }, [accounts])
-  
   const connectWallet = async () => {
     try {
       if (MetaMaskOnboarding.isMetaMaskInstalled()) {
         setLoading(true)
         const newAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
         handleNewAccounts(newAccounts)
-        // setAccounts(newAccounts[0])
         setLoading(false)
       } else {
         onboarding.current.startOnboarding()
@@ -65,11 +95,23 @@ export default function useWallet() {
   const [newLoading, setNewLoading] = useState(false)
   
   // wallet new network
-  const addEthereum = async (params) => {
+  const addEthereum = async (pool = from) => {
+    const { chainId, rpcUrls, networkName: chainName, decimals, explorerUrl, symbolName, currency} = pool
+    const nativeCurrency = { name:symbolName, decimals, symbol:symbolName }
+    const params = [{
+      chainId,
+      rpcUrls: [rpcUrls],
+      chainName,
+      nativeCurrency,
+      blockExplorerUrls: [explorerUrl],
+    }]
+    // debugger
+    console.log(params)
     if (window.ethereum) {
       try {
         setNewLoading(true)
         const res = await window.ethereum.request({ method: 'wallet_addEthereumChain', params })
+        watchAsset(currency)
         console.log(res)
       } catch (error) {
         console.log(error)
@@ -79,35 +121,45 @@ export default function useWallet() {
     }
   }
 
-  // init swap wallet
+  // watch asset token
+  const watchAsset = async (pool) => {
+    // const { currency, decimals } = pool
+    const { symbol, tokenAddress:address, decimals} = pool
+    const options = {
+      address,
+      symbol,
+      decimals,
+      // image
+    }
+    try {
+      const success = await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options
+        },
+      })
+      if (success) {
+        console.log('FOO successfully added to wallet!')
+      } else {
+        throw new Error('Something went wrong.')
+      }
+    } catch (error) {
+      console.log('error',error)
+    }
+   
+  }
+
   useEffect(() => {
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      window.ethereum.on('chainChanged', (chainId) => {
-        getNetworkAndChainId()
-      })
       if (accounts?.length > 0) {
         setButtonText(formatAddress(accounts))
-        setDisabled(true)
         onboarding.current?.stopOnboarding()
       } else {
         setButtonText(CONNECT_TEXT)
-        setDisabled(false)
       }
     }
   }, [accounts])
 
-  // init connect wallet
-  useEffect(() => {
-    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      window.ethereum
-        .request({ method: 'eth_requestAccounts' })
-        .then(handleNewAccounts)
-      window.ethereum.on('accountsChanged', handleNewAccounts);
-      return () => {
-        window.ethereum.off('accountsChanged', handleNewAccounts);
-      }
-    }
-  }, [])
-
-  return {networkStatus,wallet,connectWallet,loading,addEthereum,newLoading,isDisabled,buttonText}
+  return {wallet,connectWallet,loading,addEthereum,newLoading,buttonText,disConnect,initWallet}
 }

@@ -108,7 +108,7 @@ function TabSelect(props) {
 // ]
 
 export default function Setting(props) {
-  const { poolsList, wallet, swapSetting, setSwapSetting } = useGlobal()
+  const { from, to, wallet, swapSetting, setSwapSetting } = useGlobal()
   const { router, tolerance, gas, deadline} = swapSetting
   const { networkId } = wallet
   const toleranceArray = [0.5, 1, 1.5, 3]
@@ -135,6 +135,7 @@ const ItemError = styled.div`
   color:#ff3300;
   margin-bottom:14px;
 `
+
 function SettingItem(props){
   return (
     <div className="setting-item">

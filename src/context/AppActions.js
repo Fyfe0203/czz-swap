@@ -42,16 +42,15 @@ export default function actions(state, dispatch) {
         payload
       })
     },
-    setPoolsList(payload) {
-      // debugger
-      dispatch({
-        type: 'SET_POOLS_LIST',
-        payload
-      })
-    },
     setState(payload) {
       dispatch({
         type: 'SET_STATE',
+        payload
+      })
+    },
+    setButtonText(payload) {
+      dispatch({
+        type: 'SET_BUTTON_TEXT',
         payload
       })
     }

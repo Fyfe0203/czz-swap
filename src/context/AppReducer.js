@@ -27,33 +27,20 @@ export default function reducer(state, action) {
       ...state,
       ...action.payload
       }
-    case 'CHANGE_POOLS':
-      let list = Array.from(state.poolsList)
-      const {networkId} = list[0]
-      list[1].tokenValue = ''
+    case 'SET_BUTTON_TEXT':
       return {
-        ...state,
-        poolsList: list,
-        networkStatus:networkId === state.wallet?.networkId
-      }
+      ...state,
+      swapButtonText: action.payload
+    }
     case 'SET_WALLET':
       return {
         ...state,
         wallet: { ...state.wallet, ...action.payload },
-        networkStatus: action.payload?.networkId === state.poolsList[0].networkId
       }
     case 'SET_SWAP_SETTING':
       return {
         ...state,
-        swapSetting: { ...state.swapSetting, ...action.payload },
     }
-    case 'SET_POOLS_LIST':
-      // console.log('SET_POOLS_LIST', action.payload)
-      return {
-        ...state,
-        poolsList: action.payload,
-        networkStatus:action.payload[0]?.networkId === state.wallet?.networkId
-      }
     default: return state
   }
 };

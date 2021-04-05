@@ -6,32 +6,33 @@ import { Scrollbars } from 'rc-scrollbars'
 
 export default function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
-  const { pools, networks, setState, from, to } = useGlobal()
-  const tokenSystem = types ===1 ? to : from
-  const { type, symbol } = tokenSystem
+  const { pools, networks, setState, from, to ,wallet} = useGlobal()
+  const { currency } = pool
 
-  const normalFilter = token => token?.systemType === type
+  const normalFilter = token => token?.systemType === pool.networkType
   const [filters, setFilters] = useState(() => { return normalFilter })
   const [keyword, setKeyword] = useState(null)
-  const [chainId,setChainId] = useState(null)
+  const [chainId, setChainId] = useState(null)
 
   useEffect(() => {
-    setFilters(() => { return token => token?.systemType === type })
-  }, [type])
+    setFilters(() => { return token => token?.systemType === pool.networkType })
+    setChainId(pool.chainId)
+  }, [pool.networkType, pool.chainId])
 
   // select tooken item
-  const selectToken = symbol => {
-    const currentNetwork = networks.filter(i => i.symbolName === symbol.systemType)[0]
-    const symbolItem =  { ...currentNetwork, ...tokenSystem, symbol }
-    types === 1 ? setState({ to: {...symbolItem,tokenValue:''} }) : setState({ from: symbolItem})
+  const selectToken = item => {
+    const currentNetwork = networks.filter(i => i.networkType === item.systemType)[0]
+    // debugger
+    const symbolItem =  { ...currentNetwork, currency:item }
+    types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem})
     setListStatus(false)
   }
 
   // filter token
-  const filterToken = (e) => { 
+  const filterToken = e => { 
     if (e.target.value.length > 0) {
       setKeyword(e.target.value)
-      setFilters(() => { return token => { return token.symbol.indexOf(e.target.value.toUpperCase()) !== -1 && token?.systemType === type } })
+      setFilters(() => { return token => { return token.symbol.indexOf(e.target.value.toUpperCase()) !== -1 && token?.systemType === pool.networkType } })
     }
   }
   
@@ -43,15 +44,16 @@ export default function SelectId({ types, pool }) {
   
   const filterNetwork = (item) => {
     setChainId(item.chainId)
-    setFilters(() => { return token => { return token.systemType === item.symbolName } })
+    setFilters(() => { return token => { return token.systemType === item.networkType } })
   }
 
   const notFound = <div className="token-empty"><i className="ico ico-target" /> <span>{keyword}</span><p>Not Found this token! </p></div>
+
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">
         <div className="token-network">
-          {networks.map((item, index) => <div key={ index } className={ chainId === item.chainId && 'selected'} onClick={ () => filterNetwork(item)}>{ item.symbolName }</div>)}
+          {networks.map((item, index) => <div key={ index } className={ chainId === item.chainId && 'selected'} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
         </div>
         <div className="token-search">
           <i className="ico ico-search" />
@@ -62,19 +64,19 @@ export default function SelectId({ types, pool }) {
         </div>
         <Scrollbars style={{ maxWidth: 500, height: 560 }}>
           <div className="token-table">
-              {pools && tokenSystem && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
-                const icons = require(`../../asset/svg/${item.systemType}.svg`)
+              {pools && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
+              const icons = require(`../../asset/svg/${item.systemType}.svg`)
               return (
-                <div key={index} className={`f-c token-item ${tokenSystem.symbol?.tokenAddress === item.tokenAddress ? 'active' : ''}`} onClick={() => selectToken(item)}>
+                <div key={index} className={`f-c token-item ${currency?.tokenAddress === item.tokenAddress ? 'active' : ''}`} onClick={() => selectToken(item)}>
                   <div className="token-info f-c">
-                    <div className="img" style={{backgroundImage:`url(${icons.default})`}} />
+                    {icons.default && <div className="img" style={{backgroundImage:`url(${icons.default})`}} />}
                     <div className="f-1">
                       <h2>{item.symbol}</h2>
                       <div className="token-address">{formatAddress(item.tokenAddress)}</div>
                     </div>
                   </div>
                   <div className="token-desc">
-                    { item.desc }
+                    { item.name }
                   </div>
                 </div>
               )
@@ -97,8 +99,8 @@ export default function SelectId({ types, pool }) {
         <div className="f-c f-1">
           <i className="img" alt={icon.default} style={{ backgroundImage: `url(${icon.default})` }} />
           <div className="select-inner-val">
-            <h3>{symbol?.symbol || type || 'Select Token'}</h3>
-            <div className="select-inner-desc">{ symbol?.desc }</div>
+            <h3>{currency?.symbol || 'Select Token'}</h3>
+            <div className="select-inner-desc">{ currency?.name }</div>
           </div>
         </div>
         <div className="ico ico-chevron-down" />

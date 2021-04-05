@@ -1,8 +1,12 @@
 import { symbol } from 'prop-types'
 import React from 'react'
 import { Button } from '../../compontent'
-export default function NetworkModal(props) {
+import useWallet from '../../hooks/useWallet'
+import useGlobal from '../../hooks/useGlobal'
 
+export default function NetworkModal(props) {
+  const { addEthereum } = useWallet()
+  const { from } = useGlobal()
   const BASE_TEXT = `If you have already configured this network in MetaMask, then open MetaMask -> Network Dropdown at the top of MetaMask and select ${symbol}.`
   const INFO_TEXT = `If you have not configured this network, then open Metamask -> Settings -> Networks -> Add Network and paste the settings below`
 
@@ -14,7 +18,7 @@ export default function NetworkModal(props) {
       <div>
         { INFO_TEXT}
       </div>
-      <Button className="button">Unlock Wallet</Button>
+      <Button className="button" onClick={()=> addEthereum(from) }>Unlock Wallet</Button>
     </div>
   )
 }

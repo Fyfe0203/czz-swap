@@ -11,12 +11,14 @@ import Recent from './Recent'
 import NetworkModal from '../swap/NetworkModal'
 import './index.scss'
 // https://chainid.network/chains.json
-import { OnboardingButton } from './ConnectButton'
+// Insufficient liquidity for this trade.
+// Insufficient BNB balance
+
 import useWallet from '../../hooks/useWallet'
 
 export default function Connect(props) {
   const { accounts, wallet, networkStatus, networks, pending } = useGlobal()
-  const { connectWallet, buttonText } = useWallet()
+  const { connectWallet, buttonText, disConnect,initWallet } = useWallet()
 
   const walletList = [
     {
@@ -34,7 +36,6 @@ export default function Connect(props) {
     }
   ]
 
-  const disConnect = async () => {}
   
   const [showModal, setShowModal] = useState(false)
   const [showAccount, setShowAccount] = useState(false)
@@ -61,22 +62,26 @@ export default function Connect(props) {
   useEffect(() => {
     networkChange()
   }, [wallet])
+
+  useEffect(() => {
+    initWallet()
+  }, [])
   
   const accountBlock = (
     <Fragment>
-      <div className="c-wallet c-connect-link network">{ currentNetwork?.networkName}</div>
+      {currentNetwork.networkName && <div className="c-wallet c-connect-link network">{ currentNetwork?.networkName}</div>}
       <div className="c-wallet f-c">
         {networkLoading && <Loading size="small" mask={true} style={{borderRadius:90}} />}
-          <div className="f-c" onClick={() => setShowAccount(!showModal)}>
+          <div className="f-c">
             <div className="c-balance">{balance} { currentNetwork?.symbol }</div>
-            <div className="c-accounts f-c">
-            <div className="c-wallet-icon">
-              <Jazzicon address={accounts} />
-            </div>
-            { buttonText }
-          </div>
+            <div className="c-accounts f-c" onClick={() => setShowAccount(!showModal)}>
+              <div className="c-wallet-icon">
+                <Jazzicon address={accounts} />
+              </div>
+              { buttonText }
+           </div>
           {pending.length ? <Pending /> : null}
-          {!networkStatus ? <NetworkError /> :null}
+          {!networkStatus ? <NetworkError connect={()=>setNetworkVisible(true)} /> :null}
         </div>
       </div>
     </Fragment>
@@ -120,11 +125,11 @@ export default function Connect(props) {
       <Recent />
     </Fragment>
   )
+
   return (
     <div className="c-connect">
       <div className="connect-mask">
         {accountsButton}
-        <OnboardingButton />
         <Modal title="Connect Wallet" visible={showModal} onClose={setShowModal}>{ modalContent }</Modal>
         <Modal title="Account" visible={showAccount} onClose={setShowAccount}>{ accountsContent } </Modal>
         <Modal title="Connect to NetWork" visible={networkVisible} onClose={setNetworkVisible}><NetworkModal /></Modal>

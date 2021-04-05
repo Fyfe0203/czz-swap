@@ -6,14 +6,13 @@ import useLocalStorage from './useLocalStorage'
 import Web3 from 'web3'
 
 function useSwapAndBurn() {
-  const { poolsList, currentProvider, accounts, setPending, pending, swapSetting } = useGlobal()
+  const { from, to, currentProvider, accounts, setPending, pending, swapSetting } = useGlobal()
   const { tolerance, deadline } = swapSetting
   const [receipt,setReceipt] = useState(null)
   const [hash,setHash] = useState(null)
   const [loading, setLoading] = useState(false)
   const [recent,setRecent] = useLocalStorage([],'recent')
-  const [from, to] = poolsList
-  // const {gas, gasPrice } = swapSetting
+  
   const getHashUrl = address => { return {explorerUrl: `${from.explorerUrl}tx/${address}` }}
   const fetchSwap = () => {
     setLoading(true)
@@ -24,19 +23,16 @@ function useSwapAndBurn() {
     )
     const amountIn = decToBn(Number(from?.tokenValue))
     // debugger
-    // const receivedAmount = Number(poolsList[0].tokenValue) - (poolsList[0].tokenValue * Number(tolerance))
-    // const tolerancAmount = amountIn.minus(amountIn.times(tolerance))
-
     // history params
     const deadlineVal = deadline ? new Date().getTime() + deadline * 60 * 60 * 1000 : 100000000000000
-    const recentItem = { types: 'Swap', accounts, content: `Swap ${from?.tokenValue} ${from.symbol?.symbol} to ${to.symbol?.symbol}` }
+    const recentItem = { types: 'Swap', accounts, content: `Swap ${from?.tokenValue} ${from.currency?.symbol} to ${to.currency?.symbol}` }
     
     lpContract.methods.swapAndBurn(
       amountIn.toString(),
       0, // tolerancAmount, // 0
-      from.symbol?.tokenAddress,
+      from.currency?.tokenAddress,
       to.ntype,
-      to.symbol?.tokenAddress,
+      to.currency?.tokenAddress,
       from.swaprouter, // change router setting
       from.weth, // change weth setting
       deadlineVal,
@@ -67,7 +63,7 @@ function useSwapAndBurn() {
   const successMessage = (res) => {
     message({
       icon: 'check-circle',
-      title:`Swap ${from?.symbol.symbol} to ${to?.symbol.symbol}`,
+      title:`Swap ${from?.currency.symbol} to ${to?.currency.symbol}`,
       content: <LinkItem target="_blank" href={ `${from?.explorerUrl}tx/${res.transactionHash}`} rel="noopener">View on Etherscan</LinkItem>
     })
   }

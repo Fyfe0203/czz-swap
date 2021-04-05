@@ -44,14 +44,14 @@ export const fetchPairData = async (tokenA, tokenB, factoryAddress, initCodeHash
   }
 }
 export default function useMidPrice() {
-  const { from, to } = useGlobal()
+  const { from, to, setButtonText } = useGlobal()
   const [loading, setLoading] = useState(false)
   const [impactPrice, setImpactPrice] = useState(0)
   const [swapStatus, setSwapStatus] = useState(0)
 
   const fetchPair = async (lp) => {
-    const { networkId, symbol, czz, weth, provider, factoryAddress, initCodeHash } = lp
-    const From = new Token(Number(networkId), symbol?.tokenAddress, 18)
+    const { networkId, currency, czz, weth, provider, factoryAddress, initCodeHash } = lp
+    const From = new Token(Number(networkId), currency?.tokenAddress, 18)
     const Eczz = new Token(Number(networkId), czz, 18)
     const WETH = new Token(Number(networkId), weth, 18)
     try {

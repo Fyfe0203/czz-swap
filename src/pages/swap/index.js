@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect} from 'react'
-import { Modal, Loading, message,LinkItem,Button } from '../../compontent'
+import { Modal, Loading, message,LinkItem, Button } from '../../compontent'
 import useGetTokenValue from '../../hooks/useGetTokenValue'
 import useSwapAndBurn from '../../hooks/useSwapAndBurn'
 import useGlobal from '../../hooks/useGlobal'
@@ -10,7 +10,9 @@ import SwapItem from './SwapItem'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import useWallet from '../../hooks/useWallet'
+import {decToBn,bnToDec} from '../../utils'
 import './swap.scss'
+
 window.BigNumber = BigNumber
 
 const SwapConfirmItem = ({item,status,index}) => {
@@ -26,21 +28,18 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const { accounts, networkStatus, from, to, setState } = useGlobal()
-  const { } = useSwap()
+  const { accounts, networkStatus, from, to, setState, swapButtonText } = useGlobal()
+  const { status } = useSwap()
   const { loading, authorization, approveActions, approveLoading } = useGetTokenValue()
   const {loading: pirceLoading, impactPrice, swapStatus, swapStatusList} = useMidPrice()
   const {loading: swapLoading, hash, fetchSwap} = useSwapAndBurn()
   const [setting,setSetting] = useState(false)
   const [buttonLoading,setButtonLoading] = useState(false)
-  const { connectWallet, loading: walletLoading, wallet } = useWallet()
+  const { connectWallet, loading: walletLoading } = useWallet()
   
   useEffect(() => {
     setButtonLoading(loading || pirceLoading)
   }, [loading, pirceLoading])
-  useEffect(() => {
-    setState({aaa:'3'})
-  }, [])
 
   const reverseExchange = () => {
     setState({
@@ -78,25 +77,22 @@ export default function Swap() {
   
   const swapFooter = (
     <div className="swap-footer">
-      <div className="f-c"><span>Minimun received</span> <span><b>{to.tokenValue}</b> { to.symbol?.symbol}</span></div>
+      <div className="f-c"><span>Minimun received</span> <span><b>{to.tokenValue}</b> { to.currencys?.symbol}</span></div>
       <div className="f-c"><span>Price Impact</span> <span className={ `price-${swapStatus}` }>{impactPrice} %</span> </div>
-      <div className="f-c"><span>Liquidity Provider Fee</span><span><b>{from.tokenValue && new BigNumber(Number(from.tokenValue)).times(new BigNumber(0.0007)).toNumber()}</b> { from.symbol?.symbol}</span> </div>
+      <div className="f-c"><span>Liquidity Provider Fee</span><span><b>{from.tokenValue && bnToDec(decToBn(from.tokenValue).multipliedBy( new BigNumber(0.007)))}</b> { from.currency?.symbol}</span> </div>
     </div>
   )
 
   const [confirmStatus, setConfirmStatus] = useState(false)
   
-  const confirmSwap = () => {
-    fetchSwap()
-   
-  }
+
   const confirmButton = (
-    <div className={`swap-button button-${swapStatus}`} onClick={swapStatus === 3 || swapLoading ? null : confirmSwap}>
+    <div className={`swap-button button-${swapStatus}`} onClick={swapStatus === 3 || swapLoading ? null : fetchSwap}>
       {swapLoading ? <Loading text="Swap Pending" size="small" /> : swapStatusList[swapStatus]}
     </div>
   )
+
   useEffect(() => {
-    console.log('hash', hash)
     if (hash) {
       setConfirmStatus(false)
       setSubmitStatus(true)
@@ -125,16 +121,16 @@ export default function Swap() {
         <i className="ico ico-arrow-down" />
         <SwapConfirmItem index={0} item={from} status={swapStatus} />
         <SwapConfirmItem index={1} item={to} status={swapStatus}/>
-        {/* {poolsList.map((item, index) => <SwapConfirmItem key={index} index={ index } item={item} status={swapStatus}/>) } */}
       </div>
       <div className="confirm-warn-text">
-        {`Output is estimated.You will recive at least ${to.tokenValue} ${to.symbol?.symbol} or the transaction will revert.`}
+        {`Output is estimated.You will recive at least ${to.tokenValue} ${to.currency?.symbol} or the transaction will revert.`}
       </div>
       {confirmButton}
       {swapFooter}
     </div>
   )
   
+  const [balanceStatus,setBalanceStatus] = useState(null)
   return (
     <Fragment>
       <div className="swap-wrap">
@@ -143,10 +139,11 @@ export default function Swap() {
               <h2 className="swap-title">SWAP</h2>
               <div className="swap-setting ico-settings" onClick={ ()=>setSetting(true)} />
           </div>
-          <Item className="swap-id"> <SwapItem pools={from} type={ 0 }  /></Item>
-          <Item className="swap-id"> <SwapItem pools={to} type={1} exchange={ exchangeButton } /></Item>
+          <Item className="swap-id"> <SwapItem pool={from} type={0} sataus={ setBalanceStatus }  /></Item>
+          <Item className="swap-id"> <SwapItem pool={to} type={1} exchange={ exchangeButton } /></Item>
           <SwapBar className="swap-bar">
             {swapButton}
+            {<Button>{ status[swapButtonText]}</Button>}
           </SwapBar>
           {impactPrice ? swapFooter : null}
         </SwapPanel>
