@@ -69,8 +69,6 @@ export default function useMidPrice() {
     }
   }
 
-
-  
   const fetchPrice = async () => {
     if (from.tokenValue && to.tokenValue > 0) {
       try {
