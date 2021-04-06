@@ -3,7 +3,10 @@ import useGlobal from '../../hooks/useGlobal'
 import { Modal } from '../../compontent/index'
 import {formatAddress} from '../../utils'
 import { Scrollbars } from 'rc-scrollbars'
+import styled from 'styled-components'
 
+const SearchInput = styled.input`
+`
 export default function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
   const { pools, networks, setState, from, to } = useGlobal()
@@ -29,10 +32,13 @@ export default function SelectId({ types, pool }) {
   }
 
   // filter token
-  const filterToken = e => { 
-    if (e.target.value.length > 0) {
-      setKeyword(e.target.value)
-      setFilters(() => { return token => { return token.symbol.indexOf(e.target.value.toUpperCase()) !== -1 && token?.systemType === pool.networkType } })
+  const filterToken = ({target}) => {
+    const { value } = target
+    setKeyword(value)
+    if (value.length > 0) {
+      setFilters(() => { return token => { return token.symbol.indexOf(value.toUpperCase()) !== -1 && token?.systemType === pool.networkType } })
+    } else {
+      cleanSearch()
     }
   }
   
@@ -58,7 +64,7 @@ export default function SelectId({ types, pool }) {
         <div className="token-search">
           <i className="ico ico-search" />
           <div className="token-search-input">
-            <input value={ keyword } className="c-input" onChange={filterToken} placeholder="search token" type="text" />
+            <SearchInput value={ keyword } className="c-input" onChange={filterToken} placeholder="search token" type="text" />
           </div>
           {keyword && <i className="ico-x-circle clean" onClick={ cleanSearch } />}
         </div>

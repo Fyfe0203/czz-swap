@@ -65,6 +65,17 @@
     opacity: 0;
   }
 }
+@keyframes zoomScale {
+   0%{
+    transform: scale(0.9);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  to{
+    transform: scale(0.9);
+  }
+}
 .page{
   &-load{
     position: fixed;
@@ -77,10 +88,11 @@
     justify-content: center;
   }
   &-loading{
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     background-size: 100%;
     background-repeat: no-repeat;
+    animation: zoomScale 1s ease-in infinite;
   }
 }
 .loading{
