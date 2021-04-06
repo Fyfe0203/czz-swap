@@ -25,8 +25,9 @@ export default function SelectId({ types, pool }) {
   // select tooken item
   const selectToken = item => {
     const currentNetwork = networks.filter(i => i.networkType === item.systemType)[0]
+    const oldItem = types === 1 ? to : from
     // debugger
-    const symbolItem =  { ...currentNetwork, currency:item }
+    const symbolItem =  { ...oldItem, ...currentNetwork, currency:item }
     types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem})
     setListStatus(false)
   }

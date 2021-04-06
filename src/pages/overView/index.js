@@ -42,7 +42,7 @@ export default function OverView() {
           <div className="exchange-container">
             {
               exchange.split(',').map((item, index) => {
-                const ico = require(`../../asset/svg/${item}.png`).default
+                const ico = require(`../../asset/images/${item}.png`).default
                 return (
                   <div key={index} className="exchange-item">
                     <div className="exchange-item-cont">

@@ -148,7 +148,7 @@ export default function useGetTokenValue() {
       if(!to.currency) setButtonText('NONE_TO_TOKEN')
       if(from.tokenValue === '' && accounts) setButtonText('NONE_AMOUNT')
     }
-  }, [from?.tokenValue, to?.currency, from?.currency])
+  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol])
   
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }
