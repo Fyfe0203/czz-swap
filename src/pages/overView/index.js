@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import './style.scss'
 import { Link } from 'react-router-dom'
-import banner from '../../asset/svg/welcome.svg'
+import banner from '../../asset/svg/welcomes.svg'
 
 export default function OverView() {
   let arr = ['ETH', 'BSC', 'HECO', 'TRON', "SOL", "DOT"]
