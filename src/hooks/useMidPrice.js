@@ -50,8 +50,8 @@ export default function useMidPrice() {
 
   const fetchPair = async (lp) => {
     const { networkId, currency, czz, weth, provider, factoryAddress, initCodeHash } = lp
-    const From = new Token(Number(networkId), currency?.tokenAddress, 18)
-    const Eczz = new Token(Number(networkId), czz, 18)
+    const From = new Token(Number(networkId), currency?.tokenAddress,  currency?.decimals)
+    const Eczz = new Token(Number(networkId), czz, 8)
     const WETH = new Token(Number(networkId), weth, 18)
     try {
       const FromPair = await fetchPairData(WETH, From, factoryAddress, initCodeHash, provider)
@@ -79,7 +79,8 @@ export default function useMidPrice() {
         const czzRes = await fetchPair(to)
         const midPrice = ethRes / czzRes
         // debugger
-        const price = Number(((midPrice - to.tokenValue) / midPrice) * 100).toFixed(2)
+        const midProce2 =  Number(Number(Number(from.tokenValue) * midPrice).toFixed(to.currency.decimals))
+        const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)
         setImpactPrice(price)
         changeStatus(price)
         setLoading(false)
@@ -91,7 +92,7 @@ export default function useMidPrice() {
       }
     }
   }
-  
+
   const swapStatusList = [
     'Swap Now',
     'Swap Anyway',
@@ -115,7 +116,7 @@ export default function useMidPrice() {
   useEffect(() => {
     fetchPrice()
   }, [to.tokenValue])
-  
+
   return {loading, impactPrice, swapStatusList, swapStatus}
 }
 

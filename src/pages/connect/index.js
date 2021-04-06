@@ -60,8 +60,10 @@ export default function Connect(props) {
   }
 
   useEffect(() => {
-    networkChange()
-  }, [from,to])
+    if (accounts) { 
+      networkChange()
+    }
+  }, [from,to,accounts])
 
   const accountBlock = (
     <Fragment>
