@@ -27,8 +27,9 @@ input{
   }
 }
 html{
+  background: #f4f4f4;
     &::after{
-    background: linear-gradient(125.42deg, #FFA08B -24.19%, #FFF3D6 103.08%);
+    // background: linear-gradient(125.42deg, #FFA08B -24.19%, #FFF3D6 103.08%);
     content: '';
     position: fixed;
     left: 0;
@@ -45,7 +46,7 @@ html{
     bottom: 0;
     top:0;
     z-index: -1;
-    background: url('./images/bg.jpg') repeat; 
+    // background: url('./images/bg.jpg') repeat; 
     background-size: 1100px;
     opacity: .09;
   }
