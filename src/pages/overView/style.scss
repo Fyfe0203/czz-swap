@@ -1,5 +1,5 @@
 .home{
-  height:calc(100vh - 230px);
+  height:calc(100vh - 180px);
   display: flex;
   align-items: center;
   max-width: 1200px;
@@ -9,9 +9,13 @@
   background-size: 800px;
   position: relative;
   min-width: 600px;
+  h1{
+    font-size: 50px;
+    margin-bottom: 14px;
+  }
   p{
     line-height: 1.8;
-    font-size: 14px;
+    font-size: 16px;
   }
   .imgs{
     position: absolute;
@@ -38,7 +42,7 @@
   padding:0 0;
   border-radius: 3px;
   height: 50px;
-  margin-top:20px;
+  margin-top:40px;
   transition: .4s;
   position: relative;
   margin-top:30px;

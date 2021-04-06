@@ -7,11 +7,9 @@ export default function OverView() {
   return (
     <div className="home">
       <div>
-        <h1>All For Your Trading.</h1>
-        <p>Decentralized Full Aggregation Protocol.</p>
-        <p>Guaranteed liquidity for millions of users and hundreds of Ethereum applications.</p>
-        <p>liquidity providers and traders to participate in a financial marketplace that is open and accessible to all.</p>
-        <p><Link className="swap-button" style={{ width: 180 }} to="/swap" >GO SWAP</Link></p>
+        <h1>Powered by Te Waka.</h1>
+        <p>Enabling connectivity between islands of DeFi.</p>
+        <p><Link className="swap-button" style={{ width: 180 }} to="/swap" >Entry App</Link></p>
       </div>
       <div className="imgs" style={{backgroundImage:`url(${banner})`}}></div>
     </div>

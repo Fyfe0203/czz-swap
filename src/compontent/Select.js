@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import Scrollbars from 'rc-scrollbars'
+import PropTypes from 'prop-types'
+
+// select box
 
 export default function Select(props) {
   const [status, setStatus] = useState(false)
@@ -35,6 +38,11 @@ export default function Select(props) {
     </SelectInner>
   )
 }
+Select.propTypes = {
+  list: PropTypes.array,
+  onChange: PropTypes.func
+}
+
 const SelectInner = styled.div`
   background: rgba(110,110,110,0.1);
   border-radius:6px;
