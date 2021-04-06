@@ -162,7 +162,7 @@ export default function useWallet() {
 
   useEffect(() => {
     initWallet()
-  }, [])
+  }, [from])
 
   return {connectWallet,loading,addEthereum,newLoading,buttonText,disConnect}
 }
