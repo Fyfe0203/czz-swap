@@ -74,12 +74,11 @@ export default function useMidPrice() {
       try {
         setLoading(true)
         const ethRes = await fetchPair(from)
-        const czzRes = await fetchPair(to.decimals)
+        const czzRes = await fetchPair(to)
         const midPrice = ethRes / czzRes
-        const midProce2 = Number(midPrice.toFixed(to.decimals))
-        console.log('midPrice', midPrice, midProce2)
         debugger
-        const price = Number((((Number(from.tokenValue) * midProce2) - Number(to.tokenValue)) / (Number(from.tokenValue) * midPrice)) * 100).toFixed(2)
+        const midProce2 =  Number(Number(Number(from.tokenValue) * midPrice).toFixed(to.currency.decimals))
+        const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)
         setImpactPrice(price)
         changeStatus(price)
         setLoading(false)
