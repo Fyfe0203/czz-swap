@@ -89,7 +89,7 @@ export default function useGetTokenValue() {
   // Get Burn amount Post
   const swapBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { abi, czz, weth, currency, provider, router, swaprouter } = pool
+      const { czz, weth, currency, provider, router, swaprouter } = pool
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
@@ -116,7 +116,7 @@ export default function useGetTokenValue() {
         const inAmountRes = await swapBurnAmount(from, inAmount, true)
         const changeAmount = new BigNumber(Number(inAmountRes)).toString()
         console.log('inAmountExchangeValue == ', changeAmount)
-        if (changeAmount === 0) {
+        if (changeAmount === "0") {
           setButtonText('NONE_TRADE')
           setLoading(false)
           return false
