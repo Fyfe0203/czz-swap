@@ -6,7 +6,7 @@ import banner from '../../asset/images/saly.png'
 export default function OverView() {
   let arr = ['ETH', 'BSC', 'HECO', 'TRON', "SOL", "DOT"]
   let exchange = `Uniswap,SushiSwap,PancakeSwap,Medx,DogeSwap,KSwap,Mooniswap,Balancer,Kyber,BakerySwap,JustSwap,DODO`
-  let exchangeName = ['ETH','ETH','BSC','HECO','HECO','OKEX','ETH','ETH','ETH','ETH','ETH','ETH','ETH','ETH','ETH']
+  let exchangeName = ['ETH','ETH','BSC','HECO','HECO','OKEX','ETH','ETH','ETH','ETH','TRON','ETH,BSC']
   return (
     <Fragment>
       <div className="home">
@@ -49,7 +49,7 @@ export default function OverView() {
                       <i className="img" style={{backgroundImage:`url(${ico})`}} />
                       <span>{item}</span>
                     </div>
-                    <sub>{exchangeName[index]}</sub>
+                    <sub>{exchangeName[index].split(',').map((item, index) => <b key={ index }>{ item}</b>)}</sub>
                   </div>)
               })
             }

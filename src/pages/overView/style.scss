@@ -108,7 +108,7 @@
   }
 }
 .exchange{
-  width: 60%;
+  width: 65%;
   h1{
     margin-bottom: 20px;
     font-size: 18px;
@@ -125,19 +125,25 @@
     padding:20px 0;
     justify-content: space-between;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 14px;
     &-cont{
       display: flex;
       align-items: center;
+      flex:1;
     }
     sub{
-      background: rgb(46, 46, 46);
-      font-size: 12px;
-      padding:4px 0;
-      color: #fff;
-      transform: scale(.6);
-      width: 42px;
+  
       text-align: center;
+      display: flex;
+      justify-content: flex-end;
+      b{
+      background: rgb(46, 46, 46);
+      transform: scale(.8);
+      color: #fff;
+      padding:2px 0;
+      width: 40px;
+      font-size: 12px;
+      }
     }
   }
   .img{

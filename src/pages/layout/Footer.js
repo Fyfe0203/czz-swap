@@ -2,7 +2,7 @@ import React from 'react'
 export default function Footer() {
   const links = [
     // {name: 'White Paper', link: 'http://docs.classzz.com/czz-whitepaper-v1.3.pdf',ico:'book-open'},
-    {name: 'White Paper', link: 'https://docs.classzz.com/czz whitepaper v4.pdf',ico:'book-open'},
+    {name: 'White Paper', link: 'https://docs.classzz.com/czz-whitepaper-v4.pdf',ico:'book-open'},
     {name: 'Github', link: 'https://github.com/classzz',ico:'github'},
     {name: 'Telegram', link: 'https://t.me/classzzoffical',ico:'send'},
     {name: 'Twitter', link: 'https://www.twitter.com/class_zz',ico:'twitter'},
