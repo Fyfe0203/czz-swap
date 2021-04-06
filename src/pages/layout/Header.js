@@ -5,10 +5,9 @@ import Connect from '../connect/index'
 import useGlobal from '../../hooks/useGlobal'
 import './layout.scss'
 
-export default function Header() {
+export default React.memo(function Header() {
   const { theme, toggleTheme } = useGlobal()
   const locations = useLocation()
-  console.log(locations)
   return (
     <div className="c-header">
       <div className="f-c">
@@ -19,10 +18,11 @@ export default function Header() {
       </div>
       <div className="f-c c-tool">
         {locations.pathname === '/swap' && <Connect />}
-        <div className="theme-button" onClick={ toggleTheme }>
+        {/* <div className="theme-button" onClick={ toggleTheme }>
           <i className={theme ? 'ico-moon' : 'ico-sun'} />
-        </div>
+        </div> */}
       </div>
     </div>
   )
-}
+})
+
