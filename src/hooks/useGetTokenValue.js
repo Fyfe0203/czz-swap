@@ -8,6 +8,9 @@ import BigNumber from 'bignumber.js'
 import JSBI from 'jsbi'
 import { Token, TokenAmount,Percent } from '@uniswap/sdk'
 import useLocalStorage from './useLocalStorage'
+import { IUniswapV2Router02 } from '../abi'
+
+
 
 const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
@@ -21,7 +24,7 @@ export default function useGetTokenValue() {
   const [authorization, setAuthorization] = useState(true)
   const [isApprove, setIsApprove] = useState(true)
   const [recent, setRecent] = useLocalStorage([],'recent')
-  
+
   // const getReceived = async () => {
   //   const receivedAmount = Number(from.tokenValue) - (from.tokenValue * Number(tolerance))
   //   const res = await swapTokenValue(receivedAmount)
@@ -86,13 +89,13 @@ export default function useGetTokenValue() {
   // Get Burn amount Post
   const swapBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { abi, czz, weth, currency, provider, router, swaprouter } = pool
+      const { czz, weth, currency, provider, router, swaprouter } = pool
       const contract = await new Web3(provider)
-      const lpContract = await new contract.eth.Contract(abi, router)
+      const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
       const tokenArray = isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
       // debugger
-      const result = await lpContract.methods.swap_burn_get_amount(tokenValue, tokenArray, swaprouter).call(null)
+      const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call(null)
       console.log("swapBurnGetAmount result ===", result)
       return result[2]
     } catch (error) {
@@ -113,7 +116,7 @@ export default function useGetTokenValue() {
         const inAmountRes = await swapBurnAmount(from, inAmount, true)
         const changeAmount = new BigNumber(Number(inAmountRes)).toString()
         console.log('inAmountExchangeValue == ', changeAmount)
-        if (changeAmount === 0) {
+        if (changeAmount === "0") {
           setButtonText('NONE_TRADE')
           setLoading(false)
           return false
@@ -138,7 +141,7 @@ export default function useGetTokenValue() {
       }
     }
   }
-  
+
   // Get token Value Effect
   useEffect(() => {
     if (from.currency && from.tokenValue && to.currency) {
@@ -149,6 +152,6 @@ export default function useGetTokenValue() {
       if(from.tokenValue === '' && accounts) setButtonText('NONE_AMOUNT')
     }
   }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol])
-  
+
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }
