@@ -48,9 +48,9 @@ export default function useGetTokenValue() {
         content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Etherscan</LinkItem>
       })
     } catch (error) {
-      console.log(error)
       // set approve history failed
-      setRecent(item => [...item,{...recentInfo,status:0}])
+      setRecent(item => [...item, { ...recentInfo, status: 0 }])
+      throw error
     } finally {
       setAuthorization(true)
       setApproveLoading(false)
@@ -97,7 +97,7 @@ export default function useGetTokenValue() {
       return result[2]
     } catch (error) {
       setButtonText('NONE_TRADE')
-      console.log(error)
+      throw error
     }
   }
 
@@ -128,10 +128,11 @@ export default function useGetTokenValue() {
         setState({to:newTo})
         setAuthorization(allowanceResult)
         setLoading(false)
-        console.log("SWAP AMOUNT == >", from.tokenValue, "< == >", outAmount)
+        console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
       } catch (error) {
         setButtonText('NONE_TRADE')
         setLoading(false)
+        throw error
       } finally {
         setLoading(false)
       }

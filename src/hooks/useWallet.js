@@ -4,7 +4,7 @@ import useGlobal from './useGlobal'
 import { formatAddress } from '../utils'
 
 export default function useWallet() {
-  const { setState,from,wallet,accounts,updateAccounts } = useGlobal()
+  const { setState, from, wallet, accounts, updateAccounts } = useGlobal()
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
   const ONBOARD_TEXT = 'Click here to install MetaMask!'
@@ -121,9 +121,8 @@ export default function useWallet() {
     }
   }
 
-  // watch asset token
+  // watch walletAsset token
   const watchAsset = async (pool) => {
-    // const { currency, decimals } = pool
     const { symbol, tokenAddress:address, decimals} = pool
     const options = {
       address,
@@ -138,16 +137,16 @@ export default function useWallet() {
           type: 'ERC20',
           options
         },
+        id: Math.round(Math.random() * 100000),
       })
       if (success) {
-        console.log('FOO successfully added to wallet!')
+        console.log(`${symbol} successfully added to wallet!`)
       } else {
         throw new Error('Something went wrong.')
       }
     } catch (error) {
-      console.log('error',error)
+      throw error
     }
-   
   }
 
   useEffect(() => {
@@ -164,12 +163,6 @@ export default function useWallet() {
   useEffect(() => {
     initWallet()
   }, [])
-  
-  useEffect(() => {
-    if(window.ethereum && from.currency)(
-      handlenNewChainId(window.ethereum.chainId)
-    )
-  }, [from.currency])
 
   return {connectWallet,loading,addEthereum,newLoading,buttonText,disConnect}
 }

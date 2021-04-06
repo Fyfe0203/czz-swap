@@ -17,7 +17,7 @@ import './index.scss'
 import useWallet from '../../hooks/useWallet'
 
 export default function Connect(props) {
-  const { accounts, wallet, networkStatus, networks, pending } = useGlobal()
+  const { accounts, wallet, networkStatus, networks, pending, from, to } = useGlobal()
   const { connectWallet, buttonText, disConnect } = useWallet()
 
   const walletList = [
@@ -61,7 +61,7 @@ export default function Connect(props) {
 
   useEffect(() => {
     networkChange()
-  }, [wallet])
+  }, [from,to])
 
   const accountBlock = (
     <Fragment>
@@ -77,7 +77,7 @@ export default function Connect(props) {
               { buttonText }
            </div>
           {pending.length ? <Pending /> : null}
-          {!networkStatus ? <NetworkError connect={()=>setNetworkVisible(true)} /> :null}
+          {!!!networkStatus ? <NetworkError connect={()=>setNetworkVisible(true)} /> :null}
         </div>
       </div>
     </Fragment>

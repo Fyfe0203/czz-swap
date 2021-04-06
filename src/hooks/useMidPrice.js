@@ -43,7 +43,7 @@ export const fetchPairData = async (tokenA, tokenB, factoryAddress, initCodeHash
   }
 }
 export default function useMidPrice() {
-  const { from, to, setButtonText } = useGlobal()
+  const { from, to } = useGlobal()
   const [loading, setLoading] = useState(false)
   const [impactPrice, setImpactPrice] = useState(0)
   const [swapStatus, setSwapStatus] = useState(0)
@@ -65,19 +65,20 @@ export default function useMidPrice() {
       const eczz_weth = route1.midPrice.toSignificant(6)
       return eczz_weth / from_weth
     } catch (error) {
-      console.log(error)
+      throw new Error(error)
     }
   }
+
+
+  
   const fetchPrice = async () => {
-    
-    if (from.tokenValue && to.tokenValue) {
+    if (from.tokenValue && to.tokenValue > 0) {
       try {
         setLoading(true)
         const ethRes = await fetchPair(from)
         const czzRes = await fetchPair(to)
         const midPrice = ethRes / czzRes
-        console.log('midPrice', midPrice)
-        debugger
+        // debugger
         const price = Number(((midPrice - to.tokenValue) / midPrice) * 100).toFixed(2)
         setImpactPrice(price)
         changeStatus(price)
