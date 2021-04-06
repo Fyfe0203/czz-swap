@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import React from 'react'
+import { NavLink,useLocation } from 'react-router-dom'
 import routes from '../../routes'
 import Connect from '../connect/index'
-import { AppContext } from '../../context/AppGlobalState'
+import useGlobal from '../../hooks/useGlobal'
 import './layout.scss'
 
 export default function Header() {
-  const { theme, toggleTheme } = useContext(AppContext)
+  const { theme, toggleTheme } = useGlobal()
+  const locations = useLocation()
+  console.log(locations)
   return (
     <div className="c-header">
       <div className="f-c">
@@ -16,7 +18,7 @@ export default function Header() {
         </div>
       </div>
       <div className="f-c c-tool">
-        <Connect />
+        {locations.pathname === '/swap' && <Connect />}
         <div className="theme-button" onClick={ toggleTheme }>
           <i className={theme ? 'ico-moon' : 'ico-sun'} />
         </div>
