@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { decToBn, getBalanceNumber, getDisplayBalance } from '../utils'
 import { allowance,approve } from '../utils/erc20'
 import { message, LinkItem } from '../compontent'
@@ -6,24 +6,20 @@ import Web3 from "web3"
 import useGlobal from './useGlobal'
 import BigNumber from 'bignumber.js'
 import JSBI from 'jsbi'
-import { Token, TokenAmount,Percent } from '@uniswap/sdk'
+import { Token, TokenAmount } from '@uniswap/sdk'
 import useLocalStorage from './useLocalStorage'
+import useBalance from './useBalance'
 import { IUniswapV2Router02 } from '../abi'
+import useDebounce from './useDebounce'
 
-
-
-const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
-const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
-const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
-console.log('INPUT_FRACTION_AFTER_FEE',INPUT_FRACTION_AFTER_FEE,BASE_FEE,ONE_HUNDRED_PERCENT)
 export default function useGetTokenValue() {
-  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText } = useGlobal()
+  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus } = useGlobal()
   const [loading,setLoading] = useState(false)
-  // const [value, setValue] = useState(0)
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
   const [isApprove, setIsApprove] = useState(true)
   const [recent, setRecent] = useLocalStorage([],'recent')
+  const {  balance } = useBalance(from)
 
   // const getReceived = async () => {
   //   const receivedAmount = Number(from.tokenValue) - (from.tokenValue * Number(tolerance))
@@ -36,22 +32,22 @@ export default function useGetTokenValue() {
     const recentInfo = {content:`Approved ${currency?.symbol}`}
     try {
       setApproveLoading(true)
-      setPending([...pending,'approve'])
+      setPending([...pending, 'approve'])
+      setButtonText('SWAP_ING')
       const res = await approve({ provider: currentProvider, tokenAddress: currency?.tokenAddress, spender, accounts })
-      console.log('approve result ======',res)
+      console.log('Approve result ======',res)
       setIsApprove(res)
       setApproveLoading(false)
       setAuthorization(true)
-      // set approve history success
       setRecent(item => [...item, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
       setPending(pending.filter(i => i !== 'approve'))
+      setButtonText('SWAP')
       message({
         icon: 'award',
         title:`Approvd White ${currency?.symbol}`,
         content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Etherscan</LinkItem>
       })
     } catch (error) {
-      // set approve history failed
       setRecent(item => [...item, { ...recentInfo, status: 0 }])
       throw error
     } finally {
@@ -69,7 +65,6 @@ export default function useGetTokenValue() {
     const allonceNum = decToBn(allowanceTotal).toNumber()
     return allonceNum > amountToken
   }
-
   // const networkError = () => {
   //    message({
   //     title: 'Network Error',
@@ -77,7 +72,6 @@ export default function useGetTokenValue() {
   //     icon:'wifi-off'
   //   })
   // }
-
   // const lessValue = () => {
   //   message({
   //     title: 'illiquid',
@@ -104,15 +98,13 @@ export default function useGetTokenValue() {
     }
   }
 
-  const swapTokenValue = async (from) => {
+  const swapTokenValue = async (from,to) => {
     if (from && from.currency && to.currency && from.tokenValue && Number(from.tokenValue) > 0) {
-      setLoading(false)
       try {
         setLoading(true)
         setButtonText('FINDING_PRICE_ING')
         const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
-        // debugger
         const inAmountRes = await swapBurnAmount(from, inAmount, true)
         const changeAmount = new BigNumber(Number(inAmountRes)).toString()
         console.log('inAmountExchangeValue == ', changeAmount)
@@ -128,7 +120,7 @@ export default function useGetTokenValue() {
         const outAmount = amounts.toSignificant(6)
         const allowanceResult = await allowanceAction(from.tokenValue)
         let newTo = {...to,tokenValue:outAmount}
-        setState({to:newTo})
+        setState({ to: newTo })
         setAuthorization(allowanceResult)
         setLoading(false)
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
@@ -142,14 +134,35 @@ export default function useGetTokenValue() {
     }
   }
 
+  const debounceValue = useDebounce({
+    fn: swapTokenValue,
+    wait: 1000
+  })
+
+  const [hasBalance,setHasBalance] =  useState(true)
+  useEffect(() => {
+    setHasBalance( Number(balance) > Number(from.tokenValue))
+  }, [balance])
   // Get token Value Effect
   useEffect(() => {
-    if (from.currency && from.tokenValue && to.currency) {
-      swapTokenValue(from)
-    } else {
-      if(!from.currency) setButtonText('NONE_FROM_TOKEN')
-      if(!to.currency) setButtonText('NONE_TO_TOKEN')
-      if(from.tokenValue === '' && accounts) setButtonText('NONE_AMOUNT')
+    if (from.currency && from?.tokenValue && to.currency?.symbol) {
+      debounceValue(from, to)
+    } else { 
+      if (accounts) {
+        if (from.tokenValue === '') {
+          setButtonText('NONE_AMOUNT')
+        } else if (networkStatus && to.tokenValue) {
+          setButtonText('NONE_NETWORK')
+        } else if (!hasBalance) {
+          setButtonText('NONE_BALANCE')
+        } else if (!authorization && to.tokenValue) {
+          setButtonText('APPROVE')
+        } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance) {
+          setButtonText('SWAP')
+        }
+      } else {
+        setButtonText('NONE_WALLET')
+      }
     }
   }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol])
 

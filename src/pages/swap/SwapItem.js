@@ -1,19 +1,16 @@
-import React, { useState, useEffect} from 'react'
+import React, { useEffect } from 'react'
 import useGlobal from '../../hooks/useGlobal'
+import useBalance from '../../hooks/useBalance'
 import SwapSelect from './SwapSelect'
-import { getBalance } from '../../utils/erc20'
 import styled from 'styled-components'
-import BigNumber from 'bignumber.js'
-import { getBalanceNumber } from '../../utils'
-import Web3 from 'web3'
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const AmountInput = styled.input``
 
-export default function SwapItem({ pool, exchange, type, status = () => { }}) {
-  const [ balance,setBalance ] = useState(0)
-  const { from, setState, accounts } = useGlobal()
+export default function SwapItem({ pool, exchange, type}) {
+  const { from, setState } = useGlobal()
+  const {  balance } = useBalance(pool)
 
   const enforcer = (nextUserInput) => {
     if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
@@ -24,20 +21,7 @@ export default function SwapItem({ pool, exchange, type, status = () => { }}) {
   const valChange = tokenValue => {
     setState({from:{...from,tokenValue}})
   }
-  
-  const balanceGet = async (accounts,pool) => {
-    if (accounts && pool.provider) {
-      debugger
-      const res = pool.currency ? await getBalance(pool.provider, pool.currency?.tokenAddress, accounts) : await new Web3(pool.provider).eth.getBalance(accounts)
-      const balances = getBalanceNumber(new BigNumber(Number(res)),pool.currency.decimals)
-      status(balances === 0 && type === 0 ? 'NONE_BALANCE' : null)
-      setBalance(balances)
-    }
-  }
 
-  useEffect(() => {
-    balanceGet(accounts,pool)
-  }, [accounts, pool.currency?.tokenAddress])
   
   return (
     <div className="swap-item">

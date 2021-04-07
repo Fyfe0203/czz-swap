@@ -14,7 +14,7 @@ export default function Footer() {
   return (
     <div className="footer">
     <div className="navs f-c">
-        {links.map((item, index) => <a alt={ item.name } target="_bank" key={index} href={item.link}><i className={ `ico-${item.ico}`}/></a>)}
+        {links.map((item, index) => <a alt={ item.name } target="_bank" key={index} href={item.link}><i  className={`ico-${item.ico}`}/></a>)}
       </div>
       <div> © 2021 classzz.com. All rights reserved</div>
     </div>

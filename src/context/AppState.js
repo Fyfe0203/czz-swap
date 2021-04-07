@@ -10,8 +10,10 @@ const state = {
   networkStatus:false,
   pending: [],
   wallet: {},
+  balanceStatus: true,
   from: {tokenValue:''},
-  to: {tokenValue:''},
+  to: { tokenValue: '' },
+  priceStatus:null,
   swapSetting: {
     router:null,
     tolerance:null,

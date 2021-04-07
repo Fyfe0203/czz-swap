@@ -14,7 +14,7 @@ export default function SelectId({ types, pool }) {
 
   const normalFilter = token => token?.systemType === pool.networkType
   const [filters, setFilters] = useState(() => { return normalFilter })
-  const [keyword, setKeyword] = useState(null)
+  const [keyword, setKeyword] = useState('')
   const [chainId, setChainId] = useState(null)
 
   useEffect(() => {
@@ -26,8 +26,7 @@ export default function SelectId({ types, pool }) {
   const selectToken = item => {
     const currentNetwork = networks.filter(i => i.networkType === item.systemType)[0]
     const oldItem = types === 1 ? to : from
-    // debugger
-    const symbolItem =  { ...oldItem, ...currentNetwork, currency:item }
+    const symbolItem =  { ...oldItem, ...currentNetwork,tokenValue:oldItem.tokenValue, currency:item }
     types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem})
     setListStatus(false)
   }
@@ -60,7 +59,7 @@ export default function SelectId({ types, pool }) {
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">
         <div className="token-network">
-          {networks.map((item, index) => <div key={ index } className={ chainId === item.chainId && 'selected'} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
+          {networks.map((item, index) => <div key={ index } className={ chainId === item.chainId ? 'selected' : ''} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
         </div>
         <div className="token-search">
           <i className="ico ico-search" />

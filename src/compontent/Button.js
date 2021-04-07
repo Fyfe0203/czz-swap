@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropType from 'prop-types'
 
-const ButtonBox = styled.button`
+const ButtonContainer = styled.button`
   background:blue;
   color:#fff;
   text-align:center;
@@ -12,13 +12,19 @@ const ButtonBox = styled.button`
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:14px 30px;
+  padding:16px 30px;
   cursor: pointer;
+  transition:.5s;
   &:hover{
     background-color:darkblue;
   }
   &.block{
     display:block;
+    width:100%;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
   &.mini{
     display:flex;
@@ -30,9 +36,9 @@ const ButtonBox = styled.button`
 function Button(props) {
   const { children, ...rest } = props
   return (
-    <ButtonBox {...rest}>
+    <ButtonContainer {...rest}>
       {children}
-    </ButtonBox>
+    </ButtonContainer>
   )
 }
 

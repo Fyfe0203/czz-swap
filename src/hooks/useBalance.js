@@ -1,24 +1,33 @@
-import { useCallback, useEffect, useState } from 'react'
-import BigNumber from 'bignumber.js'
-import useBlock from './useBlock'
+import {useEffect,useCallback,useState} from 'react'
 import useGlobal from './useGlobal'
-import { getBalance } from '../utils/erc20'
+import {getBalanceNumber} from '../utils'
+import {getBalance} from '../utils/erc20'
+import Web3 from 'web3'
+import BigNumber from 'bignumber.js'
 
-export function useBalance ({tokenAddress,abi}) {
-  const [balance, setBalance] = useState(new BigNumber(0))
-  const [ethBalance, setEthBalance] = useState(new BigNumber(0))
-  const { accounts } = useGlobal()
-  const ethereum = window.ethereum
-  const block = useBlock()
-  const fetchBalance = useCallback(async () => {
-    const balance = await getBalance({tokenAddress, accounts, abi})
-    setBalance(new BigNumber(balance))
-  }, [accounts, tokenAddress])
+export default function useBalabce(pool) {
+  const { accounts }  = useGlobal()
+  const [loading,setLoading]  = useState(false)
+  const [balance,setBalance]  = useState(0)
+  
+  const balanceGet = useCallback( async (pool) => {
+    try {
+      setLoading(true)
+      if (accounts && pool.provider) {
+        const res = pool.currency && pool.currency?.tokenAddress ? await getBalance(pool.provider, pool.currency?.tokenAddress, accounts) : await new Web3(pool.provider).eth.getBalance(accounts)
+        const balances = getBalanceNumber(new BigNumber(Number(res)), pool.currency.decimals)
+        setBalance(balances)
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }, [pool])
 
   useEffect(() => {
-    if (account && ethereum) {
-      fetchBalance()
-    }
-  }, [accounts, ethereum, block, tokenAddress])
-  return {balance,block}
+    balanceGet(pool)
+  },[pool])
+  
+  return {balance,loading}
 }

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import useGlobal from './useGlobal'
-import useWallet from './useWallet'
 
 export default function useSwap() {
   const { from, accounts, setState, networks, pools,wallet} = useGlobal()

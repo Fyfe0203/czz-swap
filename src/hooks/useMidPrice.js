@@ -43,7 +43,7 @@ export const fetchPairData = async (tokenA, tokenB, factoryAddress, initCodeHash
   }
 }
 export default function useMidPrice() {
-  const { from, to } = useGlobal()
+  const { from, to, setButtonText,setState } = useGlobal()
   const [loading, setLoading] = useState(false)
   const [impactPrice, setImpactPrice] = useState(0)
   const [swapStatus, setSwapStatus] = useState(0)
@@ -58,9 +58,6 @@ export default function useMidPrice() {
       const route0 = new Route([FromPair], WETH)
       const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
       const route1 = new Route([ToPair], WETH)
-      // console.log(route0)
-      // console.log(route0.midPrice.toSignificant(6))
-      // console.log(route1.midPrice.toSignificant(6))
       const from_weth =  route0.midPrice.toSignificant(6)
       const eczz_weth = route1.midPrice.toSignificant(6)
       return eczz_weth / from_weth
@@ -70,7 +67,7 @@ export default function useMidPrice() {
   }
 
   const fetchPrice = async () => {
-    if (from.tokenValue && to.tokenValue > 0) {
+    if (from.tokenValue && Number(to.tokenValue) > 0) {
       try {
         setLoading(true)
         const ethRes = await fetchPair(from)
@@ -102,12 +99,20 @@ export default function useMidPrice() {
     let price = Number(val)
     if(price > 15) {
       setSwapStatus(3)
+      setState({priceStatus:3})
+      setButtonText('SWAP_IMPACT_HIGH')
     }else if (price > 5 && price < 15) {
-      setSwapStatus(2)
+      // setSwapStatus(2)
+      setButtonText('SWAP_IMPACT_WARN')
+      setState({priceStatus:2})
     } else if (price > 3 && price < 5) {
-      setSwapStatus(1)
+      // setSwapStatus(1)
+      setButtonText('SWAP_IMPACT_WARN')
+      setState({priceStatus:1})
     } else if (price < 3) {
-      setSwapStatus(0)
+      // setSwapStatus(0)
+      setButtonText('SWAP')
+      setState({priceStatus:0})
     }
   }
 
