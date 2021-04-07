@@ -106,7 +106,7 @@ export default function useGetTokenValue() {
     if (from && from.currency && to.currency && from.tokenValue && Number(from.tokenValue) > 0) {
       try {
         setLoading(true)
-        setState({priceStatus:null})
+        setState({priceStatus:0})
         const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
         const inAmountRes = await swapBurnAmount(from, inAmount, true)
