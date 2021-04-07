@@ -156,15 +156,15 @@ export default function useGetTokenValue() {
    if (accounts) {
      if (to.currency == null) {
        setButtonText('NONE_TO_TOKEN')
-     } else if (from.tokenValue === '') {
+      } else if (from.tokenValue === '') {
        setButtonText('NONE_AMOUNT')
-     } else if(approveLoading){
-        setButtonText('APPROVE_ING')
       } else if(loading){
         setButtonText('FINDING_PRICE_ING')
+      } else if(approveLoading){
+        setButtonText('APPROVE_ING')
       } else if (!hasBalance) {
        setButtonText('NONE_BALANCE')
-     } else if (!networkStatus  && to.tokenValue) {
+      } else if (!networkStatus && to.tokenValue) {
         setButtonText('NONE_NETWORK')
       } else if (!authorization  && to.tokenValue) {
         setButtonText('APPROVE' )
