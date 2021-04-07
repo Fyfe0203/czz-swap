@@ -55,11 +55,12 @@ export default function SelectId({ types, pool }) {
 
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <span>{keyword}</span><p>Not Found this token! </p></div>
 
+  const networkTabs = types === 1 ? networks.filter(i=>i.networkType !== pool.networkType) : networks
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">
         <div className="token-network">
-          {networks.map((item, index) => <div key={ index } className={ chainId === item.chainId ? 'selected' : ''} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
+          {networkTabs.map((item, index) => <div key={ index } className={ chainId === item.chainId ? 'selected' : ''} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
         </div>
         <div className="token-search">
           <i className="ico ico-search" />
@@ -71,11 +72,11 @@ export default function SelectId({ types, pool }) {
         <Scrollbars style={{ maxHeight: 400, height: 400 }}>
           <div className="token-table">
               {pools && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
-              const icons = require(`../../asset/svg/${item.systemType}.svg`)
+              // const icons = require(`../../asset/svg/${item.image}`)
               return (
                 <div key={index} className={`f-c token-item ${currency?.tokenAddress === item.tokenAddress ? 'active' : ''}`} onClick={() => selectToken(item)}>
                   <div className="token-info f-c">
-                    {icons.default && <div className="img" style={{backgroundImage:`url(${icons.default})`}} />}
+                    {item.image && <div className="img" style={{backgroundImage:`url(${item.image})`}} />}
                     <div className="f-1">
                       <h2>{item.symbol}</h2>
                       <div className="token-address">{formatAddress(item.tokenAddress)}</div>
@@ -103,10 +104,10 @@ export default function SelectId({ types, pool }) {
     <Fragment>
       <div className="select select-inner f-c" onClick={selectTokenModal}>
         <div className="f-c f-1">
-          <i className="img" alt={icon.default} style={{ backgroundImage: `url(${icon.default})` }} />
+          {currency?.image && <i className="img" alt={icon.default} style={{ backgroundImage: `url(${currency?.image})` }} />}
           <div className="select-inner-val">
-            <h3>{currency?.symbol || 'Select Token'}</h3>
-            <div className="select-inner-desc">{ currency?.name }</div>
+            <h3>{currency?.symbol || <span>Select a Token</span>}</h3>
+            {currency?.name && <div className="select-inner-desc">{ currency?.name }</div>}
           </div>
         </div>
         <div className="ico ico-chevron-down" />
