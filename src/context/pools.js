@@ -109,7 +109,7 @@ const pools = [
     symbol: "ETH",
     decimals: 8,
     systemType: "HECO",
-    image:"https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=010"
+    image:"https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
   },
   {
     tokenAddress: "0x4E2aD2fe93e45143B97A8f926036992f17B572dc",
