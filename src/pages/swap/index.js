@@ -39,7 +39,7 @@ export default function Swap() {
   
   useEffect(() => {
     setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
-  }, [valueLoading, pirceLoading,pirceLoading,approveLoading])
+  }, [valueLoading, swapLoading, pirceLoading,approveLoading])
 
   const reverseExchange = () => {
     setState({
