@@ -45,7 +45,7 @@ export default function SelectId({ types, pool }) {
   // clean search token
   const cleanSearch = () => {
     setKeyword('')
-    setFilters(() => { return normalFilter })
+    setFilters(() => { return filters })
   }
   
   const filterNetwork = (item) => {
@@ -55,7 +55,7 @@ export default function SelectId({ types, pool }) {
 
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <span>{keyword}</span><p>Not Found this token! </p></div>
 
-  const networkTabs = types === 1 ? networks.filter(i=>i.networkType !== pool.networkType) : networks
+  const networkTabs = types === 1 ? networks.filter(i=>i.networkType !== from.networkType) : networks
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">

@@ -151,27 +151,29 @@ export default function useGetTokenValue() {
   useEffect(() => {
     if (from.currency && from?.tokenValue && to.currency?.symbol) {
       debounceValue(from, to)
-      getBalanceValue(from)
-    } else { 
-      if (accounts) {
+    }
+  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol,accounts])
+
+  useEffect(() => {
+    getBalanceValue(from)
+   if (accounts) {
         if (to.currency == null) {
           setButtonText('NONE_TO_TOKEN')
         } else if (from.tokenValue === '') {
           setButtonText('NONE_AMOUNT')
         } else if (!hasBalance) {
           setButtonText('NONE_BALANCE')
-        } else if (networkStatus && to.tokenValue) {
+        } else if (networkStatus  && to.tokenValue) {
           setButtonText('NONE_NETWORK')
-        } else if (!authorization && to.tokenValue) {
-          setButtonText('APPROVE')
+        } else if (!authorization  && to.tokenValue) {
+          setButtonText('APPROVE' )
         } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance) {
           setButtonText('SWAP')
         }
       } else {
         setButtonText('NONE_WALLET')
       }
-    }
-  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol,accounts])
-
+  }, [accounts, from.tokenValue, to.currency])
+  
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }
