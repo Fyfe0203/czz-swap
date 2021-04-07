@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { decToBn } from '../utils'
 import { message,LinkItem } from '../compontent'
 import useGlobal from './useGlobal'
@@ -6,9 +6,9 @@ import useLocalStorage from './useLocalStorage'
 import Web3 from 'web3'
 
 function useSwapAndBurn() {
-  const { from, to, currentProvider, accounts, setPending, pending, swapSetting } = useGlobal()
+  const { from, to, currentProvider, accounts, setPending, pending, swapSetting,  setButtonText} = useGlobal()
   const { tolerance, deadline } = swapSetting
-  const [receipt,setReceipt] = useState(null)
+  const [receipt, setReceipt] = useState(null)
   const [hash,setHash] = useState(null)
   const [loading, setLoading] = useState(false)
   const [recent,setRecent] = useLocalStorage([],'recent')
@@ -68,6 +68,13 @@ function useSwapAndBurn() {
       content: <LinkItem target="_blank" href={ `${from?.explorerUrl}tx/${res.transactionHash}`} rel="noopener">View on Etherscan</LinkItem>
     })
   }
+
+  useEffect(() => {
+    if (loading) {
+      setButtonText('SWAP_ING')
+    }
+  }, [loading])
+
   return {loading,receipt,hash,fetchSwap}
 }
 export default useSwapAndBurn
