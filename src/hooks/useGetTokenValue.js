@@ -36,13 +36,13 @@ export default function useGetTokenValue() {
       setPending([...pending, 'approve'])
       setButtonText('APPROVE_ING')
       const res = await approve({ provider: currentProvider, tokenAddress: currency?.tokenAddress, spender, accounts })
-      console.log('Approve result ======',res)
+      // console.log('Approve result ======',res)
       setIsApprove(res)
       setApproveLoading(false)
       setAuthorization(true)
       setRecent(item => [...item, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
       setPending(pending.filter(i => i !== 'approve'))
-      setButtonText('SWAP')
+      // setButtonText('SWAP')
       message({
         icon: 'award',
         title:`Approvd White ${currency?.symbol}`,

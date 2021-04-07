@@ -30,16 +30,16 @@ const SwapConfirmItem = ({item,status,index}) => {
 export default function Swap() {
   const { accounts, networkStatus, from, to, setState, swapButtonText, priceStatus } = useGlobal()
   const { status } = useSwap()
-  const { loading, authorization, approveActions, approveLoading } = useGetTokenValue()
+  const { loading: valueLoading, approveActions, approveLoading } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
   const { loading: swapLoading, hash, fetchSwap } = useSwapAndBurn()
   const [setting, setSetting] = useState(false)
-  const [buttonLoading, setButtonLoading] = useState(false)
   const { connectWallet } = useWallet()
+  const [buttonLoading, setButtonLoading] = useState(false)
   
   useEffect(() => {
-    setButtonLoading(loading || pirceLoading)
-  }, [loading, pirceLoading])
+    setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
+  }, [valueLoading, pirceLoading,pirceLoading,approveLoading])
 
   const reverseExchange = () => {
     setState({
@@ -138,7 +138,7 @@ export default function Swap() {
   //     setButtonText('APPROVE')
   //   }
   // }, [authorization, swapButtonText])
-  const buttonChildren = swapLoading || loading || pirceLoading ? <Loading size="small" text={status[swapButtonText]} /> : status[swapButtonText]
+  const buttonChildren = buttonLoading ? <Loading size="small" text={status[swapButtonText]} /> : status[swapButtonText]
 
   return (
     <Fragment>
