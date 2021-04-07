@@ -13,7 +13,7 @@ const state = {
   balanceStatus: true,
   from: {tokenValue:''},
   to: { tokenValue: '' },
-  priceStatus:null,
+  priceStatus: 0,
   swapSetting: {
     router:null,
     tolerance:null,

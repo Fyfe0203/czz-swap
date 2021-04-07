@@ -527,3 +527,14 @@
     font-size: 16px;
   }
 }
+
+.network{
+  &-switch{
+    padding-bottom: 10px;
+    .text{
+      font-size: 12px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+  }
+}

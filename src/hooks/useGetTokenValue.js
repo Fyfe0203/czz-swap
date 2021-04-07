@@ -19,7 +19,7 @@ export default function useGetTokenValue() {
   const [authorization, setAuthorization] = useState(true)
   const [isApprove, setIsApprove] = useState(true)
   const [recent, setRecent] = useLocalStorage([],'recent')
-  const {  balance } = useBalance(from)
+  const { balance, getBalanceValue } = useBalance(from)
 
   // const getReceived = async () => {
   //   const receivedAmount = Number(from.tokenValue) - (from.tokenValue * Number(tolerance))
@@ -32,6 +32,7 @@ export default function useGetTokenValue() {
     const recentInfo = {content:`Approved ${currency?.symbol}`}
     try {
       setApproveLoading(true)
+      setState({priceStatus:null})
       setPending([...pending, 'approve'])
       setButtonText('SWAP_ING')
       const res = await approve({ provider: currentProvider, tokenAddress: currency?.tokenAddress, spender, accounts })
@@ -102,6 +103,7 @@ export default function useGetTokenValue() {
     if (from && from.currency && to.currency && from.tokenValue && Number(from.tokenValue) > 0) {
       try {
         setLoading(true)
+        setState({priceStatus:null})
         setButtonText('FINDING_PRICE_ING')
         const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
@@ -143,18 +145,22 @@ export default function useGetTokenValue() {
   useEffect(() => {
     setHasBalance( Number(balance) > Number(from.tokenValue))
   }, [balance])
+
   // Get token Value Effect
   useEffect(() => {
     if (from.currency && from?.tokenValue && to.currency?.symbol) {
       debounceValue(from, to)
+      getBalanceValue(from)
     } else { 
       if (accounts) {
-        if (from.tokenValue === '') {
+        if (to.currency == null) {
+          setButtonText('NONE_TO_TOKEN')
+        } else if (from.tokenValue === '') {
           setButtonText('NONE_AMOUNT')
-        } else if (networkStatus && to.tokenValue) {
-          setButtonText('NONE_NETWORK')
         } else if (!hasBalance) {
           setButtonText('NONE_BALANCE')
+        } else if (networkStatus && to.tokenValue) {
+          setButtonText('NONE_NETWORK')
         } else if (!authorization && to.tokenValue) {
           setButtonText('APPROVE')
         } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance) {

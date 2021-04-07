@@ -47,7 +47,7 @@ export default function Connect(props) {
   const networkChange = async () => {
     try {
       setNetworkLoading(true)
-      const networkItem = networks.filter(i => i.networkId == wallet.networkId)
+      const networkItem = networks.filter(i => i.chainId === wallet.chainId)
       setCurrentNetwork(networkItem[0] || {})
       if (networkItem[0]?.provider) {
         const res = await new Web3(networkItem[0]?.provider).eth.getBalance(accounts)

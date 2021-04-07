@@ -46,7 +46,6 @@ export default function useMidPrice() {
   const { from, to, setButtonText,setState } = useGlobal()
   const [loading, setLoading] = useState(false)
   const [impactPrice, setImpactPrice] = useState(0)
-  const [swapStatus, setSwapStatus] = useState(0)
 
   const fetchPair = async (lp) => {
     const { networkId, currency, czz, weth, provider, factoryAddress, initCodeHash } = lp
@@ -78,10 +77,12 @@ export default function useMidPrice() {
         const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)
         setImpactPrice(price)
         changeStatus(price)
+        console.log(price)
         setLoading(false)
       } catch (error) {
-        console.log(error)
         setLoading(false)
+        setButtonText('NONE_TRADE')
+        throw error
       } finally {
         setLoading(false)
       }
@@ -98,19 +99,15 @@ export default function useMidPrice() {
   const changeStatus = val => {
     let price = Number(val)
     if(price > 15) {
-      setSwapStatus(3)
       setState({priceStatus:3})
       setButtonText('SWAP_IMPACT_HIGH')
     }else if (price > 5 && price < 15) {
-      // setSwapStatus(2)
       setButtonText('SWAP_IMPACT_WARN')
       setState({priceStatus:2})
     } else if (price > 3 && price < 5) {
-      // setSwapStatus(1)
       setButtonText('SWAP_IMPACT_WARN')
       setState({priceStatus:1})
     } else if (price < 3) {
-      // setSwapStatus(0)
       setButtonText('SWAP')
       setState({priceStatus:0})
     }
@@ -120,6 +117,6 @@ export default function useMidPrice() {
     fetchPrice()
   }, [to.tokenValue])
 
-  return {loading, impactPrice, swapStatusList, swapStatus}
+  return {loading, impactPrice, swapStatusList}
 }
 

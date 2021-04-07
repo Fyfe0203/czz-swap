@@ -28,10 +28,10 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const { accounts, networkStatus, from, to, setState, swapButtonText,balanceStatus,setButtonText } = useGlobal()
+  const { accounts, networkStatus, from, to, setState, swapButtonText, priceStatus } = useGlobal()
   const { status } = useSwap()
   const { loading, authorization, approveActions, approveLoading } = useGetTokenValue()
-  const { loading: pirceLoading, impactPrice, swapStatus, swapStatusList } = useMidPrice()
+  const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
   const { loading: swapLoading, hash, fetchSwap } = useSwapAndBurn()
   const [setting, setSetting] = useState(false)
   const [buttonLoading, setButtonLoading] = useState(false)
@@ -61,24 +61,24 @@ export default function Swap() {
   }
   const exchangeButton = (<div className="swap-exchange f-c"><div onClick={reverseExchange} className="ico ico-repeat" /></div>)
   const approveButton = <div className="swap-button" onClick={approveLoading ? null : approveActions}>{approveLoading ? <Loading mask={true} size="small" /> : 'Approve'}</div>
-  const swapWarnButton = <div className={`swap-button button-${swapStatus} error`}>{swapStatusList[swapStatus]}</div>
+  const swapWarnButton = <div className={`swap-button button-${priceStatus} error`}>{swapStatusList[priceStatus]}</div>
   const connectWalletButton = <div className="swap-button disable" onClick={connectWallet}>Connect Wallet</div>
 
   const swapingButton = (
     <Fragment>
       {accounts ?
-        <div className={`swap-button button-${buttonLoading ? '' : swapStatus} ${!accounts ? 'disable' : ''}`} onClick={buttonLoading ? null : swapActions}>
-          {buttonLoading ? <Loading text="Finding Best Price" size="small" /> : swapStatusList[swapStatus]}</div> : connectWalletButton
+        <div className={`swap-button button-${buttonLoading ? '' : priceStatus} ${!accounts ? 'disable' : ''}`} onClick={buttonLoading ? null : swapActions}>
+          {buttonLoading ? <Loading text="Finding Best Price" size="small" /> : swapStatusList[priceStatus]}</div> : connectWalletButton
       }
     </Fragment>
   )
 
-  const swapButton = authorization || loading || pirceLoading ? (swapStatus === 3 ? swapWarnButton : swapingButton) : swapStatus === 3 ? swapWarnButton : approveButton
+  const swapButton = authorization || loading || pirceLoading ? (priceStatus === 3 ? swapWarnButton : swapingButton) : priceStatus === 3 ? swapWarnButton : approveButton
   
   const swapFooter = (
     <div className="swap-footer">
       <div className="f-c"><span>Minimun received</span> <span><b>{to.tokenValue}</b> {to.currencys?.symbol}</span></div>
-      <div className="f-c"><span>Price Impact</span> <span className={`price-${swapStatus}`}>{impactPrice} %</span> </div>
+      <div className="f-c"><span>Price Impact</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
       <div className="f-c"><span>Liquidity Provider Fee</span><span><b>{from.tokenValue && bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007)))}</b> {from.currency?.symbol}</span> </div>
     </div>
   )
@@ -87,8 +87,8 @@ export default function Swap() {
   
 
   const confirmButton = (
-    <div className={`swap-button button-${swapStatus}`} onClick={swapStatus === 3 || swapLoading ? null : fetchSwap}>
-      {swapLoading ? <Loading text="Swap Pending" size="small" /> : swapStatusList[swapStatus]}
+    <div className={`swap-button button-${priceStatus}`} onClick={priceStatus === 3 || swapLoading ? null : fetchSwap}>
+      {swapLoading ? <Loading text="Swap Pending" size="small" /> : swapStatusList[priceStatus]}
     </div>
   )
 
@@ -118,8 +118,8 @@ export default function Swap() {
     <div>
       <div className="confirm-pool">
         <i className="ico ico-arrow-down" />
-        <SwapConfirmItem index={0} item={from} status={swapStatus} />
-        <SwapConfirmItem index={1} item={to} status={swapStatus} />
+        <SwapConfirmItem index={0} item={from} status={priceStatus} />
+        <SwapConfirmItem index={1} item={to} status={priceStatus} />
       </div>
       <div className="confirm-warn-text">
         {`Output is estimated.You will recive at least ${to.tokenValue} ${to.currency?.symbol} or the transaction will revert.`}
@@ -131,6 +131,9 @@ export default function Swap() {
   const buttonActions = () => {
     switch (swapButtonText) {
       case 'SWAP':
+        swapActions()
+        break
+      case 'SWAP_IMPACT_WARN':
         swapActions()
         break
       case 'APPROVE':
@@ -158,10 +161,10 @@ export default function Swap() {
           <Item className="swap-id"> <SwapItem pool={from} type={0} /></Item>
           <Item className="swap-id"> <SwapItem pool={to} type={1} exchange={ exchangeButton } /></Item>
           <SwapBar className="swap-bar">
-            {swapButton}
-            {<Button onClick={buttonActions} className={`block ${swapStatus}`}>{buttonChildren}</Button>}
+            {/* {swapButton} */}
+            {<Button onClick={buttonActions} className={`block ${priceStatus} swap-button button-${priceStatus}`}>{buttonChildren}</Button>}
           </SwapBar>
-          {impactPrice ? swapFooter : null}
+          {impactPrice && to.tokenValue ? swapFooter : null}
         </SwapPanel>
         </div>
       <Modal title="Advanced Settings" visible={setting} onClose={ ()=>setSetting(false)}>

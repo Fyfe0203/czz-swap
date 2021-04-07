@@ -10,7 +10,7 @@ export default function useBalabce(pool) {
   const [loading,setLoading]  = useState(false)
   const [balance,setBalance]  = useState(0)
   
-  const balanceGet = useCallback( async (pool) => {
+  const getBalanceValue = useCallback( async (pool) => {
     try {
       setLoading(true)
       if (accounts && pool.provider) {
@@ -26,8 +26,8 @@ export default function useBalabce(pool) {
   }, [pool])
 
   useEffect(() => {
-    balanceGet(pool)
+    getBalanceValue(pool)
   },[pool])
   
-  return {balance,loading}
+  return {balance,loading,getBalanceValue}
 }
