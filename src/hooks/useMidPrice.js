@@ -76,12 +76,14 @@ export default function useMidPrice() {
         const midProce2 =  Number(Number(Number(from.tokenValue) * midPrice).toFixed(to.currency.decimals))
         const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)
         setImpactPrice(price)
+        setState({impactPrice:price})
         changeStatus(price)
-        console.log(price)
         setLoading(false)
       } catch (error) {
         setLoading(false)
         setButtonText('NONE_TRADE')
+        setState({impactPrice:0})
+        setImpactPrice(0)
         throw error
       } finally {
         setLoading(false)

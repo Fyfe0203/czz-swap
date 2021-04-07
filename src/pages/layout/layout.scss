@@ -57,8 +57,19 @@ body{
   .nav{
     &-link{
       color: #181E3C;
+      position: relative;
+      font-size: 15px;
       &.selected{
         color: blue;
+        &::after{
+          content: '';
+          position: absolute;
+          left: 38%;
+          right: 38%;
+          height: 3px;
+          background: blue;
+          bottom: -8px;
+        }
       }
     }
   }

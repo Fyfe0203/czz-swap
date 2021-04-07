@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { decToBn, getBalanceNumber, getDisplayBalance } from '../utils'
+import { useState, useEffect } from 'react'
+import { decToBn } from '../utils'
 import { allowance,approve } from '../utils/erc20'
 import { message, LinkItem } from '../compontent'
 import Web3 from "web3"
@@ -13,7 +13,7 @@ import { IUniswapV2Router02 } from '../abi'
 import useDebounce from './useDebounce'
 
 export default function useGetTokenValue() {
-  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus } = useGlobal()
+  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus, impactPrice} = useGlobal()
   const [loading,setLoading] = useState(false)
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
@@ -64,7 +64,6 @@ export default function useGetTokenValue() {
     const allowanceTotal = await allowance({ provider, tokenAddress: currency?.tokenAddress, spender, accounts })
     const amountToken = decToBn(tokenValue).toNumber()
     const allonceNum = decToBn(allowanceTotal).toNumber()
-    console.log('allowance', allonceNum)
     return allonceNum > amountToken
   }
   // const networkError = () => {
@@ -173,7 +172,7 @@ export default function useGetTokenValue() {
       } else {
         setButtonText('NONE_WALLET')
       }
-  }, [accounts, from.tokenValue, to.currency])
+  }, [accounts, from.tokenValue, to.currency, impactPrice])
   
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }

@@ -14,6 +14,7 @@ const state = {
   from: {tokenValue:''},
   to: { tokenValue: '' },
   priceStatus: 0,
+  impactPrice: 0,
   swapSetting: {
     router:null,
     tolerance:null,

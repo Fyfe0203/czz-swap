@@ -59,22 +59,9 @@ export default function Swap() {
   const swapActions = () => {
     networkStatus ? setConfirmStatus(true) : networkMessage()
   }
-  const exchangeButton = (<div className="swap-exchange f-c"><div onClick={reverseExchange} className="ico ico-repeat" /></div>)
-  const approveButton = <div className="swap-button" onClick={approveLoading ? null : approveActions}>{approveLoading ? <Loading mask={true} size="small" /> : 'Approve'}</div>
-  const swapWarnButton = <div className={`swap-button button-${priceStatus} error`}>{swapStatusList[priceStatus]}</div>
-  const connectWalletButton = <div className="swap-button disable" onClick={connectWallet}>Connect Wallet</div>
-
-  const swapingButton = (
-    <Fragment>
-      {accounts ?
-        <div className={`swap-button button-${buttonLoading ? '' : priceStatus} ${!accounts ? 'disable' : ''}`} onClick={buttonLoading ? null : swapActions}>
-          {buttonLoading ? <Loading text="Finding Best Price" size="small" /> : swapStatusList[priceStatus]}</div> : connectWalletButton
-      }
-    </Fragment>
-  )
-
-  const swapButton = authorization || loading || pirceLoading ? (priceStatus === 3 ? swapWarnButton : swapingButton) : priceStatus === 3 ? swapWarnButton : approveButton
   
+  const exchangeButton = (<div className="swap-exchange f-c"><div onClick={reverseExchange} className="ico ico-repeat" /></div>)
+
   const swapFooter = (
     <div className="swap-footer">
       <div className="f-c"><span>Minimun received</span> <span><b>{to.tokenValue}</b> {to.currencys?.symbol}</span></div>
