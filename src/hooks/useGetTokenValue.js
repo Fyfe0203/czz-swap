@@ -58,14 +58,16 @@ export default function useGetTokenValue() {
   }
 
   // allowance authorization
-  const allowanceAction = async (tokenValue) => {
-    const {provider,currency,router:spender} = from
-    const allowanceTotal = await allowance({ provider, tokenAddress: currency?.tokenAddress, spender, accounts })
+  const allowanceAction = async (from) => {
+    const { provider, currency, router: spender,tokenValue } = from
+    const { tokenAddress } = currency
+    const allowanceTotal = await allowance({ provider, tokenAddress, spender, accounts })
     const amountToken = decToBn(tokenValue).toNumber()
     const allonceNum = decToBn(allowanceTotal).toNumber()
-    console.log('AllonceNum result==', allowance)
+    console.log('AllonceNum result==', allonceNum)
     return allonceNum > amountToken
   }
+
   // const networkError = () => {
   //    message({
   //     title: 'Network Error',
@@ -73,6 +75,7 @@ export default function useGetTokenValue() {
   //     icon:'wifi-off'
   //   })
   // }
+
   // const lessValue = () => {
   //   message({
   //     title: 'illiquid',
@@ -119,7 +122,8 @@ export default function useGetTokenValue() {
         const result_1 = JSBI.BigInt(result)
         const amounts = new TokenAmount(token, result_1)
         const outAmount = amounts.toSignificant(6)
-        const allowanceResult = await allowanceAction(from.tokenValue)
+        debugger
+        const allowanceResult = await allowanceAction(from)
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
         setAuthorization(allowanceResult)
@@ -147,10 +151,10 @@ export default function useGetTokenValue() {
 
   // Get token Value Effect
   useEffect(() => {
-    if (from.currency && from?.tokenValue && to.currency?.symbol) {
+    if (from.currency && from?.tokenValue && to.currency?.symbol && from?.currency?.tokenAddress) {
       debounceValue(from, to)
     }
-  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol,accounts])
+  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol, accounts])
 
   useEffect(() => {
     getBalanceValue(from)

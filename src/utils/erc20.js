@@ -60,13 +60,10 @@ export const getName = async (provider, tokenAddress, accounts) => {
 export const allowance = async ({ spender, provider, tokenAddress,accounts }) => {
   const lpContract = getContract(provider, tokenAddress)
   try {
-    //  const name = await lpContract.methods.name().call()
-    // const symbol = await lpContract.methods.symbol().call()
-    // const owner = await lpContract.methods.owner().call()
     const res = await lpContract.methods
       .allowance(accounts,spender)
       .call()
-    console.log('allowance result=======', res)
+    console.log('Allowance result=======', res)
     return res
   } catch (error) {
     console.warn(error)
