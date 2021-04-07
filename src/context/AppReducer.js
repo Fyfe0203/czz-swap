@@ -40,6 +40,10 @@ export default function reducer(state, action) {
     case 'SET_SWAP_SETTING':
       return {
         ...state,
+        swapSetting: {
+          ...state.swapSetting,
+          ...action.payload
+        }
     }
     default: return state
   }

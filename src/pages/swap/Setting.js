@@ -21,7 +21,7 @@ function TabSelect(props) {
     <div className="item">
       <div className="tolerance">
         {props?.list.map((item, index) => { 
-          return <div className={`tolerance-item ${current === index ? "selected" : ''}`} onClick={() => selectVal(item, index)} key={index}>{item} { unit}</div>
+          return <div className={`tolerance-item ${current === index ? "selected" : ''}`} onClick={() => selectVal(item, index)} key={index}>{item} { unit }</div>
         })}
       </div>
         <div className="tolerance-custom">
@@ -110,10 +110,10 @@ function TabSelect(props) {
 export default function Setting(props) {
   const { from, to, wallet, swapSetting, setSwapSetting } = useGlobal()
   const { router, tolerance, gas, deadline} = swapSetting
-  const { networkId } = wallet
+  const { chiainId } = wallet
   const toleranceArray = [0.5, 1, 1.5, 3]
   const gasArray = [160, 200, 197]
-
+  console.log(swapSetting)
   // const filter = item => item.networkId === networkId
   return (
     <div className="setting">

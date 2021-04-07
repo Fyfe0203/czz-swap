@@ -552,6 +552,12 @@
     min-width: inherit;
     margin:0 15px;
     padding:14px;
+    .mask{
+      align-items:flex-end;
+      .modal{
+        width: 100%;
+      }
+    }
     &-wrap{
       width: 100%;
     }
