@@ -122,7 +122,7 @@ export default function useGetTokenValue() {
         const result_1 = JSBI.BigInt(result)
         const amounts = new TokenAmount(token, result_1)
         const outAmount = amounts.toSignificant(6)
-        debugger
+        // debugger
         const allowanceResult = await allowanceAction(from)
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
