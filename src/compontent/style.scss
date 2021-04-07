@@ -163,3 +163,10 @@
     margin:0;
   }
 }
+
+@media screen and (max-width:600px){
+  .modal{
+    width: 95%;
+    margin: 0 auto;
+  }
+}

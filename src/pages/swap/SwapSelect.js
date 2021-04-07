@@ -67,7 +67,7 @@ export default function SelectId({ types, pool }) {
           <div className="token-search-input">
             <SearchInput value={ keyword } className="c-input" onChange={filterToken} placeholder="search token" type="text" />
           </div>
-          {keyword && <i className="ico-x-circle clean" onClick={ cleanSearch } />}
+          {keyword && <i className="ico-x clean" onClick={ cleanSearch } />}
         </div>
         <Scrollbars style={{ maxHeight: 400, height: 400 }}>
           <div className="token-table">

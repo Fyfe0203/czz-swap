@@ -73,13 +73,13 @@
           color: #181E3C;
         }
         &-2{
-          color: red;
+          color: orangered;
         }
         &-3{
-          color: red;
+          color: orangered;
         }
         &-1{
-          color: orangered;
+          color: darkorange;
         }
       }
     }
@@ -104,19 +104,19 @@
     position: relative;
     &.button{
       &-1{
-        background: orangered;
+        background: darkorange;
          &:hover{
-        background: darken(orangered,10%);
+        background: darken(darkorange,10%);
         }
       }
       &-2,&-3{
-        background: red;
+        background: orangered;
         &:hover{
-          background: darken(red,10%);
+          background: darken(orangered,10%);
         }
       }
       &-3{
-        opacity: .7;
+        opacity: 1;
       }
     }
     &.disable{
@@ -541,5 +541,21 @@
       margin-bottom: 20px;
       line-height: 1.6;
     }
+  }
+}
+
+@media screen and (max-width:600px){
+  .swap{
+    width: inherit;
+    max-width: inherit;
+    min-width: inherit;
+    margin:0 15px;
+    padding:14px;
+    &-wrap{
+      width: 100%;
+    }
+  }
+  .c-tool{
+    display: none;
   }
 }
