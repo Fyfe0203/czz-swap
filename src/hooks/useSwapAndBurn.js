@@ -57,7 +57,8 @@ function useSwapAndBurn() {
       if (hash) setRecent(recent => [...recent, { ...recentItem,status:2, ...getHashUrl(hash) }])
       setLoading(false)
       setPending(pending.filter(i => i !== 'swapburn'))
-      console.log('swap error ===>',error)
+      console.log('swap error ===>', error)
+      setButtonText('SWAP')
     })
   }
   
