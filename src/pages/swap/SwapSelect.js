@@ -53,7 +53,7 @@ export default function SelectId({ types, pool }) {
     setFilters(() => { return token => { return token.systemType === item.networkType } })
   }
 
-  const notFound = <div className="token-empty"><i className="ico ico-target" /> <span>{keyword}</span><p>Not Found this token! </p></div>
+  const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <span>{keyword}</span><p>Not Found this token! </p></div>
 
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
@@ -68,7 +68,7 @@ export default function SelectId({ types, pool }) {
           </div>
           {keyword && <i className="ico-x-circle clean" onClick={ cleanSearch } />}
         </div>
-        <Scrollbars style={{ maxWidth: 500, height: 560 }}>
+        <Scrollbars style={{ maxHeight: 400, height: 400 }}>
           <div className="token-table">
               {pools && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
               const icons = require(`../../asset/svg/${item.systemType}.svg`)
