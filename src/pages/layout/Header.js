@@ -22,6 +22,7 @@ export default React.memo(function Header() {
           <i className={theme ? 'ico-moon' : 'ico-sun'} />
         </div> */}
       </div>
+      <div className="menu ico-menu"></div>
     </div>
   )
 })

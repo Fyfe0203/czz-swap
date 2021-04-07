@@ -6,11 +6,11 @@ import banner from '../../asset/svg/welcomes.svg'
 export default function OverView() {
   let arr = ['ETH', 'BSC', 'HECO', 'TRON', "SOL", "DOT"]
   let exchange = `Uniswap,SushiSwap,PancakeSwap,Medx,DogeSwap,KSwap,Mooniswap,Balancer,Kyber,BakerySwap,JustSwap,DODO`
-  let exchangeName = ['ETH','ETH','BSC','HECO','HECO','OKEX','ETH','ETH','ETH','ETH','TRON','ETH,BSC']
+  let exchangeName = ['ETH','ETH','BSC','HECO','HECO','OKEX','ETH','ETH','ETH','BSC','TRON','ETH,BSC']
   return (
     <Fragment>
       <div className="home">
-        <div>
+        <div className="home-container">
           <h1>Powered by Te Waka.</h1>
           <p>Enabling connectivity between islands of DeFi.</p>
           <p><Link className="swap-button" style={{ width: 210 }} to="/swap" >Start Swap Now</Link></p>
