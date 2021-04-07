@@ -25,6 +25,10 @@ body{
         height: 40px;
         width: 100px;
         display: block;
+        transition: .4s;
+        &:hover{
+          transform: rotate(-5deg);
+        }
       }
     }
     &-tool{
