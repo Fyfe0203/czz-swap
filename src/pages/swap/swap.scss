@@ -397,7 +397,7 @@
     margin-bottom: 10px;
     font-size: 14px;
     &>div{
-      padding:20px 15px 10px;
+      padding:20px 15px 15px;
       font-weight: 800;
       cursor: pointer;
       font-size: 14px;
@@ -408,9 +408,9 @@
           content: '';
           background: blue;
           position: absolute;
-          height: 3px;
-          left:24%;
-          right:24%;
+          height: 4px;
+          left:30%;
+          right:30%;
           bottom: 0;
         }
       }
@@ -426,8 +426,9 @@
     .img{
       text-align: center;
       font-size: 50px;
-      width: 180px;
-      height: 180px;
+      width: 220px;
+      height: 220px;
+      margin:0;
       margin-bottom: 15px;
     }
     p{

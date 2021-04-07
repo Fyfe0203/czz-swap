@@ -11,14 +11,13 @@ export default function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
   const { pools, networks, setState, from, to } = useGlobal()
   const { currency } = pool
-
   const normalFilter = token => token?.systemType === pool.networkType
   const [filters, setFilters] = useState(() => { return normalFilter })
   const [keyword, setKeyword] = useState('')
   const [chainId, setChainId] = useState(null)
 
   useEffect(() => {
-    setFilters(() => { return token => token?.systemType === pool.networkType })
+    setFilters(() => { return normalFilter })
     setChainId(pool.chainId)
   }, [pool.networkType, pool.chainId])
 
@@ -53,7 +52,7 @@ export default function SelectId({ types, pool }) {
     setFilters(() => { return token => { return token.systemType === item.networkType } })
   }
 
-  const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <span>{keyword}</span><p>Not Found this token! </p></div>
+  const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
 
   const networkTabs = types === 1 ? networks.filter(i=>i.networkType !== from.networkType) : networks
   const tokenModal = (

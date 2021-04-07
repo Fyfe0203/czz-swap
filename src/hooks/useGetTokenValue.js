@@ -159,14 +159,14 @@ export default function useGetTokenValue() {
   useEffect(() => {
     getBalanceValue(from)
    if (accounts) {
-     if (to.currency == null) {
-       setButtonText('NONE_TO_TOKEN')
-      } else if (from.tokenValue === '') {
-       setButtonText('NONE_AMOUNT')
-      } else if(loading){
+      if(loading){
         setButtonText('FINDING_PRICE_ING')
+      } else if (to.currency == null) {
+       setButtonText('NONE_TO_TOKEN')
       } else if(approveLoading){
         setButtonText('APPROVE_ING')
+      } else if (from.tokenValue === '') {
+       setButtonText('NONE_AMOUNT')
       } else if (!hasBalance) {
        setButtonText('NONE_BALANCE')
       } else if (!networkStatus && to.tokenValue) {
