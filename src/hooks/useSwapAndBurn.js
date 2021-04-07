@@ -21,7 +21,7 @@ function useSwapAndBurn() {
       from.abi,
       from.router
     )
-    const amountIn = decToBn(Number(from?.tokenValue))
+    const amountIn = decToBn(Number(from?.tokenValue),from.currency?.decimals)
     // debugger
     // history params
     const deadlineVal = deadline ? new Date().getTime() + deadline * 60 * 60 * 1000 : 100000000000000
