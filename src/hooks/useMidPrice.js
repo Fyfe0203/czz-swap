@@ -69,6 +69,7 @@ export default function useMidPrice() {
     if (from.tokenValue && Number(to.tokenValue) > 0) {
       try {
         setLoading(true)
+        setButtonText('FINDING_PRICE_ING')
         const ethRes = await fetchPair(from)
         const czzRes = await fetchPair(to)
         const midPrice = ethRes / czzRes
