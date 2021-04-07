@@ -15,7 +15,7 @@ export default function OverView() {
           <p>Enabling connectivity between islands of DeFi.</p>
           <p><Link className="swap-button" style={{ width: 210 }} to="/swap" >Start Swap Now</Link></p>
           <div className="swap-button-bar">
-            <a href="https://docs.classzz.com/CZZ_audit.pdf" target="_bank" className="ico-shield"><span>Audit HECO-ETH</span></a>
+            <a href="https://docs.classzz.com/CZZ_audit.pdf" target="_bank" className="ico-shield"><span>Audit HECO/ETH</span></a>
             <a href="https://docs.classzz.com/CZZ_audit2.0.pdf" target="_bank" className="ico-book"><span>Audit BSC</span></a>
           </div>
         </div>
