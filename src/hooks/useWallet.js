@@ -8,7 +8,7 @@ export default function useWallet() {
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
   const ONBOARD_TEXT = 'Click here to install MetaMask!'
-  const CONNECT_TEXT = 'Connect'
+  const CONNECT_TEXT = 'Connect MetaMask'
   const [buttonText, setButtonText] = useState(ONBOARD_TEXT)
   var storage = window.localStorage
 
@@ -67,10 +67,12 @@ export default function useWallet() {
         ]
       })
       storage.removeItem('address')
-      setState({
+      const state = {
         accounts: null,
         wallet: {},
-      })
+      }
+      setState(state)
+      return state
     }
   }
 
@@ -81,11 +83,12 @@ export default function useWallet() {
         const newAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
         handleNewAccounts(newAccounts)
         setLoading(false)
+        return newAccounts
       } else {
         onboarding.current.startOnboarding()
       }
     } catch (error) {
-      console.warn(error)
+      throw error
     } finally {
       setLoading(false)
     }

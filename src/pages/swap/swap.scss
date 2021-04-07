@@ -6,6 +6,9 @@
   padding: 25px 25px 20px;
   border-radius: 10px;
   // box-shadow: 0 30px 80px rgba($color: #333, $alpha: .4);
+  &-title{
+    padding:20px 0;
+  }
   &-wrap{
     height:calc(100vh - 180px);
     display: flex;
@@ -373,8 +376,6 @@
 }
 
 .token{
-  &-table{
-  }
   &-info{
     flex:1;
     h2{

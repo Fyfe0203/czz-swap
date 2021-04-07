@@ -13,36 +13,37 @@ import './index.scss'
 // https://chainid.network/chains.json
 // Insufficient liquidity for this trade.
 // Insufficient BNB balance
-
 import useWallet from '../../hooks/useWallet'
 
 export default function Connect(props) {
   const { accounts, wallet, networkStatus, networks, pending, from, to } = useGlobal()
   const { connectWallet, buttonText, disConnect } = useWallet()
-
-  const walletList = [
-    {
-      icon:require('../../asset/svg/metamask-fox.svg'),
-      name: 'metaMask',
-      actions: connectWallet,
-      // connectText
-    },
-    {
-      icon:require('../../asset/svg/walletConnectIcon.svg'),
-      name: 'walletConnect',
-      actions: () => {
-        console.log('4')
-      }
-    }
-  ]
-
-  
-  const [showModal, setShowModal] = useState(false)
+  const [showConnectWallet, setShowConnectWallet] = useState(false)
   const [showAccount, setShowAccount] = useState(false)
   const [networkVisible, setNetworkVisible] = useState(false)
   const [currentNetwork, setCurrentNetwork] = useState([])
   const [balance, setBalance] = useState(null)
   const [networkLoading, setNetworkLoading] = useState(false)
+
+  const connectWalletActions =async () => {
+    const accounts = await connectWallet()
+    if (accounts) setShowConnectWallet(false)
+  }
+  const walletList = [
+    {
+      icon:require('../../asset/svg/metamask-fox.svg'),
+      name: 'metaMask',
+      actions: connectWalletActions,
+      // connectText
+    }
+    // {
+    //   icon:require('../../asset/svg/walletConnectIcon.svg'),
+    //   name: 'walletConnect',
+    //   actions: () => {
+    //     console.log('4')
+    //   }
+    // }
+  ]
 
   const networkChange = async () => {
     try {
@@ -72,19 +73,19 @@ export default function Connect(props) {
         {networkLoading && <Loading size="small" mask={true} style={{borderRadius:90}} />}
           <div className="f-c">
             <div className="c-balance">{balance} { currentNetwork?.symbol }</div>
-            <div className="c-accounts f-c" onClick={() => setShowAccount(!showModal)}>
+            <div className="c-accounts f-c" onClick={() => setShowAccount(!showAccount)}>
               <div className="c-wallet-icon">
                 <Jazzicon address={accounts} />
               </div>
               { buttonText }
            </div>
           {pending.length ? <Pending /> : null}
-          {!!!networkStatus ? <NetworkError connect={()=>setNetworkVisible(true)} /> :null}
+          {!networkStatus ? <NetworkError connect={()=>setNetworkVisible(true)} /> :null}
         </div>
       </div>
     </Fragment>
   )
-  const accountError = (<div className="c-wallet c-connect-link" onClick={() => setShowModal(!showModal)}>Connect to a wallet</div>)
+  const accountError = (<div className="c-wallet c-connect-link" onClick={() => setShowConnectWallet(!showConnectWallet)}>Connect to a wallet</div>)
   const accountsButton = accounts ? accountBlock : accountError
 
   const modalContent = (
@@ -105,7 +106,7 @@ export default function Connect(props) {
         <div className="f-c-sb">
           <h4>Connected with MetaMask</h4>
           <div className="f-c">
-            <div className="button-min" onClick={disConnect}>Disconnect</div>
+            <div className="button-min" onClick={() => disConnect().then(() => {setShowAccount(false) })}>Disconnect</div>
           </div>
         </div>
         <div className="f-c-sb">
@@ -128,7 +129,7 @@ export default function Connect(props) {
     <div className="c-connect">
       <div className="connect-mask">
         {accountsButton}
-        <Modal title="Connect Wallet" visible={showModal} onClose={setShowModal}>{ modalContent }</Modal>
+        <Modal title="Connect Wallet" visible={showConnectWallet} onClose={setShowConnectWallet}>{ modalContent }</Modal>
         <Modal title="Account" visible={showAccount} onClose={setShowAccount}>{ accountsContent } </Modal>
         <Modal title="Connect to NetWork" visible={networkVisible} onClose={setNetworkVisible}><NetworkModal /></Modal>
       </div>

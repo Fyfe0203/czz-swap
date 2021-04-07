@@ -139,6 +139,9 @@ export default function Swap() {
       case 'APPROVE':
         approveActions()
         break
+      case 'NONE_WALLET':
+        connectWallet()
+        break
       default:
         return null
     }

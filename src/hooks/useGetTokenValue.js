@@ -64,6 +64,7 @@ export default function useGetTokenValue() {
     const allowanceTotal = await allowance({ provider, tokenAddress: currency?.tokenAddress, spender, accounts })
     const amountToken = decToBn(tokenValue).toNumber()
     const allonceNum = decToBn(allowanceTotal).toNumber()
+    console.log('allowance', allonceNum)
     return allonceNum > amountToken
   }
   // const networkError = () => {
@@ -91,7 +92,7 @@ export default function useGetTokenValue() {
       const tokenArray = isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
       // debugger
       const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call(null)
-      console.log("swapBurnGetAmount result ===", result)
+      console.log("SwapBurnGetAmount result ===", result)
       return result[2]
     } catch (error) {
       setButtonText('NONE_TRADE')
@@ -170,7 +171,7 @@ export default function useGetTokenValue() {
         setButtonText('NONE_WALLET')
       }
     }
-  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol])
+  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol,accounts])
 
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }
