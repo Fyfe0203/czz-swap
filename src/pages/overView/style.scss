@@ -190,6 +190,7 @@
   .token{
     max-width: inherit;
     width: inherit;
+    min-width: inherit;
     margin:0 15px;
     display: block;
     &-inner{
