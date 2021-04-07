@@ -34,7 +34,7 @@ export default function useGetTokenValue() {
       setApproveLoading(true)
       setState({priceStatus:null})
       setPending([...pending, 'approve'])
-      setButtonText('SWAP_ING')
+      setButtonText('APPROVE_ING')
       const res = await approve({ provider: currentProvider, tokenAddress: currency?.tokenAddress, spender, accounts })
       console.log('Approve result ======',res)
       setIsApprove(res)
@@ -162,7 +162,7 @@ export default function useGetTokenValue() {
           setButtonText('NONE_AMOUNT')
         } else if (!hasBalance) {
           setButtonText('NONE_BALANCE')
-        } else if (networkStatus  && to.tokenValue) {
+        } else if (!networkStatus  && to.tokenValue) {
           setButtonText('NONE_NETWORK')
         } else if (!authorization  && to.tokenValue) {
           setButtonText('APPROVE' )

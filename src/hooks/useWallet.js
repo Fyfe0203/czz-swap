@@ -4,7 +4,7 @@ import useGlobal from './useGlobal'
 import { formatAddress } from '../utils'
 
 export default function useWallet() {
-  const { setState, from, wallet, accounts, updateAccounts } = useGlobal()
+  const { setState, from, to, wallet, accounts, updateAccounts } = useGlobal()
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
   const ONBOARD_TEXT = 'Click here to install MetaMask!'
@@ -165,7 +165,7 @@ export default function useWallet() {
 
   useEffect(() => {
     initWallet()
-  }, [from])
+  }, [from,to])
 
   return {connectWallet,loading,addEthereum,newLoading,buttonText,disConnect}
 }
