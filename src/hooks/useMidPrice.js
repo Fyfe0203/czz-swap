@@ -5,6 +5,8 @@ import { pack, keccak256 } from '@ethersproject/solidity'
 import IUniswapV2Pair from '../abi/IUniswapV2Pair.json'
 import useGlobal from './useGlobal'
 import Web3 from "web3"
+import BigNumber from "bignumber.js";
+import {decToBn} from '../utils'
 
 export function getAddress(tokenA, tokenB, factoryAddreaa, initCodeHash) {
   let PAIR_ADDRESS_CACHE = {}
@@ -65,16 +67,31 @@ export default function useMidPrice() {
     }
   }
 
+  const fetchTokenPair = async (lp) => {
+    const { networkId, czz, weth, provider, factoryAddress, initCodeHash } = lp
+    const Eczz = new Token(Number(networkId), czz, 8)
+    const WETH = new Token(Number(networkId), weth, 18)
+    try {
+      const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
+      const route1 = new Route([ToPair], WETH)
+      const eczz_weth = route1.midPrice.toSignificant(6)
+      return BigNumber(eczz_weth)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
   const fetchPrice = async () => {
     if (from.tokenValue && Number(to.tokenValue) > 0) {
       try {
         setLoading(true)
         setButtonText('FINDING_PRICE_ING')
-        const ethRes = await fetchPair(from)
-        const czzRes = await fetchPair(to)
+        const ethRes = from.currency.tokenAddress ? await fetchPair(from) : await fetchTokenPair(from)
+        const czzRes = from.currency.tokenAddress ? await fetchPair(to): await fetchTokenPair(to)
         const midPrice = ethRes / czzRes
         // debugger
-        const midProce2 =  Number(Number(Number(from.tokenValue) * midPrice).toFixed(to.currency.decimals))
+        const tokenValue = decToBn(from.tokenValue,from.currency.decimals)
+        const midProce2 =  Number(Number(Number(tokenValue) * midPrice).toFixed(to.currency.decimals))
         const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)
         setImpactPrice(price)
         setState({impactPrice:price})

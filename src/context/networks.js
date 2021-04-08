@@ -29,8 +29,8 @@ const networks = [
     weth: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
     czz: '0x0041a3a63a5844f878b1c08f9d3c28e17f3ce14a',
     explorerUrl: 'https://ropsten.etherscan.io/',
-    rpcUrls:'https://ropsten.infura.io/v3/9830cca0dde944d3a0e1100408fed9e4',
-    provider: new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/9830cca0dde944d3a0e1100408fed9e4"),
+    rpcUrls:'https://eth-ropsten.alchemyapi.io/v2/rNmOTkyfi26fswSk8FXIBuG6YJXNz09V',
+    provider: new Web3.providers.HttpProvider("https://eth-ropsten.alchemyapi.io/v2/rNmOTkyfi26fswSk8FXIBuG6YJXNz09V"),
     image:'https://cryptologos.cc/logos/ethereum-eth-logo.svg'
   },
   {
