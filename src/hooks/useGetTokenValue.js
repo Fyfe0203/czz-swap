@@ -102,14 +102,33 @@ export default function useGetTokenValue() {
     }
   }
 
+  const swapTokenBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
+    try {
+      debugger
+      const { czz, weth, provider, swaprouter } = pool
+      const contract = await new Web3(provider)
+      const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
+      const tokenArray = isFrom ? [weth, czz] : [czz, weth]
+      // debugger
+      const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call()
+      console.log("swapTokenBurnAmount result ===", result)
+      return result[1]
+    } catch (error) {
+      console.log(error)
+      setButtonText('NONE_TRADE')
+      throw error
+    }
+  }
+
   const swapTokenValue = async (from,to) => {
     if (from && from.currency && to.currency && from.tokenValue && Number(from.tokenValue) > 0) {
       try {
+        debugger
         setLoading(true)
         setState({priceStatus:0})
         const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
-        const inAmountRes = await swapBurnAmount(from, inAmount, true)
+        const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
         const changeAmount = new BigNumber(Number(inAmountRes)).toString()
         console.log('inAmountExchangeValue == ', changeAmount)
         if (changeAmount === "0") {
@@ -117,8 +136,10 @@ export default function useGetTokenValue() {
           setLoading(false)
           return false
         }
-        const result = await swapBurnAmount(to, changeAmount)
-        const token = new Token(to.networkId, to.currency.tokenAddress, to.currency.decimals)
+
+        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, true) : await swapTokenBurnAmount(to,changeAmount,true)
+        const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
+        const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
         const result_1 = JSBI.BigInt(result)
         const amounts = new TokenAmount(token, result_1)
         const outAmount = amounts.toSignificant(6)
@@ -149,16 +170,10 @@ export default function useGetTokenValue() {
     setHasBalance( Number(balance) > Number(from.tokenValue))
   }, [balance])
 
-  const swapValue = async (from,to) => {
-    
-  }
-
   // Get token Value Effect
   useEffect(() => {
-    if (from.currency && from?.tokenValue && to.currency?.symbol && from?.currency?.tokenAddress) {
+    if (from.currency && from?.tokenValue && to.currency?.symbol) {
       debounceValue(from, to)
-    } else if (from.currency && from?.tokenValue && to.currency?.symbol && from?.currency) {
-      swapValue(from,to)
     }
   }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol, accounts])
 
@@ -186,7 +201,7 @@ export default function useGetTokenValue() {
       setButtonText('NONE_WALLET')
     }
   }, [accounts, from.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization])
-  
+
 
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }
