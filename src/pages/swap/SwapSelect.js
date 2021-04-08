@@ -1,12 +1,30 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import useGlobal from '../../hooks/useGlobal'
 import { Modal } from '../../compontent/index'
-import {formatAddress} from '../../utils'
+// import {formatAddress} from '../../utils'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
 
 const SearchInput = styled.input`
 `
+
+const TokenItem = ({ item, onClick, currency }) => {
+  return (
+    <div className={`f-c token-item ${currency?.tokenAddress === item.tokenAddress ? 'active' : ''}`} onClick={() => onClick(item)}>
+      <div className="token-info f-c">
+        {item.image && <div className="img" style={{backgroundImage:`url(${item.image})`}} />}
+        <div className="f-1">
+          <h2>{item.symbolName || item.symbol}</h2>
+          <div className="token-address">{item.name}</div>
+        </div>
+      </div>
+      <div className="token-desc">
+        { item.name }
+      </div>
+    </div>
+  )
+}
+
 export default function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
   const { pools, networks, setState, from, to } = useGlobal()
@@ -71,21 +89,7 @@ export default function SelectId({ types, pool }) {
         <Scrollbars style={{ maxHeight: 400, height: 400 }}>
           <div className="token-table">
               {pools && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
-              // const icons = require(`../../asset/svg/${item.image}`)
-              return (
-                <div key={index} className={`f-c token-item ${currency?.tokenAddress === item.tokenAddress ? 'active' : ''}`} onClick={() => selectToken(item)}>
-                  <div className="token-info f-c">
-                    {item.image && <div className="img" style={{backgroundImage:`url(${item.image})`}} />}
-                    <div className="f-1">
-                      <h2>{item.symbol}</h2>
-                      <div className="token-address">{formatAddress(item.tokenAddress)}</div>
-                    </div>
-                  </div>
-                  <div className="token-desc">
-                    { item.name }
-                  </div>
-                </div>
-              )
+                return <TokenItem currency={currency} item={item} onClick={ selectToken } />
             }) : notFound}
           </div>
         </Scrollbars>
@@ -115,3 +119,5 @@ export default function SelectId({ types, pool }) {
     </Fragment>
   )
 }
+
+

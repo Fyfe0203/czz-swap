@@ -149,10 +149,16 @@ export default function useGetTokenValue() {
     setHasBalance( Number(balance) > Number(from.tokenValue))
   }, [balance])
 
+  const swapValue = async (from,to) => {
+    
+  }
+
   // Get token Value Effect
   useEffect(() => {
     if (from.currency && from?.tokenValue && to.currency?.symbol && from?.currency?.tokenAddress) {
       debounceValue(from, to)
+    } else if (from.currency && from?.tokenValue && to.currency?.symbol && from?.currency) {
+      swapValue(from,to)
     }
   }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol, accounts])
 
@@ -181,5 +187,6 @@ export default function useGetTokenValue() {
     }
   }, [accounts, from.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization])
   
+
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }

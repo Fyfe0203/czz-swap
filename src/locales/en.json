@@ -1,0 +1,10 @@
+{
+  "home":"home",
+  "overview":"综述",
+  "account":"Accounts",
+  "copyAddress":"Copy",
+  "changeAccount":"Change",
+  "connectedWithMetaMask":"Connect MetaMask Wallet",
+  "viewExport":"查看浏览器",
+  "connectWallet":"连接钱包"
+}

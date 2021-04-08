@@ -5,5 +5,6 @@
   "copyAddress":"复制地址",
   "changeAccount":"切换账户",
   "connectedWithMetaMask":"连接到MetaMask钱包",
-  "viewExport":"查看浏览器"
+  "viewExport":"查看浏览器",
+  "connectWallet":"连接钱包"
 }

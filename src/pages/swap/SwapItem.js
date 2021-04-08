@@ -22,7 +22,6 @@ export default function SwapItem({ pool, exchange, type}) {
     setState({from:{...from,tokenValue}})
   }
 
-  
   return (
     <div className="swap-item">
       <div className="f-c-sb swap-head">

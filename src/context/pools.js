@@ -1,4 +1,25 @@
 const pools = [
+    {
+    name:'ETH',
+    symbol: "ETH",
+    decimals: 18,
+    systemType: "ETH",
+    image:'https://docs.classzz.com/svg/ETH.svg'
+  },
+    {
+    name:'HECO',
+    symbol: "HT",
+    decimals: 18,
+    systemType: "HECO",
+    image:'https://docs.classzz.com/svg/HECO.svg'
+  },
+  {
+    name:'BSC',
+    symbol: "BNB",
+    decimals: 18,
+    systemType: "BSC",
+    image:'https://docs.classzz.com/svg/BSC.svg'
+  },
   {
     tokenAddress: "0x103C9FfFf6FBD142a1bb12F49E3387Bd7a211C74",
     name:'WBTC',

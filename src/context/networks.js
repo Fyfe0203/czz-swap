@@ -30,7 +30,8 @@ const networks = [
     czz: '0x0041a3a63a5844f878b1c08f9d3c28e17f3ce14a',
     explorerUrl: 'https://ropsten.etherscan.io/',
     rpcUrls:'https://ropsten.infura.io/v3/9830cca0dde944d3a0e1100408fed9e4',
-    provider:new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/9830cca0dde944d3a0e1100408fed9e4")
+    provider: new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/9830cca0dde944d3a0e1100408fed9e4"),
+    image:'https://cryptologos.cc/logos/ethereum-eth-logo.svg'
   },
   {
     networkName: 'HECO Test',
@@ -52,7 +53,8 @@ const networks = [
     czz:'0x5E8fb243AD8B9c10B2211a8C6d0D21231A3f9039',
     explorerUrl:'https://testnet.hecoinfo.com/',
     rpcUrls:'https://http-testnet.hecochain.com/',
-    provider:new Web3.providers.HttpProvider("https://http-testnet.hecochain.com/")
+    provider: new Web3.providers.HttpProvider("https://http-testnet.hecochain.com/"),
+    image:'https://cryptologos.cc/logos/huobi-token-ht-logo.svg'
   },
   {
     networkName: 'BSC Test',
@@ -74,7 +76,8 @@ const networks = [
     czz:'0x507B8283aD724aA06dF09Df3d1D6eb3816EE51d5',
     explorerUrl:'https://testnet.bscscan.com/',
     rpcUrls:'https://data-seed-prebsc-2-s1.binance.org:8545/',
-    provider:new Web3.providers.HttpProvider("https://data-seed-prebsc-2-s1.binance.org:8545/")
+    provider: new Web3.providers.HttpProvider("https://data-seed-prebsc-2-s1.binance.org:8545/"),
+    image:'https://cryptologos.cc/logos/binance-coin-bnb-logo.svg'
   }
 ]
 export default networks
