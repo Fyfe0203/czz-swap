@@ -75,7 +75,8 @@ export default function useMidPrice() {
       const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
       const route1 = new Route([ToPair], WETH)
       const eczz_weth = route1.midPrice.toSignificant(6)
-      return BigNumber(eczz_weth)
+      debugger
+      return eczz_weth / 1
     } catch (error) {
       throw new Error(error)
     }
@@ -86,12 +87,13 @@ export default function useMidPrice() {
       try {
         setLoading(true)
         setButtonText('FINDING_PRICE_ING')
+        debugger
         const ethRes = from.currency.tokenAddress ? await fetchPair(from) : await fetchTokenPair(from)
-        const czzRes = from.currency.tokenAddress ? await fetchPair(to): await fetchTokenPair(to)
+        const czzRes = to.currency.tokenAddress ? await fetchPair(to): await fetchTokenPair(to)
         const midPrice = ethRes / czzRes
         // debugger
-        const tokenValue = decToBn(from.tokenValue,from.currency.decimals)
-        const midProce2 =  Number(Number(Number(tokenValue) * midPrice).toFixed(to.currency.decimals))
+        // const tokenValue = decToBn(from.tokenValue,from.currency.decimals)
+        const midProce2 =  Number(Number(Number(from.tokenValue) * midPrice).toFixed(to.currency.decimals))
         const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)
         setImpactPrice(price)
         setState({impactPrice:price})

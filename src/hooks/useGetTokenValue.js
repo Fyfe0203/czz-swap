@@ -104,12 +104,10 @@ export default function useGetTokenValue() {
 
   const swapTokenBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      debugger
       const { czz, weth, provider, swaprouter } = pool
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenArray = isFrom ? [weth, czz] : [czz, weth]
-      // debugger
       const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call()
       console.log("swapTokenBurnAmount result ===", result)
       return result[1]
@@ -123,7 +121,6 @@ export default function useGetTokenValue() {
   const swapTokenValue = async (from,to) => {
     if (from && from.currency && to.currency && from.tokenValue && Number(from.tokenValue) > 0) {
       try {
-        debugger
         setLoading(true)
         setState({priceStatus:0})
         const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
@@ -137,13 +134,12 @@ export default function useGetTokenValue() {
           return false
         }
 
-        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, true) : await swapTokenBurnAmount(to,changeAmount,true)
+        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
         const result_1 = JSBI.BigInt(result)
         const amounts = new TokenAmount(token, result_1)
         const outAmount = amounts.toSignificant(6)
-        // debugger
         const allowanceResult = await allowanceAction(from)
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
