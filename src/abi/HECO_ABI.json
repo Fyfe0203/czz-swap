@@ -5,6 +5,11 @@
 				"internalType": "address",
 				"name": "_token",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_czzSecurityPoolPoolAddr",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -134,6 +139,37 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "mid",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			}
+		],
+		"name": "SubmitOrder",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
 				"name": "inAmount",
 				"type": "uint256"
 			},
@@ -188,6 +224,35 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_amountIn",
 				"type": "uint256"
@@ -206,6 +271,43 @@
 		"name": "burn",
 		"outputs": [],
 		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "getBalanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCzzSecurityPoolPoolAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -253,6 +355,32 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "mid",
+				"type": "uint256"
+			}
+		],
+		"name": "mintAndTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "mid",
+				"type": "uint256"
+			}
+		],
+		"name": "mintAndTransferEth",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
@@ -293,6 +421,19 @@
 				"type": "address"
 			}
 		],
+		"name": "setCzzSecurityPoolPoolAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "addr",
+				"type": "address"
+			}
+		],
 		"name": "setCzzTonkenAddress",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -307,6 +448,97 @@
 			}
 		],
 		"name": "setMinSignatures",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "mid",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "toToken",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "gas",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "routerAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "WethAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "submitOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "mid",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "gas",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "routerAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "WethAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "submitOrderEth",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -392,7 +624,93 @@
 				"type": "uint256"
 			}
 		],
-		"name": "swapAndBurnHt",
+		"name": "swapAndBurnEth",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "fromToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "toToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "routerAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "WethAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapAndBurn_t",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "fromToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "toToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "routerAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "WethAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapAndBurn_t1",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
@@ -483,7 +801,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "swapTokenForHt",
+		"name": "swapTokenForEth",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
