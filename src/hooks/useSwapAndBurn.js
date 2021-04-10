@@ -64,9 +64,8 @@ function useSwapAndBurn() {
     } else {
       lpContract.methods.swapAndBurnEth(
           0, // tolerancAmount, // 0
-          from.currency?.tokenAddress,
           to.ntype,
-          to.currency?.tokenAddress,
+          to.currency.tokenAddress ? to.currency.tokenAddress : "0x00" ,
           from.swaprouter, // change router setting
           from.weth, // change weth setting
           deadlineVal,
