@@ -140,7 +140,8 @@ export default function useGetTokenValue() {
         const result_1 = JSBI.BigInt(result)
         const amounts = new TokenAmount(token, result_1)
         const outAmount = amounts.toSignificant(6)
-        const allowanceResult = await allowanceAction(from)
+        // if from is network approve setting true
+        const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
         setAuthorization(allowanceResult)
