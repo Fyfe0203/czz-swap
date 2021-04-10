@@ -89,7 +89,7 @@ export default function SelectId({ types, pool }) {
         <Scrollbars style={{ maxHeight: 400, height: 400 }}>
           <div className="token-table">
               {pools && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
-                return <TokenItem currency={currency} item={item} onClick={ selectToken } />
+                return <TokenItem key={ index } currency={currency} item={item} onClick={ selectToken } />
             }) : notFound}
           </div>
         </Scrollbars>

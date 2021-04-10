@@ -10,6 +10,7 @@ import SwapItem from './SwapItem'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import useWallet from '../../hooks/useWallet'
+import SwapPending from './SwapPending'
 import {decToBn,bnToDec} from '../../utils'
 import './swap.scss'
 
@@ -142,6 +143,7 @@ export default function Swap() {
 
   return (
     <Fragment>
+      <SwapPending visible={ true } hash="07da11787ab6f4476dabc12a2f43687a93cf4a451cf5322a7d86b0a4dbc1fffd" />
       <div className="swap-wrap">
         <SwapPanel className="swap">
             <div className="f-c-sb">

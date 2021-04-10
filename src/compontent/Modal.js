@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
 export default function Modal(props) {
-  const { visible = false,title = null, ...rest } = props
+  const { visible = false, title = null, ...rest } = props
   return (
     <Fragment>
       {visible &&

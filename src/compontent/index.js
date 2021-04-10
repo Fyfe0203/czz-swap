@@ -8,6 +8,8 @@ import Input from './Input'
 import Select from './Select'
 import LinkItem from './LinkItem'
 import Button from './Button'
+import Image from './Image'
+import Icon from './Icon'
 import './style.scss'
 
-export { Modal,PageLoading,PageNotFound,CopyButton,Loading,Message,message ,Select, Input,LinkItem,Button}
+export { Modal,PageLoading,PageNotFound,CopyButton,Loading,Message,message ,Select, Input,LinkItem,Button,Image,Icon}
