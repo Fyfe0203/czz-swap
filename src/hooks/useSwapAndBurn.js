@@ -12,7 +12,7 @@ function useSwapAndBurn() {
   const [hash,setHash] = useState(null)
   const [loading, setLoading] = useState(false)
   const [recent,setRecent] = useLocalStorage([],'recent')
-  
+
   const getHashUrl = address => { return {explorerUrl: `${from.explorerUrl}tx/${address}` }}
   const fetchSwap = () => {
     setLoading(true)
@@ -26,42 +26,81 @@ function useSwapAndBurn() {
     // history params
     const deadlineVal = deadline ? new Date().getTime() + deadline * 60 * 60 * 1000 : 100000000000000
     const recentItem = { types: 'Swap', accounts, content: `Swap ${from?.tokenValue} ${from.currency?.symbol} to ${to.currency?.symbol}` }
-    
-    lpContract.methods.swapAndBurn(
-      amountIn.toString(),
-      0, // tolerancAmount, // 0
-      from.currency?.tokenAddress,
-      to.ntype,
-      to.currency?.tokenAddress,
-      from.swaprouter, // change router setting
-      from.weth, // change weth setting
-      deadlineVal,
-    )
-    .send({ from: accounts })
-    .on("transactionHash", (hashRes)=> {
-      console.log("hash", hashRes)
-      setHash(hashRes)
-      setPending([...pending,'swapburn'])
-    })
-    .on("receipt", (receipt) => {
-      console.log('Swap receipt Result === ', receipt)
-      setReceipt(receipt)
-      // Set Swap history Success Status
-      setRecent(recent => [...recent,{...recentItem, status:1,...getHashUrl(receipt.transactionHash)}])
-      setPending(pending.filter(i => i !== 'swapburn'))
-      successMessage(receipt)
-      setLoading(false)
-    })
-    .on("error", (error) => {
-      // Set Swap history Error Status
-      if (hash) setRecent(recent => [...recent, { ...recentItem,status:2, ...getHashUrl(hash) }])
-      setLoading(false)
-      setPending(pending.filter(i => i !== 'swapburn'))
-      console.log('swap error ===>', error)
-      setButtonText('SWAP')
-    })
+
+    if(from.currency.tokenAddress){
+      lpContract.methods.swapAndBurn(
+          amountIn.toString(),
+          0, // tolerancAmount, // 0
+          from.currency?.tokenAddress,
+          to.ntype,
+          to.currency?.tokenAddress,
+          from.swaprouter, // change router setting
+          from.weth, // change weth setting
+          deadlineVal,
+      )
+          .send({ from: accounts })
+          .on("transactionHash", (hashRes)=> {
+            console.log("hash", hashRes)
+            setHash(hashRes)
+            setPending([...pending,'swapburn'])
+          })
+          .on("receipt", (receipt) => {
+            console.log('Swap receipt Result === ', receipt)
+            setReceipt(receipt)
+            // Set Swap history Success Status
+            setRecent(recent => [...recent,{...recentItem, status:1,...getHashUrl(receipt.transactionHash)}])
+            setPending(pending.filter(i => i !== 'swapburn'))
+            successMessage(receipt)
+            setLoading(false)
+          })
+          .on("error", (error) => {
+            // Set Swap history Error Status
+            if (hash) setRecent(recent => [...recent, { ...recentItem,status:2, ...getHashUrl(hash) }])
+            setLoading(false)
+            setPending(pending.filter(i => i !== 'swapburn'))
+            console.log('swap error ===>', error)
+            setButtonText('SWAP')
+          })
+    } else {
+      lpContract.methods.swapAndBurnEth(
+          0, // tolerancAmount, // 0
+          from.currency?.tokenAddress,
+          to.ntype,
+          to.currency?.tokenAddress,
+          from.swaprouter, // change router setting
+          from.weth, // change weth setting
+          deadlineVal,
+      ).send({ from: accounts,value: amountIn})
+      .on("transactionHash", (hashRes)=> {
+        console.log("hash", hashRes)
+        setHash(hashRes)
+        setPending([...pending,'swapburn'])
+      })
+      .on("receipt", (receipt) => {
+        console.log('Swap receipt Result === ', receipt)
+        setReceipt(receipt)
+        // Set Swap history Success Status
+        setRecent(recent => [...recent,{...recentItem, status:1,...getHashUrl(receipt.transactionHash)}])
+        setPending(pending.filter(i => i !== 'swapburn'))
+        successMessage(receipt)
+        setLoading(false)
+      })
+      .on("error", (error) => {
+        // Set Swap history Error Status
+        if (hash) setRecent(recent => [...recent, { ...recentItem,status:2, ...getHashUrl(hash) }])
+        setLoading(false)
+        setPending(pending.filter(i => i !== 'swapburn'))
+        console.log('swap error ===>', error)
+        setButtonText('SWAP')
+      })
+    }
+
   }
-  
+
+
+
+
+
   const successMessage = (res) => {
     message({
       icon: 'check-circle',
