@@ -21,7 +21,7 @@ export default function NetworkModal(props) {
   return (
     <Modal {...rest} onClose={ onClose }>
       <div className="network-switch">
-        <Image onClick={ ()=> onClose(false)} src={ require('../../asset/svg/location.svg').default} style={{width:'100%',backgroundSize:'cover',height:200,marginBottom:10}} />
+        <Image onClick={ ()=> onClose(false)} src={ require('../../asset/svg/location.svg').default} style={{width:'100%',backgroundSize:'cover',height:170, backgroundSize:'contain', marginBottom:18}} />
         <div className="text">
           { BASE_TEXT }
         </div>
@@ -32,7 +32,6 @@ export default function NetworkModal(props) {
           <p>NetWorkName: <b>{chainName }</b></p>
           <p>RPC URL:<b>{rpcUrls[0] }</b></p>
           <p>Chain ID:<b>{chainId }</b></p>
-          <p>NetWorkName:<b>{chainName}</b></p>
           {/* <p>Currency Symbol:<b>{ }</b></p> */}
           <p>Block Explorer URL:<b>{blockExplorerUrls[0]}</b></p>
         </div>}

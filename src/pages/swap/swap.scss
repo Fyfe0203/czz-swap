@@ -551,9 +551,13 @@
       font-size: 12px;
       margin-bottom: 20px;
       line-height: 1.6;
+      background: rgba($color: #444, $alpha: .1);
+      padding: 15px;
+      border-radius: 5px;
     }
   }
   &-node{
+     margin-bottom: 15px;
     p{
       display: flex;
       align-items: center;
@@ -561,13 +565,13 @@
       flex-direction: column;
       align-items: center;
       align-items: flex-start;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
     }
     b{
-      opacity: .5;
-      margin:5px 0 12px;
-      font-size: 14px;
+      opacity: .7;
+      margin:2px 0 12px;
+      font-size: 12px;
       font-weight: normal;
     }
   }
