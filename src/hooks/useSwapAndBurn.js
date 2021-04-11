@@ -48,14 +48,14 @@ function useSwapAndBurn() {
             console.log('Swap receipt Result === ', receipt)
             setReceipt(receipt)
             // Set Swap history Success Status
-            setRecent(recent => [...recent,{...recentItem, status:1,...getHashUrl(receipt.transactionHash)}])
+            setRecent(recent => [...recent,{...recentItem, status:1, hash: receipt.transactionHash, ...getHashUrl(receipt.transactionHash)}])
             setPending(pending.filter(i => i !== 'swapburn'))
             successMessage(receipt)
             setLoading(false)
           })
           .on("error", (error) => {
             // Set Swap history Error Status
-            if (hash) setRecent(recent => [...recent, { ...recentItem,status:2, ...getHashUrl(hash) }])
+            if (hash) setRecent(recent => [...recent, { ...recentItem,status:2, hash, ...getHashUrl(hash) }])
             setLoading(false)
             setPending(pending.filter(i => i !== 'swapburn'))
             console.log('swap error ===>', error)
@@ -65,7 +65,7 @@ function useSwapAndBurn() {
       lpContract.methods.swapAndBurnEth(
           0, // tolerancAmount, // 0
           to.ntype,
-          to.currency.tokenAddress ? to.currency.tokenAddress : "0x00" ,
+          to.currency.tokenAddress || "0x00" ,
           from.swaprouter, // change router setting
           from.weth, // change weth setting
           deadlineVal,
@@ -79,14 +79,14 @@ function useSwapAndBurn() {
         console.log('Swap receipt Result === ', receipt)
         setReceipt(receipt)
         // Set Swap history Success Status
-        setRecent(recent => [...recent,{...recentItem, status:1,...getHashUrl(receipt.transactionHash)}])
+        setRecent(recent => [...recent,{...recentItem,hash:receipt.transactionHash, status:1,...getHashUrl(receipt.transactionHash)}])
         setPending(pending.filter(i => i !== 'swapburn'))
         successMessage(receipt)
         setLoading(false)
       })
       .on("error", (error) => {
         // Set Swap history Error Status
-        if (hash) setRecent(recent => [...recent, { ...recentItem,status:2, ...getHashUrl(hash) }])
+        if (hash) setRecent(recent => [...recent, { ...recentItem,status:2,hash, ...getHashUrl(hash) }])
         setLoading(false)
         setPending(pending.filter(i => i !== 'swapburn'))
         console.log('swap error ===>', error)

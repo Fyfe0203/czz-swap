@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect} from 'react'
-import { Modal, Loading, message,LinkItem, Button } from '../../compontent'
+import { Modal, Loading, message,LinkItem, Button, Image } from '../../compontent'
 import useGetTokenValue from '../../hooks/useGetTokenValue'
 import useSwapAndBurn from '../../hooks/useSwapAndBurn'
 import useGlobal from '../../hooks/useGlobal'
@@ -19,7 +19,7 @@ window.BigNumber = BigNumber
 const SwapConfirmItem = ({item,status,index}) => {
   return (
     <div className="confirm-node">
-      <div className="img" style={{ backgroundImg: `url(${item.img})` }} />
+      <Image src={item.currency.image} style={{width:36,height:36,borderRadius: 90,marginRight: 20}} />
       <div className="confirm-symbol">
         <b style={{color: status>0 && index === 1 ? 'red' : ''}}>{item.tokenValue}</b>
         <span>{item.currency.symbol}</span>
@@ -35,12 +35,12 @@ export default function Swap() {
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
   const { loading: swapLoading, hash, fetchSwap } = useSwapAndBurn()
   const [setting, setSetting] = useState(false)
-  const { connectWallet } = useWallet()
+  const { connectWallet,addEthereum } = useWallet()
   const [buttonLoading, setButtonLoading] = useState(false)
   
   useEffect(() => {
     setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
-  }, [valueLoading, swapLoading, pirceLoading,approveLoading])
+  }, [valueLoading, swapLoading, pirceLoading, approveLoading])
 
   const reverseExchange = () => {
     setState({
@@ -91,10 +91,11 @@ export default function Swap() {
   // Output is estimated.You will recive at least 0.23 HT or the transaction will revert.
 
   const [submitStatus, setSubmitStatus] = useState(false)
+  const [pendingVisible, setPendingVisible] = useState(false)
   const transactionSubmit = (
     <div style={{ paddingBottom: 15 }}>
       <div className="confirm-success">
-        <div style={{ backgroundImage: `url(${require('../../asset/svg/oks.svg').default})`, height: 100, width: 100, marginBottom: 20 }} className="img" />
+        <Image style={{ height: 100, width: 100, marginBottom: 20 }} src={require('../../asset/svg/oks.svg').default} />
         <p>Transaction Submit</p>
         <div><LinkItem src={`${from.explorerUrl}tx/${hash}`}>View on Etherscan</LinkItem></div>
       </div>
@@ -130,20 +131,18 @@ export default function Swap() {
       case 'NONE_WALLET':
         connectWallet()
         break
+      case 'NONE_NETWORK':
+        addEthereum()
+        break
       default:
         return null
     }
   }
-  // useEffect(() => {
-  //   if (!authorization) { 
-  //     setButtonText('APPROVE')
-  //   }
-  // }, [authorization, swapButtonText])
   const buttonChildren = buttonLoading ? <Loading size="small" text={status[swapButtonText]} /> : status[swapButtonText]
 
   return (
     <Fragment>
-      <SwapPending visible={ true } hash="07da11787ab6f4476dabc12a2f43687a93cf4a451cf5322a7d86b0a4dbc1fffd" />
+      <SwapPending visible={pendingVisible} hash={hash} onClose={ setPendingVisible }/>
       <div className="swap-wrap">
         <SwapPanel className="swap">
             <div className="f-c-sb">
@@ -165,7 +164,7 @@ export default function Swap() {
       <Modal title="Confirm Swap" visible={confirmStatus} onClose={ ()=>setConfirmStatus(false)}>
         { confirmSwapModal }
       </Modal>
-      <Modal  visible={submitStatus} onClose={ ()=>setConfirmStatus(false)}>
+      <Modal visible={submitStatus} onClose={ ()=>setConfirmStatus(false)}>
         { transactionSubmit }
       </Modal>
    </Fragment>

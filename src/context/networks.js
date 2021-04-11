@@ -1,14 +1,6 @@
 import Web3 from 'web3'
 import { ABI_ETH, ABI_HECO, ABI_BSC } from '../abi'
 
-   // [{
-    //   chainId: '0x64',
-    //   rpcUrls: ['https://dai.poa.network'],
-    //   chainName: 'xDAI Chain',
-    //   nativeCurrency: { name: 'xDAI', decimals: 18, symbol: 'xDAI' },
-    //   blockExplorerUrls: ['https://blockscout.com/poa/xdai'],
-    // }]
-
 const networks = [
   {
     networkName:'ETH Ropsten',

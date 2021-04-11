@@ -1,6 +1,5 @@
 import MetaMaskOnboarding from '@metamask/onboarding'
 import React, { useEffect,useRef,useState } from 'react'
-import { formatAddress, getBalanceNumber } from '../../utils'
 
 const ONBOARD_TEXT = 'Click here to install MetaMask!'
 const CONNECT_TEXT = 'Connect'
@@ -42,11 +41,10 @@ export function OnboardingButton() {
   }
 
   const initAccounts = async() => {
-      if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-        const newAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-        handleNewAccounts(newAccounts)
-        window.ethereum.on('accountsChanged', handleNewAccounts)
-    
+    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      const newAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+      handleNewAccounts(newAccounts)
+      window.ethereum.on('accountsChanged', handleNewAccounts)
     }
   }
 

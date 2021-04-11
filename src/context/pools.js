@@ -6,7 +6,7 @@ const pools = [
     systemType: "ETH",
     image:'https://docs.classzz.com/svg/ETH.svg'
   },
-    {
+  {
     name:'HECO',
     symbol: "HT",
     decimals: 18,

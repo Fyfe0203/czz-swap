@@ -4,12 +4,12 @@ import useGlobal from './useGlobal'
 import { formatAddress } from '../utils'
 
 export default function useWallet() {
-  const { setState, from, to, wallet, accounts, updateAccounts } = useGlobal()
+  const { setState, from, to, wallet, accounts, updateAccounts, setButtonText } = useGlobal()
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
   const ONBOARD_TEXT = 'Click here to install MetaMask!'
   const CONNECT_TEXT = 'Connect MetaMask'
-  const [buttonText, setButtonText] = useState(ONBOARD_TEXT)
+  const [buttonText, setWalletButtonText] = useState(ONBOARD_TEXT)
   var storage = window.localStorage
 
   const handleNewAccounts = newAccounts => {
@@ -28,6 +28,7 @@ export default function useWallet() {
     })
   }
 
+  // init wallet
   const initWallet = () => {
     if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined' && MetaMaskOnboarding.isMetaMaskInstalled() && storage.getItem('address')) {
       window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
@@ -54,8 +55,8 @@ export default function useWallet() {
       }
     }
   }
+
   // network chainchange
-  
   const disConnect = async () => {
     if (window.ethereum.on) { 
       await window.ethereum.request({
@@ -94,44 +95,59 @@ export default function useWallet() {
     }
   }
   
-  // new networks loading
-  const [newLoading, setNewLoading] = useState(false)
-  
-  // wallet new network
-  const addEthereum = async (pool = from) => {
-    const { chainId, rpcUrls, networkName: chainName, decimals, explorerUrl, symbolName, currency} = pool
-    const nativeCurrency = { name:symbolName, decimals, symbol:symbolName }
-    const params = [{
+  // switch networks
+  const [switchLoading,setSwitchLoading] = useState(false)
+  const [networkNode, setNetworkNode] = useState({})
+
+  const getNetworkNode = () => {
+    const { chainId, rpcUrls, networkName: chainName, decimals, explorerUrl, symbolName } = from
+    // debugger
+    const nativeCurrency = { name: symbolName, decimals, symbol: symbolName }
+    return {
       chainId,
       rpcUrls: [rpcUrls],
       chainName,
       nativeCurrency,
       blockExplorerUrls: [explorerUrl],
-    }]
+    }
+  }
+  
+  useEffect(() => {
+    if (from.currency) setNetworkNode(getNetworkNode())
+  }, [from.currency])
+  
+  // wallet new network
+  const addEthereum = async (pool = from) => {
+    const item = getNetworkNode()
+    const params = [item]
     // debugger
-    console.log(params)
     if (window.ethereum) {
       try {
-        setNewLoading(true)
+        setSwitchLoading(true)
+        setButtonText('SWITCH_ING')
         const res = await window.ethereum.request({ method: 'wallet_addEthereumChain', params })
+        setButtonText('SWAP')
+        const { currency } = pool
         watchAsset(currency)
-        console.log(res)
+        return res
       } catch (error) {
-        console.log(error)
+        setButtonText('NONE_NETWORK')
+        throw error
       } finally {
-        setNewLoading(false)
+        setSwitchLoading(false)
       }
     }
   }
 
   // watch walletAsset token
   const watchAsset = async (pool) => {
-    const { symbol, tokenAddress:address, decimals} = pool
+    const { symbol, tokenAddress: address, decimals, image } = pool
+    // debugger
     const options = {
       address,
       symbol,
       decimals,
-      image:'https://cryptologos.cc/logos/global-social-chain-gsc-logo.svg'
+      image
     }
     try {
       const success = await window.ethereum.request({
@@ -155,10 +171,10 @@ export default function useWallet() {
   useEffect(() => {
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       if (accounts?.length > 0) {
-        setButtonText(formatAddress(accounts))
+        setWalletButtonText(formatAddress(accounts))
         onboarding.current?.stopOnboarding()
       } else {
-        setButtonText(CONNECT_TEXT)
+        setWalletButtonText(CONNECT_TEXT)
       }
     }
   }, [accounts])
@@ -167,5 +183,5 @@ export default function useWallet() {
     initWallet()
   }, [from,to])
 
-  return {connectWallet,loading,addEthereum,newLoading,buttonText,disConnect}
+  return {connectWallet,loading,addEthereum,switchLoading,buttonText,disConnect,networkNode}
 }

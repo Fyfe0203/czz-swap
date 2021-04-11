@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import { Modal } from '../../compontent/index'
+import { Modal, Loading } from '../../compontent/index'
 // import {formatAddress} from '../../utils'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
-
+import useSwap from '../../hooks/useSwap'
 const SearchInput = styled.input`
 `
 
@@ -19,7 +19,7 @@ const TokenItem = ({ item, onClick, currency }) => {
         </div>
       </div>
       <div className="token-desc">
-        { item.name }
+        { item.loading ?<Loading size="small" color="blue" /> : <>{item.balance || '0.00'}</>  }
       </div>
     </div>
   )
@@ -29,6 +29,7 @@ export default function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
   const { pools, networks, setState, from, to } = useGlobal()
   const { currency } = pool
+  const { poolsBalance } = useSwap()
   const normalFilter = token => token?.systemType === pool.networkType
   const [filters, setFilters] = useState(() => { return normalFilter })
   const [keyword, setKeyword] = useState('')
@@ -68,6 +69,7 @@ export default function SelectId({ types, pool }) {
   const filterNetwork = (item) => {
     setChainId(item.chainId)
     setFilters(() => { return token => { return token.systemType === item.networkType } })
+    poolsBalance()
   }
 
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>

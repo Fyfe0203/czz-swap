@@ -22,6 +22,10 @@
   border-radius: 90px;
   justify-content: center;
   color: #fff;
+  cursor: pointer;
+  &:hover{
+    background: darken(red,5%);
+  }
   .ico{
     color: #fff;
     font-size: 20px;
