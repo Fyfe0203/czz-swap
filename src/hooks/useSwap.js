@@ -42,9 +42,9 @@ export default function useSwap() {
       lpList.splice(index, 1, {...item,loading:true})
       const items = await getPoolBalance(item)
       lpList.splice(index, 1, {...items,loading:false})
-      setState({
-        pools:lpList
-      })
+    })
+    setState({
+      pools:lpList
     })
   }
 
