@@ -15,6 +15,11 @@ import './index.scss'
 // Insufficient BNB balance
 import useWallet from '../../hooks/useWallet'
 
+const scanName = {
+  ETH:'View on Etherscan',
+  BSC:'View on Hecoscan',
+  HECO:'View on Binancescan'
+}
 export default function Connect(props) {
   const { accounts, wallet, networkStatus, networks, pending, from, to } = useGlobal()
   const { connectWallet, buttonText, disConnect } = useWallet()
@@ -114,8 +119,9 @@ export default function Connect(props) {
             <h3>{formatAddress(accounts)}</h3>
             <div className="f-c connect-bar">
               <CopyButton toCopy={accounts}>copy Address</CopyButton>
-              <a className="button-link" href={ `https://etherscan.io/address/${accounts}`}>
-                <i className="ico-external-link" />View on Etherscan
+              <a className="button-link" target="_blank" href={ `${from?.explorerUrl}/address/${accounts}`}>
+                <i className="ico-external-link" />
+                { scanName[from?.networkType] }
               </a>
             </div>
           </div>
@@ -131,7 +137,7 @@ export default function Connect(props) {
         {accountsButton}
         <Modal title="Connect Wallet" visible={showConnectWallet} onClose={setShowConnectWallet}>{ modalContent }</Modal>
         <Modal title="Account" visible={showAccount} onClose={setShowAccount}>{ accountsContent } </Modal>
-        <Modal title="Connect to NetWork" visible={networkVisible} onClose={setNetworkVisible}><NetworkModal /></Modal>
+        <NetworkModal title="Connect to NetWork" visible={networkVisible} onClose={setNetworkVisible} />
       </div>
     </div>
   )

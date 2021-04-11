@@ -128,6 +128,7 @@ export default function useWallet() {
         const res = await window.ethereum.request({ method: 'wallet_addEthereumChain', params })
         setButtonText('SWAP')
         const { currency } = pool
+        setState({networkStatus: true})
         watchAsset(currency)
         return res
       } catch (error) {
