@@ -16,6 +16,7 @@ export default React.memo(function Header() {
           <h1 className="logo"><NavLink to="/" className="img" style={{backgroundImage:`url(${require('../../asset/svg/logo.svg').default })`}}>ClassZZSwap</NavLink></h1>
           <div className="c-nav">
             {routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} >{item.name}</NavLink>)}
+            <a href="https://classzz.gitbook.io/class-zz-heco-bsc/" target="_blank">Help</a>
           </div>
         </div>
         <div className="f-c c-tool">
