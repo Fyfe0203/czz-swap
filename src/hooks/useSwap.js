@@ -37,14 +37,18 @@ export default function useSwap() {
   }
 
   const poolsBalance = () => {
-    const lpList = Array.from(pools)
-    pools.forEach(async (item, index) =>{
-      lpList.splice(index, 1, {...item,loading:true})
-      const items = await getPoolBalance(item)
-      lpList.splice(index, 1, {...items,loading:false})
-    })
-    setState({
-      pools:lpList
+      let lpList = Array.from(pools)
+      pools.forEach(async (item, index) =>{
+        lpList.splice(index, 1, { ...item, loading: true })
+        try {
+          const items = await getPoolBalance(item)
+          lpList.splice(index, 1, { ...items, loading: false })
+          setState({
+            pools: lpList
+          })
+        } catch (error) {
+          throw error
+        }
     })
   }
 

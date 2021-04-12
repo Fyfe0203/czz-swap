@@ -16,6 +16,7 @@ function useSwapAndBurn() {
   const getHashUrl = address => { return {explorerUrl: `${from.explorerUrl}tx/${address}` }}
   const fetchSwap = () => {
     setLoading(true)
+    setButtonText('SWAP_ING')
     const infoContract = new Web3(currentProvider)
     const lpContract = new infoContract.eth.Contract(
       from.abi,
@@ -95,10 +96,6 @@ function useSwapAndBurn() {
     }
 
   }
-
-
-
-
 
   const successMessage = (res) => {
     message({

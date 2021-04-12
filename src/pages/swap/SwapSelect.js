@@ -69,7 +69,7 @@ export default function SelectId({ types, pool }) {
   const filterNetwork = (item) => {
     setChainId(item.chainId)
     setFilters(() => { return token => { return token.systemType === item.networkType } })
-    poolsBalance()
+    // poolsBalance()
   }
 
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>

@@ -40,9 +40,9 @@ export default function useBalabce(pool) {
         const res = pools && item.tokenAddress ? await getBalance(pools.provider, item.tokenAddress, accounts) : await new Web3(pools.provider).eth.getBalance(accounts)
         const tokenBalance = getBalanceNumber(new BigNumber(Number(res)), item.decimals)
         setItemLoading(false)
-        // debugger
         return { ...item, balance: tokenBalance }
       } catch (error) {
+        console.log(error)
         return { ...item, balance: "0.00" }
       } finally {
         setItemLoading(false)
