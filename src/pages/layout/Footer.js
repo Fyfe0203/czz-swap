@@ -26,7 +26,6 @@ const Links = styled.a`
     padding:8px 10px;
     border-radius:5px;
     background-color:rgba(0,0,0,.6);
-   
   }
   &:hover{
     opacity:.5s;
