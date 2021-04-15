@@ -9,11 +9,10 @@ import Setting from './Setting'
 import SwapItem from './SwapItem'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
+import SwapPending from './SwapPending'
 import useWallet from '../../hooks/useWallet'
 import {decToBn,bnToDec} from '../../utils'
 import './swap.scss'
-
-window.BigNumber = BigNumber
 
 const SwapConfirmItem = ({item,status,index}) => {
   return (
@@ -28,7 +27,7 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const { accounts, networkStatus, from, to, setState, swapButtonText, priceStatus } = useGlobal()
+  const { networkStatus, from, to, setState, swapButtonText, priceStatus } = useGlobal()
   const { status } = useSwap()
   const { loading: valueLoading, approveActions, approveLoading } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
@@ -71,7 +70,6 @@ export default function Swap() {
   )
 
   const [confirmStatus, setConfirmStatus] = useState(false)
-  
 
   const confirmButton = (
     <div className={`swap-button button-${priceStatus}`} onClick={priceStatus === 3 || swapLoading ? null : fetchSwap}>
@@ -141,6 +139,7 @@ export default function Swap() {
 
   return (
     <Fragment>
+      <SwapPending visible={ pendingVisible } />
       <div className="swap-wrap">
         <SwapPanel className="swap">
             <div className="f-c-sb">
@@ -168,6 +167,7 @@ export default function Swap() {
    </Fragment>
   )
 }
+
 const Item = styled.div``
 const SwapBar = styled.div``
 const SwapPanel = styled.div``

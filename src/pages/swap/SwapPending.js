@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment} from 'react'
+import React, { useState, useEffect} from 'react'
 import useGlobal from '../../hooks/useGlobal'
 import {Loading,Icon,Image,Modal} from '../../compontent'
 import styled from 'styled-components'
@@ -34,7 +34,7 @@ const ViewLink = styled.a.attrs(props => ({
 `
 
 export default function SwapPending(props) {
-  const {hash,...rest} = props
+  const {hash,visible,...rest} = props
   const { from, to } = useGlobal()
   const {explorerUrl : fromExporer } = from
   const { explorerUrl: toExplorer } = to
@@ -60,13 +60,15 @@ export default function SwapPending(props) {
   }
 
   useEffect(() => {
-    getStatus()
-  }, [])
+    if (visible) {
+      getStatus()
+    }
+  }, [visible])
   
   const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15 }
   const iconStyle = { width: 30, height:30, display: 'flex', alignItems: 'center', justifyContent:'center'}
   return (
-    <Modal title="SwapPeding" {...rest}>
+    <Modal title="SwapPeding" visible={ visible } {...rest}>
       <SwapItem>
         <SwapName>
           <Image style={imageStyle} src={from?.currency?.image} />
