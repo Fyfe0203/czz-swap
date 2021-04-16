@@ -1,6 +1,6 @@
 .swap{
-  min-width: 380px;
-  max-width: 380px;
+  min-width: 400px;
+  max-width: 400px;
   margin: 0 auto;
   background: #fff;
   padding: 25px 25px 20px;
@@ -143,14 +143,14 @@
     padding:20px 0 10px;
   }
   &-input{
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 800;
     color: #181E3C;
     border: none;
     outline: none;
     background: transparent;
     width: 100%;
-    font-family: "Inter var", sans-serif;
+    // font-family: "Inter var", sans-serif;
     &.max{
       font-size: 20px;
     }
@@ -336,7 +336,7 @@
     background: rgba(255, 255, 255, 0.637);
     padding: 10px;
     border-radius: 5px;
-    width: 120px;
+    width: 130px;
     transition: .3s;
     min-height: 30px;
     &-desc{

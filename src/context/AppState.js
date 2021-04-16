@@ -15,6 +15,11 @@ const state = {
   to: { tokenValue: '' },
   priceStatus: 0,
   impactPrice: 0,
+  explorer:{
+    ETH:'View on Etherscan',
+    BSC:'View on Hecoscan',
+    HECO:'View on Binancescan'
+  },
   swapSetting: {
     router:null,
     tolerance:null,

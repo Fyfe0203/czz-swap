@@ -31,7 +31,7 @@ export default function Swap() {
   const { status } = useSwap()
   const { loading: valueLoading, approveActions, approveLoading } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
-  const { loading: swapLoading, hash, fetchSwap } = useSwapAndBurn()
+  const { loading: swapLoading, hash, fetchSwap,setHash } = useSwapAndBurn()
   const [setting, setSetting] = useState(false)
   const { connectWallet,addEthereum } = useWallet()
   const [buttonLoading, setButtonLoading] = useState(false)
@@ -88,17 +88,17 @@ export default function Swap() {
   // Output is estimated.You will recive at least 0.23 HT or the transaction will revert.
 
   const [submitStatus, setSubmitStatus] = useState(false)
-  const [pendingVisible, setPendingVisible] = useState(false)
-  const transactionSubmit = (
-    <div style={{ paddingBottom: 15 }}>
-      <div className="confirm-success">
-        <Image style={{ height: 100, width: 100, marginBottom: 20 }} src={require('../../asset/svg/oks.svg').default} />
-        <p>Transaction Submit</p>
-        <div><LinkItem src={`${from.explorerUrl}tx/${hash}`}>View on Etherscan</LinkItem></div>
-      </div>
-      <div className="swap-button" onClick={() => setSubmitStatus(false)}>Close</div>
-    </div>
-  )
+  // const [pendingVisible, setPendingVisible] = useState(false)
+  // const transactionSubmit = (
+  //   <div style={{ paddingBottom: 15 }}>
+  //     <div className="confirm-success">
+  //       <Image style={{ height: 100, width: 100, marginBottom: 20 }} src={require('../../asset/svg/oks.svg').default} />
+  //       <p>Transaction Submit</p>
+  //       <div><LinkItem src={`${from.explorerUrl}tx/${hash}`}>View on Etherscan</LinkItem></div>
+  //     </div>
+  //     <div className="swap-button" onClick={() => setSubmitStatus(false)}>Close</div>
+  //   </div>
+  // )
 
   const confirmSwapModal = (
     <div>
@@ -135,35 +135,35 @@ export default function Swap() {
         return null
     }
   }
-  const buttonChildren = buttonLoading ? <Loading size="small" text={status[swapButtonText]} /> : status[swapButtonText]
 
   return (
     <Fragment>
-      <SwapPending visible={ pendingVisible } />
-      <div className="swap-wrap">
+      <SwapWrap className="swap-wrap">
         <SwapPanel className="swap">
-            <div className="f-c-sb">
-              <h2 className="swap-title">SWAP</h2>
-              <div className="swap-setting ico-settings" onClick={ ()=>setSetting(true)} />
+          <div className="f-c-sb">
+            <h2 className="swap-title">SWAP</h2>
+            <div className="swap-setting ico-settings" onClick={ ()=>setSetting(true)} />
           </div>
           <Item className="swap-id"> <SwapItem pool={from} type={0} /></Item>
           <Item className="swap-id"> <SwapItem pool={to} type={1} exchange={ exchangeButton } /></Item>
           <SwapBar className="swap-bar">
-            {/* {swapButton} */}
-            {<Button onClick={buttonActions} className={`block ${priceStatus} swap-button button-${priceStatus}`}>{buttonChildren}</Button>}
+            <Button onClick={buttonActions} className={`block ${priceStatus} swap-button button-${priceStatus}`}>
+              {buttonLoading ? <Loading size="small" text={status[swapButtonText]} /> : status[swapButtonText]}
+            </Button>
           </SwapBar>
           {impactPrice && to.tokenValue ? swapFooter : null}
         </SwapPanel>
-        </div>
-      <Modal title="Advanced Settings" visible={setting} onClose={ ()=>setSetting(false)}>
-        <Setting />
-      </Modal>
-      <Modal title="Confirm Swap" visible={confirmStatus} onClose={ ()=>setConfirmStatus(false)}>
-        { confirmSwapModal }
-      </Modal>
-      <Modal visible={submitStatus} onClose={ ()=>setConfirmStatus(false)}>
-        { transactionSubmit }
-      </Modal>
+      </SwapWrap>
+    <Modal title="Advanced Settings" visible={setting} onClose={ ()=>setSetting(false)}>
+      <Setting />
+    </Modal>
+    <Modal title="Confirm Swap" visible={confirmStatus} onClose={ ()=>setConfirmStatus(false)}>
+      { confirmSwapModal }
+    </Modal>
+    {/* <Modal visible={submitStatus} onClose={ ()=>setConfirmStatus(false)}>
+      { transactionSubmit }
+    </Modal> */}
+    <SwapPending visible={hash} onClose={setHash} {...hash}/>
    </Fragment>
   )
 }
@@ -171,3 +171,4 @@ export default function Swap() {
 const Item = styled.div``
 const SwapBar = styled.div``
 const SwapPanel = styled.div``
+const SwapWrap = styled.div``

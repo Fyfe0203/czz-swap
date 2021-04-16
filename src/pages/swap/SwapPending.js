@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import {Loading,Icon,Image,Modal} from '../../compontent'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import {Loading,Icon,Image,Modal,Button} from '../../compontent'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -15,7 +16,6 @@ const SwapName = styled.div`
   display:flex;
   align-items:center;
 `
-
 const InfoContainer = styled.div`
   font-weight:700;
 `
@@ -34,50 +34,62 @@ const ViewLink = styled.a.attrs(props => ({
 `
 
 export default function SwapPending(props) {
-  const {hash,visible,...rest} = props
-  const { from, to } = useGlobal()
-  const {explorerUrl : fromExporer } = from
-  const { explorerUrl: toExplorer } = to
-  const [status, setStatus] = useState({
+  const {hash,visible,fromType,toType,fromUrl,toUrl,fromImage,toImage,onClose,id, ...rest} = props
+  const { explorer } = useGlobal()
+  const [recent,setRecent] = useLocalStorage([],'recent')
+  const normalHash = {
     ext_tx_hash: null,
     tx_hash: null,
     confirm_ext_tx_hash: null
-  })
+  }
+  const [status, setStatus] = useState(normalHash)
 
-  const {ext_tx_hash,tx_hash,confirm_ext_tx_hash } = status
-  const getStatus = async () => {
+  const { ext_tx_hash, tx_hash, confirm_ext_tx_hash } = status
+  
+  const getStatus = async (query) => {
     try {
-      const res = await fetch(`https://testnet.classzz.com/v1/transactions/dh?txhash=${hash}`)
+      const res = await fetch(`https://testnet.classzz.com/v1/transactions/dh?${query}`)
       const result = await res.json()
       const { items } = result
-      if (items) setStatus(items[0] || {    ext_tx_hash: null,
-    tx_hash: null,
-    confirm_ext_tx_hash: null})
-      if (items.confirm_ext_tx_hash === '') getStatus()
+      if (items) setStatus({ ...normalHash, ...items[0] })
+      if (items?.confirm_ext_tx_hash) {
+        const swapList = recent.map((item, index) => {
+          if(item.id === id) item.status = 1
+          return item
+        })
+        window.localStorage.setItem('recent',JSON.stringify(swapList) )
+      }
+      // if (!items?.tx_hash || !items?.ext_tx_hash || !items?.confirm_ext_tx_hash) getStatus(query)
     } catch (error) {
       throw error
     }
   }
 
   useEffect(() => {
-    if (visible) {
-      getStatus()
+    let intervalId = setInterval(() => {
+      hash && getStatus(`extTxHash=${hash}`)
+    }, 3000 )
+    return () => {
+      clearInterval(intervalId)
+      intervalId = null
     }
-  }, [visible])
+  }, [hash])
   
-  const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15 }
-  const iconStyle = { width: 30, height:30, display: 'flex', alignItems: 'center', justifyContent:'center'}
+  const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15 ,backgroundSize:'contain'}
+  const iconStyle = { width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }
+  
+  const loadingStatus =   <Loading color="blue" size="small" />
   return (
-    <Modal title="SwapPeding" visible={ visible } {...rest}>
+    <Modal title="SwapPeding" visible={visible} onClose={ () => onClose(null) } {...rest}>
       <SwapItem>
         <SwapName>
-          <Image style={imageStyle} src={from?.currency?.image} />
+          <Image style={imageStyle} src={fromImage} />
           <InfoContainer>
-            { from?.currency?.symbol }
-            <ViewLink href={`${fromExporer}tx/${ext_tx_hash}` }><Icon type="external-link" />View on Etherscan</ViewLink>
+            { fromType }
+            {ext_tx_hash && <ViewLink href={`${fromUrl}tx/${ext_tx_hash}` }><Icon type="external-link" />{explorer[fromType]}</ViewLink>}
           </InfoContainer>
         </SwapName>
-        {ext_tx_hash ? <Loading /> : <Icon type="check-circle" /> }
+        {ext_tx_hash ? <Icon type="check-circle" /> : loadingStatus}
       </SwapItem>
       <Icon style={iconStyle} type="arrow-down" />
       <SwapItem>
@@ -85,26 +97,27 @@ export default function SwapPending(props) {
           <Image style={imageStyle} src={require('../../asset/svg/logos.svg').default} />
           <InfoContainer>
             ClassZZ Network
-            <ViewLink href={`${fromExporer}tx/${tx_hash}` }><Icon type="external-link" />View on Etherscan</ViewLink>
+           {tx_hash && <ViewLink href={`https://explorer.classzz.com/tx/${tx_hash}`}><Icon type="external-link" />View on classZZscan</ViewLink>}
           </InfoContainer>
         </SwapName>
-        {tx_hash ? <Loading /> : <Icon type="check-circle" /> }
+        {tx_hash ?  <Icon type="check-circle" /> : loadingStatus}
       </SwapItem>
       <Icon style={iconStyle} type="arrow-down" />
       <SwapItem>
         <SwapName>
-          <Image style={imageStyle}  src={to?.currency?.image} />
+          <Image style={imageStyle}  src={toImage} />
           <InfoContainer>
-            { from?.currency?.symbol }
-            <ViewLink href={`${toExplorer}tx/${confirm_ext_tx_hash}` }> <Icon type="external-link" />View on Etherscan</ViewLink>
+            { toType }
+            {confirm_ext_tx_hash ? <ViewLink href={`${toUrl}tx/${confirm_ext_tx_hash}` }> <Icon type="external-link" />{explorer[toType]}</ViewLink> : <div>exchangeing</div>}
           </InfoContainer>
         </SwapName>
-        {confirm_ext_tx_hash ? <Loading /> : <Icon type="check-circle" /> }
+        {confirm_ext_tx_hash ? <Icon type="check-circle" /> : loadingStatus}
       </SwapItem>
+      <Button style={{margin:'10px 0'}} className="block" onClick={ () => onClose(null) }>Close</Button>
     </Modal>
   )
 }
 
 SwapPending.propTypes = {
-  onClose:PropTypes.func,
+  onClose: PropTypes.func,
 }

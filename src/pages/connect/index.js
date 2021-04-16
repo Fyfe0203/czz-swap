@@ -15,13 +15,8 @@ import './index.scss'
 // Insufficient BNB balance
 import useWallet from '../../hooks/useWallet'
 
-const scanName = {
-  ETH:'View on Etherscan',
-  BSC:'View on Hecoscan',
-  HECO:'View on Binancescan'
-}
 export default function Connect(props) {
-  const { accounts, wallet, networkStatus, networks, pending, from, to } = useGlobal()
+  const { accounts, wallet, networkStatus, networks, pending, from, to, explorer } = useGlobal()
   const { connectWallet, buttonText, disConnect } = useWallet()
   const [showConnectWallet, setShowConnectWallet] = useState(false)
   const [showAccount, setShowAccount] = useState(false)
@@ -121,7 +116,7 @@ export default function Connect(props) {
               <CopyButton toCopy={accounts}>copy Address</CopyButton>
               <a className="button-link" target="_blank" href={ `${from?.explorerUrl}/address/${accounts}`}>
                 <i className="ico-external-link" />
-                { scanName[from?.networkType] }
+                { explorer[from?.networkType] }
               </a>
             </div>
           </div>
