@@ -179,7 +179,42 @@
 }
 
 @media screen and (max-width:600px){
-  .connect{
+  .c{
+    &-header{
+      z-index: 10010;
+    }
+    &-connect{
+      position: fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      padding:15px;
+      background: #fff;
+      &-link{
+        padding:8px 0 !important;
+        border-radius: 90px;
+        text-align: center;
+        color: blue;
+        font-size: 14px;
+      }
+    }
+    &-accounts{
+      padding:14px 20px;
+      border-radius: 8px;
+    }
+    &-balance{
+      background: #eee;
+      padding:14px 22px 14px 10px;
+      margin-right:-10px;
+      border-radius: 8px 0 0 8px;
+    }
+    &-wallet{
+      flex:1;
+      padding:0;
+    }
+  }
 
+  .connect-mask{
+    justify-content: space-between;
   }
 }

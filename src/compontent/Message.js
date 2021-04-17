@@ -6,7 +6,7 @@ const MessageWrap = styled.div``
 const Icon = styled.div``
 const CloseIcon = styled.div``
 const Title = styled.h3``
-const Content = styled.h3``
+const Content = styled.div``
 
 export function Message(props) {
   return (
