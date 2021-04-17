@@ -37,19 +37,20 @@ export default function useSwap() {
   }
 
   const poolsBalance = () => {
-      let lpList = Array.from(pools)
-      pools.forEach(async (item, index) =>{
-        lpList.splice(index, 1, { ...item, loading: true })
+    let lpList = Array.from(pools)
+    if (accounts) { 
+      lpList.forEach(async (item, index) =>{
         try {
           const items = await getPoolBalance(item)
           lpList.splice(index, 1, { ...items, loading: false })
-          setState({
-            pools: lpList
-          })
         } catch (error) {
           throw error
         }
-    })
+      })
+      setState({
+        pools: lpList
+      })
+    }
   }
 
   useEffect(() => {

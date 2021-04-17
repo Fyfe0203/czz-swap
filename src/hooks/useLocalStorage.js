@@ -41,7 +41,7 @@ const useLocalStorage = (stateToPersist, key) => {
 
   useEffect(() => {
     const storedState = JSON.parse(localStorage.getItem(key))
-
+    debugger
     if (storedState) {
       if (isObjectType && !(localState instanceof Array)) {
         const keys = Object.keys(stateToPersist)

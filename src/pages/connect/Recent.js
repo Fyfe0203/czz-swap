@@ -5,7 +5,7 @@ import useGlobal from '../../hooks/useGlobal'
 import SwapPending from '../swap/SwapPending'
 
 // swap history
-export default React.memo( function Recent() {
+export default function Recent() {
   const { accounts } = useGlobal()
   const [recent, setRecent] = useLocalStorage([], 'recent')
   const status = ['rotate-cw', 'check-circle', 'octagon']
@@ -38,4 +38,4 @@ export default React.memo( function Recent() {
       <SwapPending visible={hash} onClose={setHash} {...hash} />
     </Fragment>
   )
-})
+}

@@ -36,7 +36,7 @@ const ViewLink = styled.a.attrs(props => ({
 export default function SwapPending(props) {
   const {hash,visible,fromType,toType,fromUrl,toUrl,fromImage,toImage,onClose,id, ...rest} = props
   const { explorer } = useGlobal()
-  const [recent,setRecent] = useLocalStorage([],'recent')
+  const [recent] = useLocalStorage([],'recent')
   const normalHash = {
     ext_tx_hash: null,
     tx_hash: null,
@@ -80,7 +80,7 @@ export default function SwapPending(props) {
   
   const loadingStatus =   <Loading color="blue" size="small" />
   return (
-    <Modal title="SwapPeding" visible={visible} onClose={ () => onClose(null) } {...rest}>
+    <Modal title="SwapPending Detail" visible={visible} onClose={ () => onClose(null) } {...rest}>
       <SwapItem>
         <SwapName>
           <Image style={imageStyle} src={fromImage} />
@@ -108,7 +108,7 @@ export default function SwapPending(props) {
           <Image style={imageStyle}  src={toImage} />
           <InfoContainer>
             { toType }
-            {confirm_ext_tx_hash ? <ViewLink href={`${toUrl}tx/${confirm_ext_tx_hash}` }> <Icon type="external-link" />{explorer[toType]}</ViewLink> : <div>exchangeing</div>}
+            {confirm_ext_tx_hash && <ViewLink href={`${toUrl}tx/${confirm_ext_tx_hash}` }> <Icon type="external-link" />{explorer[toType]}</ViewLink>}
           </InfoContainer>
         </SwapName>
         {confirm_ext_tx_hash ? <Icon type="check-circle" /> : loadingStatus}

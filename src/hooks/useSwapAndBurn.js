@@ -43,8 +43,8 @@ export default function useSwapAndBurn() {
       }
     }
     successMessage(receipt)
-    setState(state)
     stopPending()
+    setState(state)
   }
 
   const fetchSwap = () => {
