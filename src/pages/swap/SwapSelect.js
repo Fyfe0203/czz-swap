@@ -4,7 +4,7 @@ import { Modal, Loading } from '../../compontent/index'
 // import {formatAddress} from '../../utils'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
-import useSwap from '../../hooks/useSwap'
+// import useSwap from '../../hooks/useSwap'
 const SearchInput = styled.input`
 `
 
@@ -29,7 +29,7 @@ export default function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
   const { pools, networks, setState, from, to } = useGlobal()
   const { currency } = pool
-  const { poolsBalance } = useSwap()
+  // const { poolsBalance } = useSwap()
   const normalFilter = token => token?.systemType === pool.networkType
   const [filters, setFilters] = useState(() => { return normalFilter })
   const [keyword, setKeyword] = useState('')
@@ -43,9 +43,10 @@ export default function SelectId({ types, pool }) {
   // select tooken item
   const selectToken = item => {
     const currentNetwork = networks.filter(i => i.networkType === item.systemType)[0]
-    const oldItem = types === 1 ? to : from
-    const symbolItem =  { ...oldItem, ...currentNetwork,tokenValue:oldItem.tokenValue, currency:item }
-    types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem})
+    let oldItem = types === 1 ? to : from
+    const symbolItem = { ...oldItem, ...currentNetwork, tokenValue: oldItem.tokenValue, currency: item }
+    let toOld = currentNetwork.networkType === to?.networkType ? {tokenValue:''} : to
+    types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem ,to:toOld})
     setListStatus(false)
   }
 
@@ -69,12 +70,21 @@ export default function SelectId({ types, pool }) {
   const filterNetwork = (item) => {
     setChainId(item.chainId)
     setFilters(() => { return token => { return token.systemType === item.networkType } })
-    // poolsBalance()
   }
 
+  const [networkTabs,setNetworkTabs] = useState([])
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
 
-  const networkTabs = types === 1 ? networks.filter(i=>i.networkType !== from.networkType) : networks
+  // const networkTabs = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
+
+  useEffect(() => {
+    if (from.currency || to.currency) {
+      const item = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
+      setNetworkTabs(item)
+      filterNetwork(item[0])
+    }
+  }, [from.currency,to.currency])
+
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">

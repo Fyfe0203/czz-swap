@@ -124,7 +124,9 @@ export default function Setting(props) {
       {Number(tolerance) > 5 && <ItemError>Your transaction may be frontrun</ItemError>}
       <TabSelect list={gasArray} unit={'GWEI'} title="Gas Price" value={ gas } onChange={val => setSwapSetting({gas:val})} />
       <SettingItem title="Transaction deadline">
-        <div className="f-1"><Input type="text" onChange={val => setSwapSetting({deadline:val})} pattern={/^\d*?$/} value={ deadline } placeholder={`Transaction deadline number`} /></div>
+          <div className="f-1 tolerance-custom init">
+            <Input type="text" onChange={val => setSwapSetting({ deadline: val })} pattern={/^\d*?$/} value={deadline} placeholder={`Transaction deadline number`} />
+          </div>
           <span>minutes</span>
       </SettingItem>
     </div>

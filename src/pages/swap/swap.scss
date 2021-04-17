@@ -262,6 +262,9 @@
     .item{
       display: flex;
     }
+    input{
+      padding:8px 0;
+    }
   }
   &-title{
     font-size: 14px;
@@ -297,7 +300,14 @@
     align-items: center;
     justify-content: space-between;
     margin-left:8px;
-    width: 120px;
+    width: 90px;
+    &.init{
+      margin:0;
+      margin-right: 10px;
+      input,&>div{
+        width: 100%;
+      }
+    }
     input{
       border:none;
       &:focus{
