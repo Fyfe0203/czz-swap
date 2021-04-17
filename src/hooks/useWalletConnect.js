@@ -16,16 +16,18 @@ export default function useWalletConnect() {
       bridge: "https://bridge.walletconnect.org", // Required
       qrcodeModal: QRCodeModal,
       rpc,
-      // qrcodeModalOptions: {
-      //   mobileLinks: [
-      //     "rainbow",
-      //     "metamask",
-      //     "argent",
-      //     "trust",
-      //     "imtoken",
-      //     "pillar",
-      //   ],
-      // },
+      qrcodeModalOptions: {
+        mobileLinks: [
+        //   // "rainbow",
+          "metamask",
+          "bitkeep",
+          // "Huobi"
+        //   // "argent",
+        //   // "trust",
+        //   // "imtoken",
+        //   // "pillar",
+        ],
+      },
     });
 
     // Check if connection is already established
