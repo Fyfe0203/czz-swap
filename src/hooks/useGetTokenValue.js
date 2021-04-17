@@ -122,6 +122,7 @@ export default function useGetTokenValue() {
       try {
         setLoading(true)
         setState({priceStatus:0})
+        setButtonText('FINDING_PRICE_ING')
         const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
         const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
@@ -144,11 +145,9 @@ export default function useGetTokenValue() {
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
         setAuthorization(allowanceResult)
-        setLoading(false)
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
       } catch (error) {
         setButtonText('NONE_TRADE')
-        setLoading(false)
         throw error
       } finally {
         setLoading(false)
@@ -186,7 +185,7 @@ export default function useGetTokenValue() {
        setButtonText('NONE_AMOUNT')
       } else if (!hasBalance) {
        setButtonText('NONE_BALANCE')
-      } else if (!networkStatus && to.tokenValue) {
+      } else if (!networkStatus && to.tokenValue && impactPrice) {
         setButtonText('NONE_NETWORK')
       } else if (!authorization  && to.tokenValue && impactPrice) {
         setButtonText('APPROVE' )

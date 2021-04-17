@@ -10,6 +10,7 @@ export default function Recent() {
   const [recent, setRecent] = useLocalStorage([], 'recent')
   const status = ['rotate-cw', 'check-circle', 'octagon']
   const [hash, setHash] = useState(null)
+
   const recentList = (
     <div className="recent">
       <div className="recent-head f-c-sb">
@@ -32,6 +33,7 @@ export default function Recent() {
       </div>
     </div>
   )
+  
   return (
     <Fragment>
       { recent.length > 0 ? recentList  : null}

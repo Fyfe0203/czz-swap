@@ -31,7 +31,7 @@ export default function Swap() {
   const { status } = useSwap()
   const { loading: valueLoading, approveActions, approveLoading } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
-  const { loading: swapLoading, hash, fetchSwap,setHash } = useSwapAndBurn()
+  const { loading: swapLoading, hash, fetchSwap,setHash,resSwap } = useSwapAndBurn()
   const [setting, setSetting] = useState(false)
   const { connectWallet,addEthereum } = useWallet()
   const [buttonLoading, setButtonLoading] = useState(false)
@@ -163,7 +163,7 @@ export default function Swap() {
     {/* <Modal visible={submitStatus} onClose={ ()=>setConfirmStatus(false)}>
       { transactionSubmit }
     </Modal> */}
-    <SwapPending visible={hash} onClose={setHash} {...hash}/>
+      <SwapPending visible={hash} onClose={() => { setHash(null); resSwap()}} {...hash} />
    </Fragment>
   )
 }

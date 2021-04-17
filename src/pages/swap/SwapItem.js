@@ -34,7 +34,7 @@ export default function SwapItem({ pool, exchange, type}) {
         <div className="swap-init f-1">
           <AmountInput placeholder="0.0"
             value={ pool?.tokenValue }
-            className={`swap-input ${pool?.tokenValue?.length > 12 ? 'max' : ''}`}
+            className={`swap-input ${pool?.tokenValue?.length > 11 ? 'max' : ''}`}
             onChange={e => enforcer(e.target.value.replace(/,/g, '.'))}
             disabled={ type ===1 }
             inputMode="decimal"

@@ -12,6 +12,12 @@ export default function useWallet() {
   const [buttonText, setWalletButtonText] = useState(ONBOARD_TEXT)
   var storage = window.localStorage
 
+  useEffect(() => {
+    if (!onboarding.current) {
+    onboarding.current = new MetaMaskOnboarding()
+  }
+  }, [])
+  
   const handleNewAccounts = newAccounts => {
     updateAccounts(newAccounts[0])
     storage.setItem('address',newAccounts[0])
@@ -77,6 +83,7 @@ export default function useWallet() {
     }
   }
 
+  // connect wallet
   const connectWallet = async () => {
     try {
       if (MetaMaskOnboarding.isMetaMaskInstalled()) {

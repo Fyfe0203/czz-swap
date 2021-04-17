@@ -88,7 +88,7 @@ export default function Connect(props) {
   const accountError = (<div className="c-wallet c-connect-link" onClick={() => setShowConnectWallet(!showConnectWallet)}>Connect to a wallet</div>)
   const accountsButton = accounts ? accountBlock : accountError
 
-  const modalContent = (
+  const walletContent = (
     <div className="connect-list">{
     walletList.map((item, index) => {
       return (
@@ -130,7 +130,7 @@ export default function Connect(props) {
     <div className="c-connect">
       <div className="connect-mask">
         {accountsButton}
-        <Modal title="Connect Wallet" visible={showConnectWallet} onClose={setShowConnectWallet}>{ modalContent }</Modal>
+        <Modal title="Connect Wallet" visible={showConnectWallet} onClose={setShowConnectWallet}>{ walletContent }</Modal>
         <Modal title="Account" visible={showAccount} onClose={setShowAccount}>{ accountsContent } </Modal>
         <NetworkModal title="Connect to NetWork" visible={networkVisible} onClose={setNetworkVisible} />
       </div>

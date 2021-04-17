@@ -29,9 +29,9 @@ export default function useSwapAndBurn() {
     setLoading(false)
     setPending(pending.filter(i => i !== 'swapburn'))
   }
-  
-  // swap success
-  const swapSuccess = (receipt) => {
+
+  const resSwap = () => {
+    
     const state = {
       form: {
         ...from,
@@ -42,11 +42,17 @@ export default function useSwapAndBurn() {
         tokenValue: ''
       }
     }
-    successMessage(receipt)
-    stopPending()
     setState(state)
   }
 
+  // swap success
+  const swapSuccess = (receipt) => {
+    successMessage(receipt)
+    stopPending()
+    resSwap()
+  }
+
+ 
   const fetchSwap = () => {
     setLoading(true)
     setButtonText('SWAP_ING')
@@ -134,5 +140,5 @@ export default function useSwapAndBurn() {
   }, [loading])
 
   
-  return {loading,receipt,hash,fetchSwap,setHash}
+  return {loading,receipt,hash,fetchSwap,setHash,resSwap}
 }

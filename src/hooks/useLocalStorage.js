@@ -5,14 +5,19 @@ const useLocalStorage = (stateToPersist, key) => {
   if (typeof stateToPersist === "undefined") {
     throw new Error("Cannot store undefined as a state")
   } else if (typeof stateToPersist === "object") {
-    if ( !(stateToPersist instanceof Array) && stateToPersist instanceof Object ) {
+    if (
+      !(stateToPersist instanceof Array) &&
+      stateToPersist instanceof Object
+    ) {
       localState[Symbol.iterator] = function* () {
         for (let key of Object.keys(localState)) {
           yield localState[key]
         }
       }
-    } else if (stateToPersist instanceof Array && stateToPersist instanceof Object) {
-      
+    } else if (
+      stateToPersist instanceof Array &&
+      stateToPersist instanceof Object
+    ) {
     } else if (stateToPersist instanceof Date) {
       throw new Error(
         `The provided type should be an object or array, found a date type`
@@ -41,7 +46,7 @@ const useLocalStorage = (stateToPersist, key) => {
 
   useEffect(() => {
     const storedState = JSON.parse(localStorage.getItem(key))
-    debugger
+
     if (storedState) {
       if (isObjectType && !(localState instanceof Array)) {
         const keys = Object.keys(stateToPersist)
