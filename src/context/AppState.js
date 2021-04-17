@@ -13,6 +13,7 @@ const state = {
   balanceStatus: true,
   from: {tokenValue:''},
   to: { tokenValue: '' },
+  showConnectWallet:false,
   priceStatus: 0,
   impactPrice: 0,
   explorer:{

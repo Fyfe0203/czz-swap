@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { NavLink,useLocation } from 'react-router-dom'
 import routes from '../../routes'
 import Connect from '../connect/index'
@@ -8,15 +8,22 @@ import './layout.scss'
 export default React.memo(function Header() {
   const { theme, toggleTheme } = useGlobal()
   const locations = useLocation()
-  const [menuStatus,setMenuStatus] = useState(false)
+  const [menuStatus, setMenuStatus] = useState(false)
+  const helpLink = <a href="https://app.gitbook.com/@classzz/s/guide-on-class-zz-cross-chain-transaction/~/drafts/-MY3KNQjpI0sQmiQWXnt/" target="_blank">HELP</a>
+  const nav = routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} >{item.name}</NavLink>)
+  
+  useEffect(() => {
+    setMenuStatus(false)
+  }, [locations.pathname])
+  
   return (
     <Fragment>
       <div className="c-header">
         <div className="f-c">
           <h1 className="logo"><NavLink to="/" className="img" style={{backgroundImage:`url(${require('../../asset/svg/logo.svg').default })`}}>ClassZZSwap</NavLink></h1>
           <div className="c-nav">
-            {routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} >{item.name}</NavLink>)}
-            <a href="https://app.gitbook.com/@classzz/s/guide-on-class-zz-cross-chain-transaction/~/drafts/-MY3KNQjpI0sQmiQWXnt/" target="_blank">HELP</a>
+            { nav }
+            { helpLink }
           </div>
         </div>
         <div className="f-c c-tool">
@@ -30,7 +37,8 @@ export default React.memo(function Header() {
       {
         menuStatus && <div className="c-menu">
           <div className="c-menu-inner">
-          {routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} >{item.name}</NavLink>)}
+            { nav }
+            {helpLink}
         </div>
         </div>
       }

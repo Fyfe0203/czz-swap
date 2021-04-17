@@ -1,5 +1,6 @@
 import React, { useState,useEffect, Fragment } from 'react'
 import useGlobal from '../../hooks/useGlobal'
+import useWalletConnect from '../../hooks/useWalletConnect'
 import { formatAddress, getBalanceNumber,  } from '../../utils'
 import { CopyButton ,Loading, Modal} from '../../compontent'
 import Pending from './Pending'
@@ -16,16 +17,24 @@ import './index.scss'
 import useWallet from '../../hooks/useWallet'
 
 export default function Connect(props) {
-  const { accounts, wallet, networkStatus, networks, pending, from, to, explorer } = useGlobal()
+  const { accounts, wallet, networkStatus, networks, pending, from, to, explorer, showConnectWallet, setState } = useGlobal()
   const { connectWallet, buttonText, disConnect } = useWallet()
-  const [showConnectWallet, setShowConnectWallet] = useState(false)
+  // const [showConnectWallet, setShowConnectWallet] = useState(false)
   const [showAccount, setShowAccount] = useState(false)
   const [networkVisible, setNetworkVisible] = useState(false)
   const [currentNetwork, setCurrentNetwork] = useState([])
   const [balance, setBalance] = useState(null)
   const [networkLoading, setNetworkLoading] = useState(false)
 
-  const connectWalletActions =async () => {
+  const { walletconnectAction } = useWalletConnect()
+
+  const setShowConnectWallet = (status) => {
+    setState({
+      showConnectWallet:status
+    })
+  }
+  
+  const connectMetaMask =async () => {
     const accounts = await connectWallet()
     if (accounts) setShowConnectWallet(false)
   }
@@ -33,16 +42,15 @@ export default function Connect(props) {
     {
       icon:require('../../asset/svg/metamask-fox.svg'),
       name: 'metaMask',
-      actions: connectWalletActions,
-      // connectText
+      actions: connectMetaMask,
+      text:buttonText
+    },
+    {
+      icon:require('../../asset/svg/walletConnectIcon.svg'),
+      name: 'walletConnect',
+      actions: walletconnectAction,
+      text:'Connect WalletConnect'
     }
-    // {
-    //   icon:require('../../asset/svg/walletConnectIcon.svg'),
-    //   name: 'walletConnect',
-    //   actions: () => {
-    //     console.log('4')
-    //   }
-    // }
   ]
 
   const networkChange = async () => {
@@ -94,7 +102,7 @@ export default function Connect(props) {
       return (
         <div key={index} className="connect-item f-c" onClick={() => item.actions()}>
           <div className="img" style={{backgroundImage:`url(${item.icon.default})`}} alt={item.name} />
-          <div className="connect-button f-1">{buttonText}</div>
+          <div className="connect-button f-1">{item.text}</div>
         </div>
       )
     })

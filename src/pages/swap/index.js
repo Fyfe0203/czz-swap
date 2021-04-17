@@ -33,7 +33,7 @@ export default function Swap() {
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
   const { loading: swapLoading, hash, fetchSwap,setHash,resSwap } = useSwapAndBurn()
   const [setting, setSetting] = useState(false)
-  const { connectWallet,addEthereum } = useWallet()
+  const { addEthereum } = useWallet()
   const [buttonLoading, setButtonLoading] = useState(false)
   
   useEffect(() => {
@@ -114,6 +114,13 @@ export default function Swap() {
       {swapFooter}
     </div>
   )
+
+  const walletConnect = () => {
+    setState({
+      showConnectWallet: true
+    })
+  }
+
   const buttonActions = () => {
     switch (swapButtonText) {
       case 'SWAP':
@@ -126,7 +133,7 @@ export default function Swap() {
         approveActions()
         break
       case 'NONE_WALLET':
-        connectWallet()
+        walletConnect()
         break
       case 'NONE_NETWORK':
         addEthereum()
