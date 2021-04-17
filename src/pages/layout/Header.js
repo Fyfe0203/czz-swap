@@ -11,7 +11,6 @@ export default React.memo(function Header() {
   const [menuStatus, setMenuStatus] = useState(false)
   const helpLink = <a href="https://app.gitbook.com/@classzz/s/guide-on-class-zz-cross-chain-transaction/~/drafts/-MY3KNQjpI0sQmiQWXnt/" target="_blank"><i className="ico-bookmark" /><span>HELP</span></a>
   const nav = routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} ><i className={ `ico-${item.ico}`} /><span>{item.name}</span></NavLink>)
-  
   useEffect(() => {
     setMenuStatus(false)
   }, [locations.pathname])
@@ -23,7 +22,7 @@ export default React.memo(function Header() {
           <h1 className="logo"><NavLink to="/" className="img" style={{backgroundImage:`url(${require('../../asset/svg/logo.svg').default })`}}>ClassZZSwap</NavLink></h1>
           <div className="c-nav">
             { nav }
-            { helpLink }
+            {/* { helpLink } */}
           </div>
         </div>
         <div className="f-c c-tool">
@@ -38,7 +37,7 @@ export default React.memo(function Header() {
         menuStatus && <div className="c-menu">
           <div className="c-menu-inner">
             { nav }
-            {helpLink}
+            {/* {helpLink} */}
             {links.map((item, index) => <a href={item.link} target="_blank" key={index}> <i className={ `ico-${item.ico}`} /><span>{ item.name }</span> </a>)}
         </div>
         </div>
