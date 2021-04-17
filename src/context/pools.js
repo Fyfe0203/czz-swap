@@ -342,6 +342,110 @@ const pools = [
     image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
   },
   {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },
+  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },
+  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },
+  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },  {
+    tokenAddress: "0xfCcD0a3De337004B4Ea466AbE775dc7bdC292785",
+    name:'CAKE',
+    symbol: "CAKE",
+    decimals: 8,
+    systemType: "BSC",
+    image:"https://cryptologos.cc/logos/pancakeswap-cake-logo.svg?v=010"
+  },
+
+
+
+
+
+
+
+
+
+  {
     tokenAddress: "0x550712C399CdF5D8e4ecF46d37cd57985E0D6BA8",
     name:'USDT',
     symbol: "USDT",
