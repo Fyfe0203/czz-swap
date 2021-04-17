@@ -55,7 +55,7 @@ export default function useSwap() {
 
   useEffect(() => {
     initSwap()
-    poolsBalance()
+    // poolsBalance()
   }, [])
 
 

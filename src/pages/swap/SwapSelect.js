@@ -15,17 +15,18 @@ const TokenItem = ({ item, onClick, currency }) => {
         {item.image && <div className="img" style={{backgroundImage:`url(${item.image})`}} />}
         <div className="f-1">
           <h2>{item.symbolName || item.symbol}</h2>
-          <div className="token-address">{item.name}</div>
+          {/* <div className="token-address">{item.name}</div> */}
         </div>
       </div>
-      <div className="token-desc">
-        { item.loading ?<Loading size="small" color="blue" /> : <>{item.balance || '0.00'}</>  }
+      <div className="token-desc" style={{fontSize:12,fontWeight:'normal',opacity:.4}}>
+        { item.name }
+        {/* { item.loading ?<Loading size="small" color="blue" /> : <>{item.balance || '0.00'}</>  } */}
       </div>
     </div>
   )
 }
 
-export default function SelectId({ types, pool }) {
+export default React.memo( function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
   const { pools, networks, setState, from, to } = useGlobal()
   const { currency } = pool
@@ -50,16 +51,7 @@ export default function SelectId({ types, pool }) {
     setListStatus(false)
   }
 
-  // filter token
-  const filterToken = ({target}) => {
-    const { value } = target
-    setKeyword(value)
-    if (value.length > 0) {
-      setFilters(() => { return token => { return token.symbol.indexOf(value.toUpperCase()) !== -1 && token?.systemType === pool.networkType } })
-    } else {
-      cleanSearch()
-    }
-  }
+
   
   // clean search token
   const cleanSearch = () => {
@@ -85,6 +77,18 @@ export default function SelectId({ types, pool }) {
     }
   }, [from.currency,to.currency])
 
+
+    // filter token
+  const filterToken = ({target}) => {
+    const { value } = target
+    setKeyword(value)
+    if (value.length > 0) {
+      setFilters(() => { return token => { return token.symbol.indexOf(value.toUpperCase()) !== -1 && token?.systemType === pool.networkType } })
+    } else {
+      cleanSearch()
+    }
+  }
+  
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">
@@ -130,6 +134,4 @@ export default function SelectId({ types, pool }) {
       {tokenModal}
     </Fragment>
   )
-}
-
-
+})
