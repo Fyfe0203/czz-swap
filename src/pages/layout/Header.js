@@ -6,11 +6,11 @@ import useGlobal from '../../hooks/useGlobal'
 import './layout.scss'
 
 export default React.memo(function Header() {
-  const { theme, toggleTheme } = useGlobal()
+  const { theme, toggleTheme, links } = useGlobal()
   const locations = useLocation()
   const [menuStatus, setMenuStatus] = useState(false)
-  const helpLink = <a href="https://app.gitbook.com/@classzz/s/guide-on-class-zz-cross-chain-transaction/~/drafts/-MY3KNQjpI0sQmiQWXnt/" target="_blank">HELP</a>
-  const nav = routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} >{item.name}</NavLink>)
+  const helpLink = <a href="https://app.gitbook.com/@classzz/s/guide-on-class-zz-cross-chain-transaction/~/drafts/-MY3KNQjpI0sQmiQWXnt/" target="_blank"><i className="ico-bookmark" /><span>HELP</span></a>
+  const nav = routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} ><i className={ `ico-${item.ico}`} /><span>{item.name}</span></NavLink>)
   
   useEffect(() => {
     setMenuStatus(false)
@@ -39,6 +39,7 @@ export default React.memo(function Header() {
           <div className="c-menu-inner">
             { nav }
             {helpLink}
+            {links.map((item, index) => <a href={item.link} target="_blank" key={index}> <i className={ `ico-${item.ico}`} /><span>{ item.name }</span> </a>)}
         </div>
         </div>
       }
