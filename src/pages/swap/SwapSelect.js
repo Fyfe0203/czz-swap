@@ -31,15 +31,9 @@ export default React.memo( function SelectId({ types, pool }) {
   const { pools, networks, setState, from, to } = useGlobal()
   const { currency } = pool
   // const { poolsBalance } = useSwap()
-  const normalFilter = token => token?.systemType === pool.networkType
-  const [filters, setFilters] = useState(() => { return normalFilter })
+  const [networkTabs,setNetworkTabs] = useState([])
   const [keyword, setKeyword] = useState('')
   const [chainId, setChainId] = useState(null)
-
-  useEffect(() => {
-    setFilters(() => { return normalFilter })
-    setChainId(pool.chainId)
-  }, [pool.networkType, pool.chainId])
 
   // select tooken item
   const selectToken = item => {
@@ -51,44 +45,39 @@ export default React.memo( function SelectId({ types, pool }) {
     setListStatus(false)
   }
 
-
+  const [filters, setFilters] = useState(null)
+  const filterNetwork = (nodes = null) => {
+    const item = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
+    setNetworkTabs(item)
+    const node = nodes || item[0]
+    setChainId(node.chainId)
+    setFilters(() => { return token => { return token.systemType === node.networkType } })
+  }
   
+  useEffect(() => {
+    if (from.currency || to.currency) {
+      filterNetwork()
+    }
+  }, [from.currency, to.currency])
+
   // clean search token
   const cleanSearch = () => {
     setKeyword('')
-    setFilters(() => { return filters })
-  }
-  
-  const filterNetwork = (item) => {
-    setChainId(item.chainId)
-    setFilters(() => { return token => { return token.systemType === item.networkType } })
+    filterNetwork()
   }
 
-  const [networkTabs,setNetworkTabs] = useState([])
-  const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
-
-  // const networkTabs = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
-
-  useEffect(() => {
-    if (from.currency || to.currency) {
-      const item = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
-      setNetworkTabs(item)
-      filterNetwork(item[0])
-    }
-  }, [from.currency,to.currency])
-
-
-    // filter token
+  // filter token
   const filterToken = ({target}) => {
     const { value } = target
     setKeyword(value)
     if (value.length > 0) {
-      setFilters(() => { return token => { return token.symbol.indexOf(value.toUpperCase()) !== -1 && token?.systemType === pool.networkType } })
+      setFilters(() => { return token => { return token.name.indexOf(value.toUpperCase()) !== -1 && token?.systemType === pool.networkType} })
     } else {
       cleanSearch()
     }
   }
-  
+
+  const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">
@@ -104,7 +93,7 @@ export default React.memo( function SelectId({ types, pool }) {
         </div>
         <Scrollbars style={{ maxHeight: 400, height: 400 }}>
           <div className="token-table">
-              {pools && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
+              {pools && filters && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
                 return <TokenItem key={ index } currency={currency} item={item} onClick={ selectToken } />
             }) : notFound}
           </div>

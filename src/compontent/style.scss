@@ -7,7 +7,7 @@
   display: flex;
   justify-content: center;
   background: rgba($color: #000000, $alpha: .8);
-  z-index: 110;
+  z-index: 9999999;
   transition: .4s;
 }
 .message{

@@ -78,7 +78,7 @@ export default function Connect(props) {
     <Fragment>
       {currentNetwork.networkName && <div className="c-wallet c-connect-link network">{ currentNetwork?.networkName}</div>}
       <div className="c-wallet f-c">
-        {networkLoading && <Loading size="small" mask={true} style={{borderRadius:90}} />}
+        {networkLoading && <Loading size="small" mask={true} />}
           <div className="f-c">
             <div className="c-balance">{balance} { currentNetwork?.symbol }</div>
             <div className="c-accounts f-c" onClick={() => setShowAccount(!showAccount)}>

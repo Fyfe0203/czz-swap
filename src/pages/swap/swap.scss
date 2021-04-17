@@ -442,8 +442,8 @@
     .img{
       text-align: center;
       font-size: 50px;
-      width: 220px;
-      height: 220px;
+      width: 200px;
+      height: 200px;
       margin:0;
       margin-bottom: 15px;
     }
@@ -608,9 +608,8 @@
   }
   .c-tool{
   //    display: none;
-    
   }
-  .footer{
+  .swap-wrap+.footer{
     display: none;
   }
 }
