@@ -56,7 +56,7 @@ export default function Connect(props) {
   const networkChange = async () => {
     try {
       setNetworkLoading(true)
-      const networkItem = networks.filter(i => i.chainId === wallet.chainId)
+      const networkItem = networks.filter(i => i.chainId === from.chainId)
       setCurrentNetwork(networkItem[0] || {})
       if (networkItem[0]?.provider) {
         const res = await new Web3(networkItem[0]?.provider).eth.getBalance(accounts)
@@ -80,7 +80,7 @@ export default function Connect(props) {
       <div className="c-wallet f-c">
         {networkLoading && <Loading size="small" mask={true} />}
           <div className="f-c">
-            <div className="c-balance">{balance} { currentNetwork?.symbol }</div>
+            {balance && <div className="c-balance">{balance} { from?.currency?.symbol }</div>}
             <div className="c-accounts f-c" onClick={() => setShowAccount(!showAccount)}>
               <div className="c-wallet-icon">
                 <Jazzicon address={accounts} />

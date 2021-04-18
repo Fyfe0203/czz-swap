@@ -11,7 +11,7 @@ export default function useSwap() {
     NONE_AMOUNT: "Enter a Amount",
     NONE_TO_TOKEN: 'Select a Token',
     NONE_BALANCE: 'Insufficient balance',
-    NONE_NETWORK: 'Switch NetWork',
+    NONE_NETWORK: 'Unlock Wallet',
     NONE_WALLET: 'Connect Wallet',
     APPROVE: 'Appove',
     APPROVE_ING: 'Approve in Pending',

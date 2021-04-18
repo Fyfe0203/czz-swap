@@ -35,7 +35,7 @@ export default function NetworkModal(props) {
           {/* <p>Currency Symbol:<b>{ }</b></p> */}
           <p>Block Explorer URL:<b>{blockExplorerUrls[0]}</b></p>
         </div>}
-        <Button className="button block" onClick={() => addEthereum(from)}>{ switchLoading ? <Loading color="#fff" size="small" text="Switch Network pending" /> : ' Switch Networks'}</Button>
+        <Button className="button block" onClick={() => addEthereum(from)}>{ switchLoading ? <Loading color="#fff" size="small" text="Switch Network pending" /> : 'Unlock Wallet'}</Button>
       </div>
     </Modal>
   )

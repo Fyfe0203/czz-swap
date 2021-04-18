@@ -191,7 +191,7 @@
       }
     }
     &-accounts{
-      padding:14px 20px;
+      padding:14px 10px;
       border-radius: 8px;
     }
     &-balance{
@@ -201,10 +201,12 @@
       border-radius: 8px 0 0 8px;
     }
     &-wallet{
-      flex:1;
       padding:0;
       .loadings{
         border-radius: 8px !important;
+      }
+      .pending{
+        border-radius: 8px;
       }
     }
   }

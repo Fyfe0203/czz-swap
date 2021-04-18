@@ -24,6 +24,7 @@ export default function useWallet() {
   }
 
   const handlenNewChainId = chainId => {
+    console.log('chainId', chainId)
     setState({
       wallet: {
         ...wallet,
