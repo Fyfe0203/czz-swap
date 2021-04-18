@@ -2,12 +2,13 @@ import { useState, useEffect,  useRef } from 'react'
 import MetaMaskOnboarding from '@metamask/onboarding'
 import useGlobal from './useGlobal'
 import { formatAddress } from '../utils'
+import intl from 'react-intl-universal'
 
 export default function useWallet() {
   const { setState, from, to, wallet, accounts, updateAccounts, setButtonText } = useGlobal()
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
-  const ONBOARD_TEXT = 'Click here to install MetaMask!'
+  const ONBOARD_TEXT = intl.get('ClickHereToInstallMetaMask')
   const CONNECT_TEXT = 'Connect MetaMask'
   const [buttonText, setWalletButtonText] = useState(ONBOARD_TEXT)
   var storage = window.localStorage

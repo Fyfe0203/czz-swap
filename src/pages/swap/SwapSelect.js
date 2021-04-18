@@ -5,6 +5,7 @@ import { Modal, Loading } from '../../compontent/index'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
 // import useSwap from '../../hooks/useSwap'
+import intl from 'react-intl-universal'
 const SearchInput = styled.input`
 `
 
@@ -87,7 +88,7 @@ export default React.memo( function SelectId({ types, pool }) {
         <div className="token-search">
           <i className="ico ico-search" />
           <div className="token-search-input">
-            <SearchInput value={ keyword } className="c-input" onChange={filterToken} placeholder="search token" type="text" />
+            <SearchInput value={ keyword } className="c-input" onChange={filterToken} placeholder={intl.get('SearchToken')} type="text" />
           </div>
           {keyword && <i className="ico-x clean" onClick={ cleanSearch } />}
         </div>
@@ -114,7 +115,7 @@ export default React.memo( function SelectId({ types, pool }) {
         <div className="f-c f-1">
           {currency?.image && <i className="img" alt={icon.default} style={{ backgroundImage: `url(${currency?.image})` }} />}
           <div className="select-inner-val">
-            <h3>{currency?.symbol || <span>Select a Token</span>}</h3>
+            <h3>{currency?.symbol || <span>{intl.get('SelectaToken')}</span>}</h3>
             {currency?.name && <div className="select-inner-desc">{ currency?.name }</div>}
           </div>
         </div>

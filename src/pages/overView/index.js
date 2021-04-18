@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import './style.scss'
 import { Link } from 'react-router-dom'
 import banner from '../../asset/svg/welcomes.svg'
+import intl from 'react-intl-universal'
 
 export default function OverView() {
   let arr = ['ETH', 'BSC', 'HECO', 'TRON', "SOL", "DOT"]
@@ -11,9 +12,9 @@ export default function OverView() {
     <Fragment>
       <div className="home">
         <div className="home-container">
-          <h1>Powered by Te Waka.</h1>
-          <p>Enabling connectivity between islands of DeFi.</p>
-          <p><Link className="swap-button" style={{ width: 210 }} to="/swap" >Start Swap Now</Link></p>
+          <h1>{('PoweredByTeWaka')}</h1>
+          <p>{intl.get('EnablingConnectivityBetweenIslandsOfDeFi')}</p>
+          <p><Link className="swap-button" style={{ width: 210 }} to="/swap" >{intl.get('StartSwapNow')}</Link></p>
           <div className="swap-button-bar">
             <a href="https://docs.classzz.com/CZZ_audit.pdf" target="_bank" className="ico-shield"><span>Audit HECO/ETH</span></a>
             <a href="https://docs.classzz.com/CZZ_audit2.0.pdf" target="_bank" className="ico-book"><span>Audit BSC</span></a>
@@ -24,7 +25,7 @@ export default function OverView() {
       <div className="token">
         <div className="token-inner">
           <div  className="support">
-            <h1>Support Chains</h1>
+            <h1>{intl.get('SupportChains')}</h1>
             <div className="support-container">
               {
                 arr.map((item, index) => {
@@ -38,7 +39,7 @@ export default function OverView() {
             </div>
           </div>
           <div className="exchange">
-          <h1>Decentralized Exchange List</h1>
+          <h1>{intl.get('DecentralizedExchangeList')}</h1>
           <div className="exchange-container">
             {
               exchange.split(',').map((item, index) => {

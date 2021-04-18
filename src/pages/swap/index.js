@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect} from 'react'
-import { Modal, Loading, message,LinkItem, Button, Image } from '../../compontent'
+import { Modal, Loading, message, Button, Image } from '../../compontent'
 import useGetTokenValue from '../../hooks/useGetTokenValue'
 import useSwapAndBurn from '../../hooks/useSwapAndBurn'
 import useGlobal from '../../hooks/useGlobal'
@@ -13,6 +13,7 @@ import SwapPending from './SwapPending'
 import useWallet from '../../hooks/useWallet'
 import {decToBn,bnToDec} from '../../utils'
 import './swap.scss'
+import intl from 'react-intl-universal'
 
 const SwapConfirmItem = ({item,status,index}) => {
   return (
@@ -49,9 +50,9 @@ export default function Swap() {
   
   const networkMessage = () => {
     message({
-      title: 'Network Wrong.',
+      title: intl.get('NetworkWrong'),
       icon: 'wind',
-      content: 'Please connect to the appropriate Ethereum network.'
+      content: intl.get('PleaseConnectToTheAppropriateEthereumNetwork')
     })
   }
   
@@ -63,9 +64,9 @@ export default function Swap() {
 
   const swapFooter = (
     <div className="swap-footer">
-      <div className="f-c"><span>Minimun received</span> <span><b>{to.tokenValue}</b> {to.currencys?.symbol}</span></div>
-      <div className="f-c"><span>Price Impact</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
-      <div className="f-c"><span>Liquidity Provider Fee</span><span><b>{from.tokenValue && bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007)))}</b> {from.currency?.symbol}</span> </div>
+      <div className="f-c"><span>{intl.get('MinimunReceived')}</span> <span><b>{to.tokenValue}</b> {to.currencys?.symbol}</span></div>
+      <div className="f-c"><span>{intl.get('PriceImpact')}</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
+      <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007)))}</b> {from.currency?.symbol}</span> </div>
     </div>
   )
 
@@ -80,14 +81,14 @@ export default function Swap() {
   useEffect(() => {
     if (hash) {
       setConfirmStatus(false)
-      setSubmitStatus(true)
+      // setSubmitStatus(true)
     }
   }, [hash])
 
   // This swap has a price impact of at least 5%. Please confirm that you would like to continue whit this swap
   // Output is estimated.You will recive at least 0.23 HT or the transaction will revert.
 
-  const [submitStatus, setSubmitStatus] = useState(false)
+  // const [submitStatus, setSubmitStatus] = useState(false)
   // const [pendingVisible, setPendingVisible] = useState(false)
   // const transactionSubmit = (
   //   <div style={{ paddingBottom: 15 }}>
@@ -148,7 +149,7 @@ export default function Swap() {
       <SwapWrap className="swap-wrap">
         <SwapPanel className="swap">
           <div className="f-c-sb">
-            <h2 className="swap-title">SWAP</h2>
+            <h2 className="swap-title">{intl.get('swap')}</h2>
             <div className="swap-setting ico-settings" onClick={ ()=>setSetting(true)} />
           </div>
           <Item className="swap-id"> <SwapItem pool={from} type={0} /></Item>
@@ -161,7 +162,7 @@ export default function Swap() {
           {impactPrice && to.tokenValue ? swapFooter : null}
         </SwapPanel>
       </SwapWrap>
-    <Modal title="Advanced Settings" visible={setting} onClose={ ()=>setSetting(false)}>
+    <Modal title={intl.get("AdvancedSettings")} visible={setting} onClose={ ()=>setSetting(false)}>
       <Setting />
     </Modal>
     <Modal title="Confirm Swap" visible={confirmStatus} onClose={ ()=>setConfirmStatus(false)}>

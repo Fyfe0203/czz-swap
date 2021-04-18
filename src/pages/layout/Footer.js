@@ -1,5 +1,6 @@
 import React from 'react'
 import useGlobal from '../../hooks/useGlobal'
+import useIntl from '../../hooks/useIntl'
 import styled from 'styled-components'
 const Links = styled.a`
   position:relative;
@@ -35,13 +36,24 @@ const Links = styled.a`
   }
 `
 export default function Footer() {
+  const {localesList, lang, onChange } = useIntl()
   const {  links } = useGlobal()
   return (
     <div className="footer">
-    <div className="navs f-c">
+      <div className="navs f-c">
+      
         {links.map((item, index) => <Links alt={item.name} target="_bank" key={index} href={item.link}><i className={`ico-${item.ico}`} /><b> <sup>{ item.name }</sup></b></Links>)}
       </div>
-      <div> © 2021 classzz.com. All rights reserved</div>
+      <div className="f-c">
+        <div> © 2021 classzz.com. All rights reserved</div>
+          <div className="f-c footer-lang">
+        {
+          localesList.map((item, index) => {
+            return <div className={lang === item.value ? 'active' : ''} onClick={ ()=> onChange(item.value)} key={ index }>{ item.type }</div>
+          })
+        }
+        </div>
+      </div>
     </div>
   )
 }

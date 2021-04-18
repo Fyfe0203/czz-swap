@@ -15,6 +15,7 @@ import './index.scss'
 // Insufficient liquidity for this trade.
 // Insufficient BNB balance
 import useWallet from '../../hooks/useWallet'
+import intl from 'react-intl-universal'
 
 export default function Connect(props) {
   const { accounts, wallet, networkStatus, networks, pending, from, to, explorer, showConnectWallet, setState } = useGlobal()
@@ -49,7 +50,7 @@ export default function Connect(props) {
       icon:require('../../asset/svg/walletConnectIcon.svg'),
       name: 'walletConnect',
       actions: walletconnectAction,
-      text:'Connect WalletConnect'
+      text:intl.get('ConnectWalletConnect')
     }
   ]
 
@@ -93,7 +94,7 @@ export default function Connect(props) {
       </div>
     </Fragment>
   )
-  const accountError = (<div className="c-wallet c-connect-link" onClick={() => setShowConnectWallet(!showConnectWallet)}>Connect to a wallet</div>)
+  const accountError = (<div className="c-wallet c-connect-link" onClick={() => setShowConnectWallet(!showConnectWallet)}>{intl.get('ConnectToAWallet')}</div>)
   const accountsButton = accounts ? accountBlock : accountError
 
   const walletContent = (
@@ -138,7 +139,7 @@ export default function Connect(props) {
     <div className="c-connect">
       <div className="connect-mask">
         {accountsButton}
-        <Modal title="Connect Wallet" visible={showConnectWallet} onClose={setShowConnectWallet}>{ walletContent }</Modal>
+        <Modal title={intl.get('ConnectWallet')} visible={showConnectWallet} onClose={setShowConnectWallet}>{ walletContent }</Modal>
         <Modal title="Account" visible={showAccount} onClose={setShowAccount}>{ accountsContent } </Modal>
         <NetworkModal title="Connect to NetWork" visible={networkVisible} onClose={setNetworkVisible} />
       </div>
