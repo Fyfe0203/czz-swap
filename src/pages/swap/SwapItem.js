@@ -3,6 +3,7 @@ import useGlobal from '../../hooks/useGlobal'
 import useBalance from '../../hooks/useBalance'
 import SwapSelect from './SwapSelect'
 import styled from 'styled-components'
+import intl from 'react-intl-universal'
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -27,7 +28,7 @@ export default function SwapItem({ pool, exchange, type}) {
       <div className="f-c-sb swap-head">
         <div className="swap-info">{`${type === 0 ? 'From':'To'} ${pool.networkType ? pool.networkType : ''}`}</div>
         <div className="f-c swap-info">
-        Balance:{balance} {exchange}
+        {intl.get("Balance") + balance} {exchange}
         </div>
       </div>
       <div className="swap-block f-c">

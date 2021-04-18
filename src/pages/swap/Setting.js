@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import useGlobal from '../../hooks/useGlobal'
 import { Input } from '../../compontent'
 import styled from 'styled-components'
+import intl from 'react-intl-universal'
 
 function TabSelect(props) {
   const { title, unit, value } = props
@@ -14,6 +15,7 @@ function TabSelect(props) {
     setCurrent(index)
     props.onChange(item)
   }
+  let Custom = intl.get("Custom")
 
   return (
     <div className="setting-item">
@@ -26,7 +28,7 @@ function TabSelect(props) {
       </div>
         <div className="tolerance-custom">
           <div className="tolerance-input">
-            <Input maxLength={2} type="number" placeholder={current === null ? value : 'Custom'} value={current ?  '' : value} onChange={val => valChange(val)} />
+            <Input maxLength={2} type="number" placeholder={current === null ? value : Custom} value={current ?  '' : value} onChange={val => valChange(val)} />
           </div>
           {unit}</div>
       </div>
@@ -113,6 +115,7 @@ export default function Setting(props) {
   const { chiainId } = wallet
   const toleranceArray = [0.5, 1, 1.5, 3]
   const gasArray = [160, 200, 197]
+    let TransactionDeadlineNumber = intl.get("TransactionDeadlineNumber")
   console.log(swapSetting)
   // const filter = item => item.networkId === networkId
   return (
@@ -120,14 +123,14 @@ export default function Setting(props) {
       {/* <SettingItem title="Swap Router">
         <Select list={routerList} filter={filter} value={ router } rangeKey="name" onChange={val => setSwapSetting({router:val})} />
       </SettingItem> */}
-      <TabSelect list={toleranceArray} unit={'%'} title="Slippage tolerance" value={tolerance} onChange={val => setSwapSetting({ tolerance: val })} />
-      {Number(tolerance) > 5 && <ItemError>Your transaction may be frontrun</ItemError>}
-      <TabSelect list={gasArray} unit={'GWEI'} title="Gas Price" value={ gas } onChange={val => setSwapSetting({gas:val})} />
-      <SettingItem title="Transaction deadline">
+      <TabSelect list={toleranceArray} unit={'%'} title={intl.get("SlippageTolerance")} value={tolerance} onChange={val => setSwapSetting({ tolerance: val })} />
+      {Number(tolerance) > 5 && <ItemError>{intl.get("YourTransactionMayBeFrontrun")}</ItemError>}
+      <TabSelect list={gasArray} unit={'GWEI'} title={intl.get("GasPrice")} value={ gas } onChange={val => setSwapSetting({gas:val})} />
+      <SettingItem title={intl.get("TransactionDeadline")}>
           <div className="f-1 tolerance-custom init">
-            <Input type="text" onChange={val => setSwapSetting({ deadline: val })} pattern={/^\d*?$/} value={deadline} placeholder={`Transaction deadline number`} />
+            <Input type="text" onChange={val => setSwapSetting({ deadline: val })} pattern={/^\d*?$/} value={deadline} placeholder={TransactionDeadlineNumber} />
           </div>
-          <span>minutes</span>
+          <span>{intl.get("minutes")}</span>
       </SettingItem>
     </div>
   )

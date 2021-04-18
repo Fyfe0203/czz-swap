@@ -1,14 +1,16 @@
 import { lazy } from 'react' //react-router-com''
+import intl from 'react-intl-universal'
+
 const routes = [
   {
-    name: 'HOME',
+    name: 'home',
     path: '/',
     exact:true,
     ico:'home',
     compontent: lazy(() => import('./pages/overView/index'))
   },
   {
-    name: 'SWAP',
+    name: 'swap',
     exact:false,
     path: '/swap',
     ico:'repeat',

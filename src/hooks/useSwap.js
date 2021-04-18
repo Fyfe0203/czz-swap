@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import useGlobal from './useGlobal'
 import useBalance from './useBalance'
+import intl from 'react-intl-universal'
 
 export default function useSwap() {
   const { from, accounts, setState, networks, pools, wallet } = useGlobal()
@@ -12,14 +13,14 @@ export default function useSwap() {
     NONE_TO_TOKEN: 'Select a Token',
     NONE_BALANCE: 'Insufficient balance',
     NONE_NETWORK: 'Switch NetWork',
-    NONE_WALLET: 'Connect Wallet',
+    NONE_WALLET: intl.get('ConnectWallet'),
     APPROVE: 'Appove',
     APPROVE_ING: 'Approve in Pending',
-    SWAP: 'SWAP NOW',
+    SWAP: intl.get('SWAPNOW'),
     SWAP_ING: 'Swap in Pending',
-    SWAP_IMPACT_WARN: 'Swap Anyway',
-    SWAP_IMPACT_HIGH: 'Price Impact Too High',
-    FINDING_PRICE_ING: 'Finding a Best Price',
+    SWAP_IMPACT_WARN: intl.get('SwapAnyway'),
+    SWAP_IMPACT_HIGH: intl.get('PriceImpactTooHigh'),
+    FINDING_PRICE_ING: intl.get('FindingaBestPrice'),
     SWITCH_ING: 'Swich Network in Pending',
     NONE_TRADE:'Insufficient liquidity for this trade.',
   }
