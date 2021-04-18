@@ -130,7 +130,7 @@ export default function useMidPrice() {
       setButtonText('SWAP_IMPACT_WARN')
       setState({priceStatus:1})
     } else if (price < 3) {
-      setButtonText('SWAP')
+      // setButtonText('SWAP')
       setState({priceStatus:0})
     }
   }

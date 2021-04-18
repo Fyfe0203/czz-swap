@@ -41,11 +41,13 @@ export default function useGetTokenValue() {
       setAuthorization(true)
       setRecent(item => [...item, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
       setPending(pending.filter(i => i !== 'approve'))
+
       message({
         icon: 'award',
-        title:`Approvd White ${currency?.symbol}`,
+        title: `Approvd White ${currency?.symbol}`,
         content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Etherscan</LinkItem>
       })
+      
     } catch (error) {
       setRecent(item => [...item, { ...recentInfo, status: 0 }])
       throw error
@@ -63,7 +65,7 @@ export default function useGetTokenValue() {
     const allowanceTotal = await allowance({ provider, tokenAddress, spender, accounts })
     const amountToken = decToBn(tokenValue).toNumber()
     const allonceNum = decToBn(allowanceTotal).toNumber()
-    console.log('AllonceNum result==', allonceNum)
+    console.log('Allowance result==', allonceNum)
     return allonceNum > amountToken
   }
 
@@ -142,9 +144,10 @@ export default function useGetTokenValue() {
         const outAmount = amounts.toSignificant(6)
         // if from is network approve setting true
         const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
+        setAuthorization(allowanceResult)
+        console.log('allowanceResult',allowanceResult)
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
-        setAuthorization(allowanceResult)
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
       } catch (error) {
         setButtonText('NONE_TRADE')
@@ -179,23 +182,23 @@ export default function useGetTokenValue() {
         setButtonText('FINDING_PRICE_ING')
       } else if (to.currency == null) {
        setButtonText('NONE_TO_TOKEN')
-      } else if(approveLoading){
-        setButtonText('APPROVE_ING')
       } else if (from.tokenValue === '') {
        setButtonText('NONE_AMOUNT')
-      } else if (!hasBalance) {
+      } else if (!hasBalance && to.tokenValue) {
        setButtonText('NONE_BALANCE')
       } else if (!networkStatus && to.tokenValue && impactPrice) {
         setButtonText('NONE_NETWORK')
       } else if (!authorization  && to.tokenValue && impactPrice) {
         setButtonText('APPROVE' )
+      } else if(approveLoading){
+        setButtonText('APPROVE_ING')
       } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
         setButtonText('SWAP')
       }
     } else {
       setButtonText('NONE_WALLET')
     }
-  }, [accounts, from.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization])
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus])
 
 
   return {loading,authorization,isApprove,approveActions,approveLoading}

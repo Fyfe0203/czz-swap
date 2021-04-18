@@ -41,7 +41,6 @@ export default function Footer() {
   return (
     <div className="footer">
       <div className="navs f-c">
-      
         {links.map((item, index) => <Links alt={item.name} target="_bank" key={index} href={item.link}><i className={`ico-${item.ico}`} /><b> <sup>{ item.name }</sup></b></Links>)}
       </div>
       <div className="f-c">

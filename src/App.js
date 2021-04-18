@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react'
+import { Fragment, Suspense, useEffect } from 'react'
 import { AppProvider } from './context/AppGlobalState'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import Header from './pages/layout/Header'
@@ -8,24 +8,24 @@ import PageLoading from './compontent/PageLoading'
 import { ThemeProvider } from 'styled-components'
 import theme from './theme'
 import './asset/common.scss'
+import useIntl from './hooks/useIntl'
 
 export default function App() {
     const pages = routes.map((item, index) => {
       const {compontent:Page,...rest } = item
       return <Route {...rest} key={index} render={routerProps => <Page {...rest} {...routerProps} />} />
     })
-
   return (
     <Suspense fallback={<PageLoading />}>
       <ThemeProvider theme={ theme }>
         <AppProvider>
           <BrowserRouter>
             <Header />
-              <Switch>
-                <Suspense fallback={<PageLoading />}>
-                  {pages}
-                </Suspense>
-              </Switch>
+            <Switch>
+              <Suspense fallback={<PageLoading />}>
+                {pages}
+              </Suspense>
+            </Switch>
             <Footer />
           </BrowserRouter>
         </AppProvider>
