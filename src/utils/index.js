@@ -17,6 +17,11 @@ export const decToBn = (dec, decimals = 18) => {
   return new BigNumber(dec).multipliedBy(new BigNumber(10).pow(decimals))
 }
 
+export const toNonExponential = (num) => {
+  let m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+  return num.toFixed(Math.max(0, (m[1] || '').length - m[2]));
+}
+
 export const getBalanceNumber = (balance, decimals = 18) => {
   if (balance) { 
     const displayBalance = balance.dividedBy(new BigNumber(10).pow(decimals))

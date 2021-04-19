@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import SwapPending from './SwapPending'
 import useWallet from '../../hooks/useWallet'
-import {decToBn,bnToDec} from '../../utils'
+import {decToBn,bnToDec,toNonExponential} from '../../utils'
 import './swap.scss'
 import intl from 'react-intl-universal'
 
@@ -66,7 +66,7 @@ export default function Swap() {
     <div className="swap-footer">
       <div className="f-c"><span>{intl.get('MinimunReceived')}</span> <span><b>{to.tokenValue}</b> {to.currencys?.symbol}</span></div>
       <div className="f-c"><span>{intl.get('PriceImpact')}</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
-      <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007)))}</b> {from.currency?.symbol}</span> </div>
+      <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && toNonExponential(bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007))))}</b> {from.currency?.symbol}</span> </div>
     </div>
   )
 
