@@ -109,7 +109,7 @@ export default function useWallet() {
   const [networkNode, setNetworkNode] = useState({})
 
   const getNetworkNode = () => {
-    const { chainId, rpcUrls, networkName: chainName, decimals, explorerUrl, symbolName } = from
+    const {  chainId, rpcUrls, networkName: chainName, decimals, explorerUrl, symbolName } = from
     // debugger
     const nativeCurrency = { name: symbolName, decimals, symbol: symbolName }
     return {
@@ -140,7 +140,7 @@ export default function useWallet() {
         setSwitchLoading(true)
         setButtonText('SWITCH_ING')
         const res = pool.chainId === '0x1' || pool.chainId === '0x3' || pool.chainId === '0x4' 
-        ? await window.ethereum.request({ method: 'wallet_switchEthereumChain', params })
+          ? await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: chinIdSwitch })
         : await window.ethereum.request({ method: 'wallet_addEthereumChain', params })
         setButtonText('SWAP')
         const { currency } = pool

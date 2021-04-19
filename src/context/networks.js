@@ -55,7 +55,7 @@ const networks = [
     tokenValue: '',
     abi:ABI_BSC,
     networkId:"56",
-    chainId:'0x61',
+    chainId:'0x38',
     ntype: 3,
     decimals:18,
     symbol: null,

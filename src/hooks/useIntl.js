@@ -28,7 +28,7 @@ export default function useIntl() {
 
   useEffect(() => {
     let langs = window.localStorage.getItem('lang')
-    changeLocales(langs)
+    changeLocales(langs || 'en-US')
   }, [])
 
   const onChange = val => {
