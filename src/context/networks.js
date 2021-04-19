@@ -20,9 +20,9 @@ const networks = [
     router: "0x9AC88c5136240312f8817dBB99497aCe62b03F12",
     weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     czz: '0x150BbCfF6b1B4D528b48f1A300585Dea0b6490B6',
-    explorerUrl: 'https://etherscan.io/',
-    rpcUrls:'https://learnblockchain.cn/article/1792',
-    provider: new Web3.providers.HttpProvider("https://learnblockchain.cn/article/1792"),
+    explorerUrl: 'https://eth-mainnet.token.im',
+    rpcUrls:'https://nodes.mewapi.io/rpc/eth',
+    provider: new Web3.providers.HttpProvider("https://eth-mainnet.token.im"),
     image:'https://cryptologos.cc/logos/ethereum-eth-logo.svg'
   },
   {
