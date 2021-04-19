@@ -6,7 +6,7 @@ import useGlobal from '../../hooks/useGlobal'
 import './layout.scss'
 import intl from 'react-intl-universal'
 
-export default React.memo(function Header() {
+export default function Header() {
   const { theme, toggleTheme, links } = useGlobal()
   const locations = useLocation()
   const [menuStatus, setMenuStatus] = useState(false)
@@ -45,5 +45,4 @@ export default React.memo(function Header() {
       }
     </Fragment>
   )
-})
-
+}

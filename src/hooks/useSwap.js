@@ -33,7 +33,7 @@ export default function useSwap() {
     const fromState = accounts && window.ethereum && id && currentNetwork.length ? currentNetwork[0] : networks[0]
     const currency = pools.filter(i => i.systemType === fromState?.networkType)[0]
     setState({ from: { ...from, ...fromState, currency } })
-    setNetworksStatus()
+    // setNetworksStatus()
   }
 
   const poolsBalance = () => {
