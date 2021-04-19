@@ -203,7 +203,7 @@ export default function useWallet() {
 
   useEffect(() => {
     initWallet()
-  }, [from,to])
+  }, [])
 
   return {connectWallet,loading,addEthereum,switchLoading,buttonText,disConnect,networkNode}
 }

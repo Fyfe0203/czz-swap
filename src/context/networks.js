@@ -21,8 +21,8 @@ const networks = [
     weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     czz: '0x150BbCfF6b1B4D528b48f1A300585Dea0b6490B6',
     explorerUrl: 'https://etherscan.io/',
-    rpcUrls:'https://cloudflare-eth.com/',
-    provider: new Web3.providers.HttpProvider("https://cloudflare-eth.com/"),
+    rpcUrls:'https://web3.1inch.exchange/',
+    provider: new Web3.providers.HttpProvider("https://web3.1inch.exchange/"),
     image:'https://cryptologos.cc/logos/ethereum-eth-logo.svg'
   },
   {

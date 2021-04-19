@@ -29,7 +29,8 @@ const TokenItem = ({ item, onClick, currency }) => {
 
 export default React.memo( function SelectId({ types, pool }) {
   const [listStatus, setListStatus] = useState(false)
-  const { pools, networks, setState, from, to } = useGlobal()
+  const state = useGlobal()
+  const { pools, networks, setState, from, to, wallet } = state
   const { currency } = pool
   // const { poolsBalance } = useSwap()
   const [networkTabs,setNetworkTabs] = useState([])
@@ -41,8 +42,9 @@ export default React.memo( function SelectId({ types, pool }) {
     const currentNetwork = networks.filter(i => i.networkType === item.systemType)[0]
     let oldItem = types === 1 ? to : from
     const symbolItem = { ...oldItem, ...currentNetwork, tokenValue: oldItem.tokenValue, currency: item }
-    let toOld = currentNetwork.networkType === to?.networkType ? {tokenValue:''} : to
-    types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem ,to:toOld})
+    let toOld = currentNetwork.networkType === to?.networkType ? { tokenValue: '' } : to
+    const networkStatus = types === 0 ? wallet?.chainId === symbolItem.chainId : state?.networkStatus
+    types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem ,to:toOld, networkStatus })
     setListStatus(false)
   }
 
