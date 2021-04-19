@@ -88,7 +88,7 @@ export default React.memo( function SelectId({ types, pool }) {
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">
         <div className="token-network">
-          {networkTabs.map((item, index) => <div key={ index } className={ chainId === item.chainId ? 'selected' : ''} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
+          {networkTabs.map((item, index) => <div key={ index } className={ item.chainId === chainId ? 'selected' : ''} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
         </div>
         <div className="token-search">
           <i className="ico ico-search" />

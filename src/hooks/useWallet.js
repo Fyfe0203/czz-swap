@@ -1,11 +1,13 @@
 import { useState, useEffect,  useRef } from 'react'
 import MetaMaskOnboarding from '@metamask/onboarding'
 import useGlobal from './useGlobal'
+import useSwap from './useSwap'
 import { formatAddress } from '../utils'
 import intl from 'react-intl-universal'
 
 export default function useWallet() {
   const { setState, from, to, wallet, accounts, updateAccounts, setButtonText } = useGlobal()
+  const { switchChin } = useSwap()
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
   const ONBOARD_TEXT = intl.get('ClickHereToInstallMetaMask')
@@ -25,7 +27,7 @@ export default function useWallet() {
   }
 
   const handlenNewChainId = chainId => {
-    // console.log('chainId', chainId)
+    console.log('chainId', chainId)
     setState({
       wallet: {
         ...wallet,
@@ -34,6 +36,7 @@ export default function useWallet() {
       },
       networkStatus:chainId === from.chainId
     })
+    // initSwap()
   }
 
   // init wallet
@@ -43,8 +46,10 @@ export default function useWallet() {
         handleNewAccounts(accounts)
         handlenNewChainId(window.ethereum.chainId)
       })
-      window.ethereum.on('chainIdChanged', handlenNewChainId)
-      window.ethereum.on('chainChanged', handlenNewChainId)
+      window.ethereum.on('chainIdChanged', (chainId) => {
+        console.log('chainIdChanged',chainId)
+      })
+      window.ethereum.on('chainChanged',switchChin)
       window.ethereum.on('accountsChanged', handleNewAccounts)
       window.ethereum.on('connect', () => {
         console.log('connect')

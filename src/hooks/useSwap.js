@@ -4,9 +4,8 @@ import useBalance from './useBalance'
 import intl from 'react-intl-universal'
 
 export default function useSwap() {
-  const { from, accounts, setState, networks, pools, wallet } = useGlobal()
+  const { from, accounts, setState, networks, pools, wallet, to } = useGlobal()
   const { getPoolBalance } = useBalance()
-  const { chainId } = wallet
 
   const status = {
     NONE_AMOUNT: "Enter a Amount",
@@ -28,8 +27,8 @@ export default function useSwap() {
   // Insufficient liquidity for this trade.
   // Insufficient BNB balance
 
-  const initSwap = async () => {
-    const id = chainId || window.ethereum?.chainId
+  const initSwap = () => {
+    const id = wallet?.chainId || window.ethereum?.chainId
     // debugger
     const currentNetwork = networks.filter(i => i.chainId === id)
     const fromState = accounts && window.ethereum && id && currentNetwork.length ? currentNetwork[0] : networks[0]
@@ -59,6 +58,24 @@ export default function useSwap() {
     // poolsBalance()
   }, [])
 
+  // chain change pools need change
+  const switchChin = chainId => {
+    const currentNetwork = networks.filter(i => i.chainId === chainId)
+    const fromValue = from?.tokenValue || ''
+    const fromState = accounts && window.ethereum && chainId && currentNetwork.length ? currentNetwork[0] : from
+    const currency = currentNetwork.length ? pools.filter(i => i.systemType === fromState?.networkType)[0] : from.currency
+    const toState = fromState.chainId === to.chainId ? {} : to
+    setState({
+      from: { ...fromState, currency,tokenValue:fromValue },
+      to: { ...toState, tokenValue: '' },
+      networkStatus: fromState.chainId === chainId,
+      wallet: {
+        ...wallet,
+        networkId: parseInt(chainId, 16),
+        chainId
+      }
+    })
+  }
 
-  return {status,poolsBalance}
+  return {status,poolsBalance, switchChin}
 }
