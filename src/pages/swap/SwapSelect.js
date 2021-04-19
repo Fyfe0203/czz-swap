@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import { Modal, Loading } from '../../compontent/index'
+import { Modal } from '../../compontent/index'
 // import {formatAddress} from '../../utils'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
@@ -28,7 +28,6 @@ const TokenItem = ({ item, onClick, currency }) => {
 }
 
 export default React.memo( function SelectId({ types, pool }) {
-  const [listStatus, setListStatus] = useState(false)
   const state = useGlobal()
   const { pools, networks, setState, from, to, wallet } = state
   const { currency } = pool
@@ -36,6 +35,8 @@ export default React.memo( function SelectId({ types, pool }) {
   const [networkTabs,setNetworkTabs] = useState([])
   const [keyword, setKeyword] = useState('')
   const [chainId, setChainId] = useState(null)
+  const [filters, setFilters] = useState(null)
+  const [listStatus, setListStatus] = useState(false)
 
   // select tooken item
   const selectToken = item => {
@@ -48,26 +49,21 @@ export default React.memo( function SelectId({ types, pool }) {
     setListStatus(false)
   }
 
-  const [filters, setFilters] = useState(null)
 
   const filterNetwork = (nodes = null) => {
-    const item = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
-    setNetworkTabs(item)
-    const node = nodes || item[0]
-    setChainId(node.chainId)
-    setFilters(() => { return token => { return token.systemType === node.networkType } })
+    const current = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
+    const node = nodes || current[0]
+    setNetworkTabs(current)
+    const activeId = node?.chainId || current[0].chainId
+    const currentToken = node?.networkType || current[0].networkType
+    setFilters(() => { return token => { return token.systemType === currentToken } })
+    setChainId(activeId)
   }
-  
-  useEffect(() => {
-    if (from.currency || to.currency) {
-      filterNetwork()
-    }
-  }, [from.currency, to.currency])
 
   // clean search token
   const cleanSearch = () => {
     setKeyword('')
-    filterNetwork()
+    filterNetwork(pool)
   }
 
   // filter token
@@ -82,8 +78,8 @@ export default React.memo( function SelectId({ types, pool }) {
   }
 
   useEffect(() => {
-    pool.currency && filterNetwork(pool)
-  }, [])
+    filterNetwork(pool)
+  }, [pool])
   
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
   const tokenModal = (
@@ -109,18 +105,12 @@ export default React.memo( function SelectId({ types, pool }) {
       </div>
     </Modal>
   )
-  const icon = require(`../../asset/svg/BSC.svg`)
-
-  function selectTokenModal(){
-    setChainId(types === 1 ? to.chainId : from.chainId)
-    setListStatus(!listStatus)
-  }
 
   return (
     <Fragment>
-      <div className="select select-inner f-c" onClick={selectTokenModal}>
+      <div className="select select-inner f-c" onClick={(() => setListStatus(true))}>
         <div className="f-c f-1">
-          {currency?.image && <i className="img" alt={icon.default} style={{ backgroundImage: `url(${currency?.image})` }} />}
+          {currency?.image && <i className="img" style={{ backgroundImage: `url(${currency?.image})` }} />}
           <div className="select-inner-val">
             <h3>{currency?.symbol || <span>{intl.get('SelectaToken')}</span>}</h3>
             {currency?.name && <div className="select-inner-desc">{ currency?.name }</div>}
