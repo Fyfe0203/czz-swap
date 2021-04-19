@@ -1,13 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import useGlobal from '../../hooks/useGlobal'
 import { Modal } from '../../compontent/index'
-// import {formatAddress} from '../../utils'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
-// import useSwap from '../../hooks/useSwap'
 import intl from 'react-intl-universal'
-const SearchInput = styled.input`
-`
+const SearchInput = styled.input``
 
 const TokenItem = ({ item, onClick, currency }) => {
   return (
