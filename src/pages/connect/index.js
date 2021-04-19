@@ -8,7 +8,7 @@ import NetworkError from './NetworkError'
 import Web3 from 'web3'
 import BigNumber from 'bignumber.js'
 import { Jazzicon } from '@ukstv/jazzicon-react'
-import Recent from './Recent'
+import Recent from './Recent'       
 import NetworkModal from '../swap/NetworkModal'
 import './index.scss'
 // https://chainid.network/chains.json
@@ -26,9 +26,7 @@ export default function Connect(props) {
   const [currentNetwork, setCurrentNetwork] = useState([])
   const [balance, setBalance] = useState(null)
   const [networkLoading, setNetworkLoading] = useState(true)
-
   const { walletconnectAction } = useWalletConnect()
-
   const setShowConnectWallet = (status) => {
     setState({
       showConnectWallet:status

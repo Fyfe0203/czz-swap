@@ -1,4 +1,4 @@
-import { Fragment, Suspense, useEffect } from 'react'
+import { Suspense } from 'react'
 import { AppProvider } from './context/AppGlobalState'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import Header from './pages/layout/Header'
@@ -8,7 +8,6 @@ import PageLoading from './compontent/PageLoading'
 import { ThemeProvider } from 'styled-components'
 import theme from './theme'
 import './asset/common.scss'
-import useIntl from './hooks/useIntl'
 
 export default function App() {
     const pages = routes.map((item, index) => {
