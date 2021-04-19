@@ -18,14 +18,14 @@ import useWallet from '../../hooks/useWallet'
 import intl from 'react-intl-universal'
 
 export default function Connect(props) {
-  const { accounts, wallet, networkStatus, networks, pending, from, to, explorer, showConnectWallet, setState } = useGlobal()
+  const { accounts,wallet, networkStatus, networks, pending, from, to, explorer, showConnectWallet, setState } = useGlobal()
   const { connectWallet, buttonText, disConnect } = useWallet()
   // const [showConnectWallet, setShowConnectWallet] = useState(false)
   const [showAccount, setShowAccount] = useState(false)
   const [networkVisible, setNetworkVisible] = useState(false)
   const [currentNetwork, setCurrentNetwork] = useState([])
   const [balance, setBalance] = useState(null)
-  const [networkLoading, setNetworkLoading] = useState(false)
+  const [networkLoading, setNetworkLoading] = useState(true)
 
   const { walletconnectAction } = useWalletConnect()
 
@@ -70,10 +70,8 @@ export default function Connect(props) {
   }
 
   useEffect(() => {
-    if (accounts) { 
-      networkChange()
-    }
-  }, [from,to,accounts])
+    if (accounts) networkChange()
+  }, [from,to,accounts,wallet])
 
   const accountBlock = (
     <Fragment>
