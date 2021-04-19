@@ -79,10 +79,8 @@ export default function Swap() {
   )
 
   useEffect(() => {
-    if (hash) {
-      setConfirmStatus(false)
+    if (hash) setConfirmStatus(false)
       // setSubmitStatus(true)
-    }
   }, [hash])
 
   // This swap has a price impact of at least 5%. Please confirm that you would like to continue whit this swap

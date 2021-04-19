@@ -6,7 +6,7 @@ import { formatAddress } from '../utils'
 import intl from 'react-intl-universal'
 
 export default function useWallet() {
-  const { setState, from, to, wallet, accounts, updateAccounts, setButtonText } = useGlobal()
+  const { setState, from, wallet, accounts, updateAccounts, setButtonText } = useGlobal()
   const { switchChin } = useSwap()
   const [loading, setLoading] = useState(false)
   const onboarding = useRef()
@@ -33,7 +33,7 @@ export default function useWallet() {
         networkId: parseInt(chainId, 16),
         chainId
       },
-      networkStatus:chainId === from.chainId
+      // networkStatus:chainId === from.chainId
     })
   }
 

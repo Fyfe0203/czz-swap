@@ -13,9 +13,7 @@ export default function NetworkModal(props) {
   const INFO_TEXT = `If you have not configured this network, then open Metamask -> Settings -> Networks -> Add Network and paste the settings below`
 
   useEffect(() => {
-    if (networkStatus) {
-      onClose(false)
-    } 
+    if (networkStatus) onClose(false)
   }, [networkStatus])
 
   return (

@@ -85,7 +85,7 @@ export default function Connect(props) {
               { buttonText }
            </div>
           {pending.length ? <Pending /> : null}
-          {!networkStatus ? <NetworkError connect={()=>setNetworkVisible(true)} /> :null}
+          {networkStatus ? null : <NetworkError connect={()=>setNetworkVisible(true)} /> }
         </div>
       </div>
     </Fragment>
