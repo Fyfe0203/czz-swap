@@ -47,6 +47,7 @@ export default React.memo( function SelectId({ types, pool }) {
   }
 
   const [filters, setFilters] = useState(null)
+
   const filterNetwork = (nodes = null) => {
     const item = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
     setNetworkTabs(item)
@@ -78,6 +79,10 @@ export default React.memo( function SelectId({ types, pool }) {
     }
   }
 
+  useEffect(() => {
+    pool.currency && filterNetwork(pool)
+  }, [])
+  
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
   const tokenModal = (
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
