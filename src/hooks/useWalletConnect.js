@@ -45,13 +45,11 @@ export default function useWalletConnect() {
       const { accounts, chainId } = payload.params[0]
       setWallet({accounts,chainId})
       setState({
-        wallet: { accounts, chainId },
+        wallet: { accounts, chainId , networkId: parseInt(chainId, 16),},
         accounts
       })
     })
   }
-  // useEffect(() => {
-  //   connect()
-  // },[])
+
   return {wallet,walletconnectAction}
 }

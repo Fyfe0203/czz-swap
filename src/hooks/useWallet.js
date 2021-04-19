@@ -25,7 +25,7 @@ export default function useWallet() {
   }
 
   const handlenNewChainId = chainId => {
-    console.log('chainId', chainId)
+    // console.log('chainId', chainId)
     setState({
       wallet: {
         ...wallet,
@@ -129,12 +129,19 @@ export default function useWallet() {
   const addEthereum = async (pool = from) => {
     const item = getNetworkNode()
     const params = [item]
+    const chinIdSwitch = [
+      {
+        chainId:pool.chainId
+      }
+    ]
     // debugger
     if (window.ethereum) {
       try {
         setSwitchLoading(true)
         setButtonText('SWITCH_ING')
-        const res = await window.ethereum.request({ method: 'wallet_addEthereumChain', params })
+        const res = pool.chainId === '0x1' || pool.chainId === '0x3' || pool.chainId === '0x4' 
+        ? await window.ethereum.request({ method: 'wallet_switchEthereumChain', params })
+        : await window.ethereum.request({ method: 'wallet_addEthereumChain', params })
         setButtonText('SWAP')
         const { currency } = pool
         setState({networkStatus: true})

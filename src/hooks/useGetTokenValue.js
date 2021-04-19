@@ -145,7 +145,7 @@ export default function useGetTokenValue() {
         // if from is network approve setting true
         const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
         setAuthorization(allowanceResult)
-        console.log('allowanceResult',allowanceResult)
+        // console.log('allowanceResult',allowanceResult)
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
