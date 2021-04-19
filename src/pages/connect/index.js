@@ -62,6 +62,8 @@ export default function Connect(props) {
         const _balance = getBalanceNumber(new BigNumber(Number(res))).toFixed(4)
         setBalance(_balance)
       }
+    } catch (error) {
+      setBalance(0.00)
     } finally {
       setNetworkLoading(false)
     }
@@ -77,7 +79,7 @@ export default function Connect(props) {
       <div className="c-wallet f-c">
         {networkLoading && <Loading size="small" mask={true} />}
           <div className="f-c">
-            {balance && <div className="c-balance">{balance} { from?.currency?.symbol }</div>}
+            {balance && <div className="c-balance">{balance} { from?.symbolName }</div>}
             <div className="c-accounts f-c" onClick={() => setShowAccount(!showAccount)}>
               <div className="c-wallet-icon">
                 <Jazzicon address={accounts} />
