@@ -161,7 +161,8 @@ export default function useGetTokenValue() {
         console.log("czzfee",czzfee)
         const changeAmount2 = changeAmount - czzfee
         if (changeAmount2 <= "0") {
-          setState({ to: 0 })
+          let newTo = {...to, tokenValue:0}
+          setState({ to: newTo })
           return false
         }
         const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
