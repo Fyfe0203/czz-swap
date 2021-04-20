@@ -71,8 +71,8 @@ export const getFee = (amount, feePercent) => {
     .div(MAX_FEE.addn(1))
     .toString()
 }
+
 window.getFee = getFee
 window.web3 = web3
 window.bnToDec = bnToDec
 window.decToBn = decToBn
-

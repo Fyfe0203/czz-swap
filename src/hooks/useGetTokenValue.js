@@ -123,7 +123,7 @@ export default function useGetTokenValue() {
     try {
       const { czz, weth, provider, swaprouter } = pool
       const contract = await new Web3(provider)
-      debugger
+      // debugger
       const gasPrice = await contract.eth.getGasPrice(function (price){
         return price
       });
@@ -160,7 +160,8 @@ export default function useGetTokenValue() {
         const czzfee = await swapCastingAmount(to)
         console.log("czzfee",czzfee)
         const changeAmount2 = changeAmount - czzfee
-        if (changeAmount2 <= "0") {
+        if (changeAmount2 <= 0) {
+          debugger
           setState({ to: {...to,tokenValue: ''} })
           setButtonText('NONE_TRADE')
           return false
