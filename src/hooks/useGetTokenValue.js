@@ -93,8 +93,8 @@ export default function useGetTokenValue() {
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
       const tokenArray = isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
-      // debugger
-      const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call(null)
+      const tokenamount =  Web3.utils.toHex(new BigNumber(tokenValue))
+      const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call(null)
       console.log("SwapBurnGetAmount result ===", result)
       return result[2]
     } catch (error) {
@@ -109,7 +109,8 @@ export default function useGetTokenValue() {
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenArray = isFrom ? [weth, czz] : [czz, weth]
-      const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call()
+      const tokenamount =  Web3.utils.toHex(new BigNumber(tokenValue))
+      const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call()
       console.log("swapTokenBurnAmount result ===", result)
       return result[1]
     } catch (error) {
@@ -123,7 +124,6 @@ export default function useGetTokenValue() {
     try {
       const { czz, weth, provider, swaprouter } = pool
       const contract = await new Web3(provider)
-      // debugger
       const gasPrice = await contract.eth.getGasPrice(function (price){
         return price
       });
@@ -146,10 +146,10 @@ export default function useGetTokenValue() {
         setLoading(true)
         setState({priceStatus:0})
         setButtonText('FINDING_PRICE_ING')
-        const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals)
+        const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
         const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
-        const changeAmount = new BigNumber(Number(inAmountRes)).toString()
+        const changeAmount = new BigNumber(inAmountRes)
         console.log('inAmountExchangeValue == ', changeAmount)
         if (changeAmount === "0") {
           setButtonText('NONE_TRADE')
@@ -165,7 +165,6 @@ export default function useGetTokenValue() {
           setButtonText('NONE_TRADE')
           return false
         }
-        
         const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
