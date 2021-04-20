@@ -12,7 +12,7 @@ export default function OverView() {
     <Fragment>
       <div className="home">
         <div className="home-container">
-          <h1>{('PoweredByTeWaka')}</h1>
+          <h1>{intl.get('PoweredByTeWaka')}</h1>
           <p>{intl.get('EnablingConnectivityBetweenIslandsOfDeFi')}</p>
           <p><Link className="swap-button" style={{ width: 210 }} to="/swap" >{intl.get('StartSwapNow')}</Link></p>
           <div className="swap-button-bar">
