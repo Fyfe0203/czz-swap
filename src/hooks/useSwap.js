@@ -4,7 +4,7 @@ import useBalance from './useBalance'
 import intl from 'react-intl-universal'
 
 export default function useSwap() {
-  const { from, accounts, setState, networks, pools, wallet, to } = useGlobal()
+  const { from, accounts, setState, networks, pools, wallet, to, setButtonText } = useGlobal()
   const { getPoolBalance } = useBalance()
 
   const status = {
@@ -32,7 +32,8 @@ export default function useSwap() {
     const currentNetwork = networks.filter(i => i.chainId === id)
     const fromState = accounts && window.ethereum && id && currentNetwork.length ? currentNetwork[0] : networks[0]
     const currency = pools.filter(i => i.systemType === fromState?.networkType)[0]
-    setState({ from: { ...from, ...fromState, currency }, to: {tokenValue:''}, priceStatus:null })
+    setState({ from: { ...from, ...fromState, currency }, to: { tokenValue: '' }, priceStatus: null })
+    setButtonText('NONE_AMOUNT')
   }
 
   const poolsBalance = () => {
@@ -72,6 +73,7 @@ export default function useSwap() {
         from: { tokenValue: '' },
         to: {tokenValue:''}
       })
+      setButtonText('NONE_AMOUNT')
     }
   }, [])
 

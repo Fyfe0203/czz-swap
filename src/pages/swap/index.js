@@ -98,7 +98,6 @@ export default function Swap() {
   //     <div className="swap-button" onClick={() => setSubmitStatus(false)}>Close</div>
   //   </div>
   // )
-
   const confirmSwapModal = (
     <div>
       <div className="confirm-pool">

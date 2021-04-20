@@ -158,10 +158,9 @@ export default function useGetTokenValue() {
         }
 
         const czzfee = await swapCastingAmount(to)
-        console.log("czzfee",czzfee)
         const changeAmount2 = changeAmount - czzfee
         if (changeAmount2 <= 0) {
-          debugger
+          // debugger
           setState({ to: {...to,tokenValue: ''} })
           setButtonText('NONE_TRADE')
           return false
@@ -208,29 +207,26 @@ export default function useGetTokenValue() {
 
   useEffect(() => {
     getBalanceValue(from)
-    
-    return () => {
-      if (accounts) {
-        if(loading){
-          setButtonText('FINDING_PRICE_ING')
-        } else if (to.currency == null) {
-        setButtonText('NONE_TO_TOKEN')
-        } else if (from.tokenValue === '') {
-        setButtonText('NONE_AMOUNT')
-        } else if (!hasBalance && to.tokenValue) {
-        setButtonText('NONE_BALANCE')
-        } else if (!networkStatus && to.tokenValue && impactPrice) {
-          setButtonText('NONE_NETWORK')
-        } else if (!authorization  && to.tokenValue && impactPrice) {
-          setButtonText('APPROVE' )
-        } else if(approveLoading){
-          setButtonText('APPROVE_ING')
-        } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
-          setButtonText('SWAP')
-        }
-      } else {
-        setButtonText('NONE_WALLET')
+    if (accounts) {
+      if(loading){
+        setButtonText('FINDING_PRICE_ING')
+      } else if (to.currency == null) {
+      setButtonText('NONE_TO_TOKEN')
+      } else if (from.tokenValue === '') {
+      setButtonText('NONE_AMOUNT')
+      } else if (!hasBalance && to.tokenValue) {
+      setButtonText('NONE_BALANCE')
+      } else if (!networkStatus && to.tokenValue && impactPrice) {
+        setButtonText('NONE_NETWORK')
+      } else if (!authorization  && to.tokenValue && impactPrice) {
+        setButtonText('APPROVE' )
+      } else if(approveLoading){
+        setButtonText('APPROVE_ING')
+      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
+        setButtonText('SWAP')
       }
+    } else {
+      setButtonText('NONE_WALLET')
     }
   }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus])
 

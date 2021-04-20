@@ -17,7 +17,7 @@ export default function NetworkModal(props) {
   }, [networkStatus])
 
   return (
-    <Modal {...rest} onClose={ onClose }>
+    <Modal maskClose={ true } {...rest} onClose={ onClose }>
       <div className="network-switch">
         <Image onClick={ ()=> onClose(false)} src={ require('../../asset/svg/location.svg').default} style={{width:'100%',backgroundSize:'cover',height:170, backgroundSize:'contain', marginBottom:18}} />
         <div className="text">
@@ -27,9 +27,9 @@ export default function NetworkModal(props) {
           { INFO_TEXT }
         </div> */}
         {networkNode.chainId && <div className="network-node">
-          <p>NetWorkName: <b>{chainName }</b></p>
-          <p>RPC URL:<b>{rpcUrls[0] }</b></p>
-          <p>Chain ID:<b>{chainId }</b></p>
+          <p> NetWorkName: <b>{chainName }</b></p>
+          <p>RPC URL: <b>{rpcUrls[0] }</b></p>
+          <p>Chain ID: <b>{chainId }</b></p>
           {/* <p>Currency Symbol:<b>{ }</b></p> */}
           <p>Block Explorer URL:<b>{blockExplorerUrls[0]}</b></p>
         </div>}
