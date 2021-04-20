@@ -10,11 +10,12 @@ export const formatAddress = (address) => {
 }
 
 export const bnToDec = (bn, decimals = 18) => {
-  return bn.dividedBy(new BigNumber(10).pow(decimals)).toNumber()
+  return bn.dividedBy(new BigNumber(10).pow(decimals))
 }
 
 export const decToBn = (dec, decimals = 18) => {
-  return new BigNumber(dec).multipliedBy(new BigNumber(10).pow(decimals))
+  let num = new BigNumber(dec).decimalPlaces(decimals)
+  return num.multipliedBy(new BigNumber(10).pow(decimals))
 }
 
 export const toNonExponential = (num) => {

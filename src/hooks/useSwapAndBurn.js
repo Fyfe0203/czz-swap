@@ -4,6 +4,7 @@ import { message,LinkItem } from '../compontent'
 import useGlobal from './useGlobal'
 import useLocalStorage from './useLocalStorage'
 import Web3 from 'web3'
+import BigNumber from "bignumber.js";
 
 export default function useSwapAndBurn() {
   const { from, to, currentProvider, accounts, setPending, pending, swapSetting,  setButtonText, setState} = useGlobal()
@@ -94,7 +95,7 @@ export default function useSwapAndBurn() {
     
     const lpSwap = () => {
       lpContract.methods.swapAndBurn(
-          amountIn.toString(),
+          Web3.utils.toHex(new BigNumber(amountIn)),
           0, // tolerancAmount, // 0
           from.currency?.tokenAddress,
           to.ntype,
@@ -116,7 +117,7 @@ export default function useSwapAndBurn() {
           from.swaprouter, // change router setting
           from.weth,       // change weth setting
           deadlineVal,
-      ).send({ from: accounts,value: amountIn})
+      ).send({ from: accounts,value: Web3.utils.toHex(new BigNumber(amountIn))})
       .on("transactionHash",swapTranscationHash)
       .on("receipt", swapReceipt)
       .on("error", swapError)
