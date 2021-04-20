@@ -146,7 +146,7 @@ export default function useGetTokenValue() {
         setLoading(true)
         setState({priceStatus:0})
         setButtonText('FINDING_PRICE_ING')
-        const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals).toString()
+        const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals)
         console.log('inAmount == ',inAmount)
         const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
         const changeAmount = new BigNumber(Number(inAmountRes)).toString()
@@ -161,10 +161,11 @@ export default function useGetTokenValue() {
         console.log("czzfee",czzfee)
         const changeAmount2 = changeAmount - czzfee
         if (changeAmount2 <= "0") {
-          let newTo = {...to, tokenValue:0}
-          setState({ to: newTo })
+          setState({ to: {...to,tokenValue: ''} })
+          setButtonText('NONE_TRADE')
           return false
         }
+        
         const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)

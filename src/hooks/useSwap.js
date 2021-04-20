@@ -68,7 +68,6 @@ export default function useSwap() {
   useEffect(() => {
     initSwap()
     return () => {
-      console.log('init swap')
       setState({
         from: { tokenValue: '' },
         to: {tokenValue:''}
