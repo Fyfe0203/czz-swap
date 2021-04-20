@@ -6,7 +6,7 @@ export default function Modal(props) {
     <Fragment>
       {
         visible &&
-          <div className="mask f-c-c">
+        <div className="mask f-c-c">
           <div className="modal" {...rest}>
             <div className="ico-x modal-close" onClick={() => props.onClose(false)} />
             { title &&

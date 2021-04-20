@@ -32,8 +32,7 @@ export default function useSwap() {
     const currentNetwork = networks.filter(i => i.chainId === id)
     const fromState = accounts && window.ethereum && id && currentNetwork.length ? currentNetwork[0] : networks[0]
     const currency = pools.filter(i => i.systemType === fromState?.networkType)[0]
-    setState({ from: { ...from, ...fromState, currency } })
-    // setNetworksStatus()
+    setState({ from: { ...from, ...fromState, currency }, to: {tokenValue:''}, priceStatus:null })
   }
 
   const poolsBalance = () => {
@@ -53,7 +52,6 @@ export default function useSwap() {
     }
   }
 
-
   const setNetworksStatus = () => {
     if (from?.chainId && window.ethereum && wallet?.chainId) {
       const status = from?.chainId === wallet?.chainId
@@ -69,6 +67,13 @@ export default function useSwap() {
 
   useEffect(() => {
     initSwap()
+    return () => {
+      console.log('init swap')
+      setState({
+        from: { tokenValue: '' },
+        to: {tokenValue:''}
+      })
+    }
   }, [])
 
   // chain change pools need change

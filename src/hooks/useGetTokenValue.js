@@ -177,26 +177,29 @@ export default function useGetTokenValue() {
 
   useEffect(() => {
     getBalanceValue(from)
-   if (accounts) {
-      if(loading){
-        setButtonText('FINDING_PRICE_ING')
-      } else if (to.currency == null) {
-       setButtonText('NONE_TO_TOKEN')
-      } else if (from.tokenValue === '') {
-       setButtonText('NONE_AMOUNT')
-      } else if (!hasBalance && to.tokenValue) {
-       setButtonText('NONE_BALANCE')
-      } else if (!networkStatus && to.tokenValue && impactPrice) {
-        setButtonText('NONE_NETWORK')
-      } else if (!authorization  && to.tokenValue && impactPrice) {
-        setButtonText('APPROVE' )
-      } else if(approveLoading){
-        setButtonText('APPROVE_ING')
-      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
-        setButtonText('SWAP')
+    
+    return () => {
+      if (accounts) {
+        if(loading){
+          setButtonText('FINDING_PRICE_ING')
+        } else if (to.currency == null) {
+        setButtonText('NONE_TO_TOKEN')
+        } else if (from.tokenValue === '') {
+        setButtonText('NONE_AMOUNT')
+        } else if (!hasBalance && to.tokenValue) {
+        setButtonText('NONE_BALANCE')
+        } else if (!networkStatus && to.tokenValue && impactPrice) {
+          setButtonText('NONE_NETWORK')
+        } else if (!authorization  && to.tokenValue && impactPrice) {
+          setButtonText('APPROVE' )
+        } else if(approveLoading){
+          setButtonText('APPROVE_ING')
+        } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
+          setButtonText('SWAP')
+        }
+      } else {
+        setButtonText('NONE_WALLET')
       }
-    } else {
-      setButtonText('NONE_WALLET')
     }
   }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus])
 
