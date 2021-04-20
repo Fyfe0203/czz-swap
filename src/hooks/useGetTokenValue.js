@@ -119,6 +119,27 @@ export default function useGetTokenValue() {
     }
   }
 
+  const swapCastingAmount = async (pool = {}) => {
+    try {
+      const { czz, weth, provider, swaprouter } = pool
+      const contract = await new Web3(provider)
+      debugger
+      const gasPrice = await contract.eth.getGasPrice(function (price){
+        return price
+      });
+      let gas = gasPrice * 800000
+      const result_1 =  new BigNumber(Number(gas)).toString()
+      const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
+      const tokenArray = [weth, czz]
+      const result = await lpContract.methods.getAmountsOut(result_1, tokenArray).call(null)
+      console.log("SwapBurnGetAmount result ===", result)
+      return result[1]
+    } catch (error) {
+      setButtonText('NONE_TRADE')
+      throw error
+    }
+  }
+
   const swapTokenValue = async (from,to) => {
     if (from && from.currency && to.currency && from.tokenValue && Number(from.tokenValue) > 0) {
       try {
@@ -136,7 +157,14 @@ export default function useGetTokenValue() {
           return false
         }
 
-        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
+        const czzfee = await swapCastingAmount(to)
+        console.log("czzfee",czzfee)
+        const changeAmount2 = changeAmount - czzfee
+        if (changeAmount2 <= "0") {
+          setState({ to: 0 })
+          return false
+        }
+        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
         const result_1 = JSBI.BigInt(result)

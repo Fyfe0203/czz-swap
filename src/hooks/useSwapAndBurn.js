@@ -124,7 +124,6 @@ export default function useSwapAndBurn() {
     from.currency.tokenAddress ? lpSwap() : ethSwap()
   }
 
-
   const successMessage = (res) => {
     message({
       icon: 'check-circle',
