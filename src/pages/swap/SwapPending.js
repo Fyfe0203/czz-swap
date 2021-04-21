@@ -19,15 +19,16 @@ const SwapName = styled.div`
 const InfoContainer = styled.div`
   font-weight:700;
 `
-const ViewLink = styled.a.attrs(props => ({
-  target: '_blank',
-  href:props.href
-}))`
+const ViewLink = styled.div`
   display:block;
   font-size:12px;
   margin-top:10px;
   font-weight:normal;
   cursor: pointer;
+  color:blue;
+  &:hover{
+    color:darkblue;
+  }
   i{
     margin-right:6px;
   }
@@ -44,7 +45,7 @@ export default function SwapPending(props) {
   }
   const [status, setStatus] = useState(normalHash)
 
-  const { ext_tx_hash, tx_hash, confirm_ext_tx_hash } = status
+  const { tx_hash, confirm_ext_tx_hash } = status
   
   const getStatus = async (query) => {
     try {
@@ -86,7 +87,7 @@ export default function SwapPending(props) {
           <Image style={imageStyle} src={fromImage} />
           <InfoContainer>
             { fromType }
-            <ViewLink href={`${fromUrl}tx/${hash}` }><Icon type="external-link" />{explorer[fromType]}</ViewLink>
+            <ViewLink onClick={()=>window.open(`${fromUrl}tx/${hash}`) }><Icon type="external-link" />{explorer[fromType]}</ViewLink>
           </InfoContainer>
         </SwapName>
         <Icon type="check-circle" />
@@ -97,7 +98,7 @@ export default function SwapPending(props) {
           <Image style={imageStyle} src={require('../../asset/svg/logos.svg').default} />
           <InfoContainer>
             ClassZZ Network
-           {tx_hash && <ViewLink href={`https://scan.classzz.com/#/transactionHash?transHash=${tx_hash}`}><Icon type="external-link" />View on classZZscan</ViewLink>}
+           {tx_hash && <ViewLink onClick={()=>window.open(`https://scan.classzz.com/#/transactionHash?transHash=${tx_hash}`)}><Icon type="external-link" />View on classZZscan</ViewLink>}
           </InfoContainer>
         </SwapName>
         {tx_hash ?  <Icon type="check-circle" /> : loadingStatus}
@@ -108,7 +109,7 @@ export default function SwapPending(props) {
           <Image style={imageStyle}  src={toImage} />
           <InfoContainer>
             { toType }
-            {confirm_ext_tx_hash && <ViewLink href={`${toUrl}tx/${confirm_ext_tx_hash}` }> <Icon type="external-link" />{explorer[toType]}</ViewLink>}
+            {confirm_ext_tx_hash && <ViewLink onClick={ ()=>window.open(`${toUrl}tx/${confirm_ext_tx_hash}`)}> <Icon type="external-link" />{explorer[toType]}</ViewLink>}
           </InfoContainer>
         </SwapName>
         {confirm_ext_tx_hash ? <Icon type="check-circle" /> : loadingStatus}

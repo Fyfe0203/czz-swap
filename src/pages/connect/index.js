@@ -121,10 +121,10 @@ export default function Connect(props) {
             <h3>{formatAddress(accounts)}</h3>
             <div className="f-c connect-bar">
               <CopyButton toCopy={accounts}>copy Address</CopyButton>
-              <a className="button-link" target="_blank" href={ `${from?.explorerUrl}/address/${accounts}`}>
+              <div className="button-link" onClick={()=>window.open(`${from?.explorerUrl}/address/${accounts}`)}>
                 <i className="ico-external-link" />
                 { explorer[from?.networkType] }
-              </a>
+              </div>
             </div>
           </div>
         </div>

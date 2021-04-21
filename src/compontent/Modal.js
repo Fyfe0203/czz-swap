@@ -4,8 +4,8 @@ export default function Modal(props) {
   const { visible = false, title = null, maskClose = true, ...rest } = props
   const maskRef = useRef()
   const close = (e) => {
+    if (e.target === maskRef.current)  maskClose && props.onClose(false)
     e.preventDefault()
-     if (e.target === maskRef.current)  maskClose && props.onClose(false)
   }
   return (
     <Fragment>
