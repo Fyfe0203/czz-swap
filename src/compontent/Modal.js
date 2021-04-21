@@ -1,7 +1,7 @@
 import React, { Fragment, useRef } from 'react'
 
 export default function Modal(props) {
-  const { visible = false, title = null, maskClose = false, ...rest } = props
+  const { visible = false, title = null, maskClose = true, ...rest } = props
   const maskRef = useRef()
   const close = (e) => {
     e.preventDefault()

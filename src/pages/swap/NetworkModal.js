@@ -17,7 +17,7 @@ export default function NetworkModal(props) {
   }, [networkStatus])
 
   return (
-    <Modal maskClose={ true } {...rest} onClose={ onClose }>
+    <Modal {...rest} onClose={ onClose }>
       <div className="network-switch">
         <Image onClick={ ()=> onClose(false)} src={ require('../../asset/svg/location.svg').default} style={{width:'100%',backgroundSize:'cover',height:170, backgroundSize:'contain', marginBottom:18}} />
         <div className="text">

@@ -80,7 +80,7 @@ export default function SwapPending(props) {
   
   const loadingStatus =   <Loading color="blue" size="small" />
   return (
-    <Modal maskClose={ true } title="SwapPending Detail" visible={visible} onClose={ () => onClose(null) } {...rest}>
+    <Modal title="SwapPending Detail" visible={visible} onClose={ () => onClose(null) } {...rest}>
       <SwapItem>
         <SwapName>
           <Image style={imageStyle} src={fromImage} />

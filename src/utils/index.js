@@ -53,6 +53,7 @@ export const debounce = function (fn, delay = 1000) {
   }
 }
 
+
 export const throttle = (fn, delay = 3000) => {
   let canRun = true
   return (...rest) => {

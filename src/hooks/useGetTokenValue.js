@@ -45,7 +45,7 @@ export default function useGetTokenValue() {
       message({
         icon: 'award',
         title: `Approvd White ${currency?.symbol}`,
-        content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Etherscan</LinkItem>
+        content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Explorer</LinkItem>
       })
       
     } catch (error) {

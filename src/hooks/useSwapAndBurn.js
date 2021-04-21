@@ -4,7 +4,8 @@ import { message,LinkItem } from '../compontent'
 import useGlobal from './useGlobal'
 import useLocalStorage from './useLocalStorage'
 import Web3 from 'web3'
-import BigNumber from "bignumber.js";
+import BigNumber from "bignumber.js"
+const  { toHex } = Web3.utils
 
 export default function useSwapAndBurn() {
   const { from, to, currentProvider, accounts, setPending, pending, swapSetting,  setButtonText, setState} = useGlobal()
@@ -26,13 +27,13 @@ export default function useSwapAndBurn() {
     }
   }
   
-  const stopPending = () => {
+  const stopPending = id => {
     setLoading(false)
-    setPending(pending.filter(i => i !== 'swapburn'))
+    setPending(pending.filter(i => i.id !== id))
   }
 
+  // reset swap token loop
   const resSwap = () => {
-    
     const state = {
       form: {
         ...from,
@@ -46,10 +47,9 @@ export default function useSwapAndBurn() {
     setState(state)
   }
 
-  // swap success
+  // Swap Success
   const swapSuccess = (receipt) => {
     successMessage(receipt)
-    stopPending()
     resSwap()
   }
 
@@ -62,10 +62,12 @@ export default function useSwapAndBurn() {
       from.abi,
       from.router
     )
+
     const amountIn = decToBn(Number(from?.tokenValue), from.currency?.decimals)
     
     // history params
-    const deadlineVal = deadline ? new Date().getTime() + deadline * 60 * 60 * 1000 : 100000000000000
+    const swapTime = new Date().getTime()
+    const deadlineVal = deadline ? swapTime + deadline : 100000000000000
     const recentItem = {
       types: 'Swap',
       accounts,
@@ -73,35 +75,36 @@ export default function useSwapAndBurn() {
     }
 
     const swapTranscationHash = hashRes => {
-      console.log('Swap hash Result === ', hashRes)
-      const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id: new Date().getTime() }
+      console.log('Swap Hash Result ===', hashRes)
+      const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime}
       setRecent(recent => [...recent, swapResresult])
       setHash(swapResresult)
-      setPending([...pending,'swapburn'])
+      setPending([...pending, swapResresult])
     }
 
-    const swapReceipt = receipt => {
-      console.log('Swap receipt Result === ', receipt)
+    const swapReceipt = (receipt,id) => {
+      console.log('Swap receipt Result ===> ', receipt)
       setReceipt(receipt)
       swapSuccess(receipt)
+      stopPending(swapTime)
     }
 
-    const swapError = error => {
+    const swapError = (error) => {
       setLoading(false)
-      stopPending()
+      stopPending(swapTime)
       setButtonText('SWAP')
-      console.log('swap error ===>', error)
+      console.log('Swap Error ===>', error)
     }
     
     const lpSwap = () => {
       lpContract.methods.swapAndBurn(
-          Web3.utils.toHex(new BigNumber(amountIn)),
-          0, // tolerancAmount, // 0
+          toHex(new BigNumber(amountIn)),
+          0,                             // tolerancAmount, // 0
           from.currency?.tokenAddress,
           to.ntype,
           to.currency?.tokenAddress,
-          from.swaprouter, // change router setting
-          from.weth, // change weth setting
+          from.swaprouter,              // change router setting
+          from.weth,                    // change weth setting
           deadlineVal,
       )
       .send({ from: accounts })
@@ -109,18 +112,19 @@ export default function useSwapAndBurn() {
       .on("receipt",swapReceipt)
       .on("error",swapError)
     }
+
     const ethSwap = () => {
       lpContract.methods.swapAndBurnEth(
-          0, // tolerancAmount, // 0
+          0,              // tolerancAmount, // 0
           to.ntype,
           to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000" ,
           from.swaprouter, // change router setting
           from.weth,       // change weth setting
           deadlineVal,
-      ).send({ from: accounts,value: Web3.utils.toHex(new BigNumber(amountIn))})
+      ).send({ from: accounts,value: toHex(new BigNumber(amountIn))})
       .on("transactionHash",swapTranscationHash)
-      .on("receipt", swapReceipt)
-      .on("error", swapError)
+      .on("receipt",swapReceipt)
+        .on("error",swapError)
     }
     from.currency.tokenAddress ? lpSwap() : ethSwap()
   }
@@ -129,7 +133,7 @@ export default function useSwapAndBurn() {
     message({
       icon: 'check-circle',
       title:`Swap ${from?.currency.symbol} to ${to?.currency.symbol}`,
-      content: <LinkItem target="_blank" href={ `${from?.explorerUrl}tx/${res.transactionHash}`} rel="noopener">View on Etherscan</LinkItem>
+      content: <LinkItem target="_blank" href={ `${from?.explorerUrl}tx/${res.transactionHash}`} rel="noopener">View on Explorer</LinkItem>
     })
   }
 
@@ -138,7 +142,6 @@ export default function useSwapAndBurn() {
       setButtonText('SWAP_ING')
     }
   }, [loading])
-
   
   return {loading,receipt,hash,fetchSwap,setHash,resSwap}
 }
