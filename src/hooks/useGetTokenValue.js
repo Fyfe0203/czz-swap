@@ -47,7 +47,7 @@ export default function useGetTokenValue() {
         title: `Approvd White ${currency?.symbol}`,
         content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Explorer</LinkItem>
       })
-      
+
     } catch (error) {
       setRecent(item => [...item, { ...recentInfo, status: 0 }])
       throw error
@@ -165,12 +165,18 @@ export default function useGetTokenValue() {
           setButtonText('NONE_TRADE')
           return false
         }
-        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
+
+        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
-        const result_1 = JSBI.BigInt(result)
-        const amounts = new TokenAmount(token, result_1)
+        const amounts = new TokenAmount(token, new BigNumber(result))
         const outAmount = amounts.toSignificant(6)
+
+        const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
+        const amounts1 = new TokenAmount(token, new BigNumber(result1))
+        const outAmount1 = amounts1.toSignificant(6)
+
+
         // if from is network approve setting true
         const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
         setAuthorization(allowanceResult)
@@ -178,6 +184,7 @@ export default function useGetTokenValue() {
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo })
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
+
       } catch (error) {
         setButtonText('NONE_TRADE')
         throw error
