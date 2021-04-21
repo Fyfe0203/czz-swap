@@ -39,5 +39,13 @@
   "SwapAnyway": "Swap Anyway",
   "FindingaBestPrice": "Finding a Best Price",
   "NetworkWrong": "Network Wrong.",
-  "PleaseConnectToTheAppropriateEthereumNetwork": "Please connect to the appropriate Ethereum network."
+  "PleaseConnectToTheAppropriateEthereumNetwork": "Please connect to the appropriate Ethereum network.",
+  "InsufficientBalance": "Insufficient balance",
+  "EnteraAmount": "Enter a Amount",
+  "UnlockWallet": "Unlock Wallet",
+  "Appove": "Appove",
+  "ApproveInPending": "Approve in Pending",
+  "SwapInPending": "Swap in Pending",
+  "SwichNetworkInPending": "Swich Network in Pending",
+  "InsufficientliquidityForThisTrade": "Insufficient liquidity for this trade."
 }

@@ -8,21 +8,21 @@ export default function useSwap() {
   const { getPoolBalance } = useBalance()
 
   const status = {
-    NONE_AMOUNT: "Enter a Amount",
-    NONE_TO_TOKEN: 'Select a Token',
-    NONE_BALANCE: 'Insufficient balance',
-    NONE_NETWORK: 'Unlock Wallet',
+    NONE_AMOUNT: intl.get('EnteraAmount'),
+    NONE_TO_TOKEN: intl.get('SelectaToken'),
+    NONE_BALANCE: intl.get('InsufficientBalance'),
+    NONE_NETWORK: intl.get('UnlockWallet'),
     NONE_WALLET: intl.get('ConnectWallet'),
-    APPROVE: 'Appove',
-    APPROVE_ING: 'Approve in Pending',
+    APPROVE: intl.get('Appove'),
+    APPROVE_ING: intl.get('ApproveInPending'),
     SWAP: intl.get('SWAPNOW'),
-    SWAP_ING: 'Swap in Pending',
+    SWAP_ING: intl.get('SwapInPending'),
     SWAP_IMPACT_WARN: intl.get('SwapAnyway'),
     SWAP_IMPACT_HIGH: intl.get('PriceImpactTooHigh'),
     FINDING_PRICE_ING: intl.get('FindingaBestPrice'),
-    SWITCH_ING: 'Swich Network in Pending',
-    NONE_TRADE:'Insufficient liquidity for this trade.',
     NONE_GAS:'Insufficient Casting GAS.',
+    SWITCH_ING: intl.get('SwichNetworkInPending'),
+    NONE_TRADE:intl.get('InsufficientliquidityForThisTrade'),
   }
 
   // Insufficient liquidity for this trade.

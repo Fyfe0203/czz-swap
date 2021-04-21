@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import banner from '../../asset/svg/welcomes.svg'
 import intl from 'react-intl-universal'
 
+
 export default function OverView() {
   let arr = ['ETH', 'BSC', 'HECO', 'TRON', "SOL", "DOT"]
   let exchange = `Uniswap,SushiSwap,PancakeSwap,Medx,DogeSwap,KSwap,Mooniswap,Balancer,Kyber,BakerySwap,JustSwap,DODO`
