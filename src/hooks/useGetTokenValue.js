@@ -157,14 +157,6 @@ export default function useGetTokenValue() {
           return false
         }
 
-        const czzfee = await swapCastingAmount(to)
-        const changeAmount2 = changeAmount - czzfee
-        if (changeAmount2 <= 0) {
-          // debugger
-          setState({ to: {...to,tokenValue: ''} })
-          setButtonText('NONE_TRADE')
-          return false
-        }
 
         const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
@@ -172,9 +164,15 @@ export default function useGetTokenValue() {
         const amounts = new TokenAmount(token, new BigNumber(result))
         const outAmount = amounts.toSignificant(6)
 
-        const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
-        const amounts1 = new TokenAmount(token, new BigNumber(result1))
-        const miniReceived = amounts1.toSignificant(6)
+        const czzfee = await swapCastingAmount(to)
+        const changeAmount2 = changeAmount - czzfee
+        let miniReceived = 0
+        if (changeAmount2 > 0) {
+          // debugger
+          const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
+          const amounts1 = new TokenAmount(token, new BigNumber(result1))
+          miniReceived = amounts1.toSignificant(6)
+        }
 
         // if from is network approve setting true
         const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
