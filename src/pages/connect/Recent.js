@@ -7,7 +7,9 @@ import SwapPending from '../swap/SwapPending'
 // swap history
 export default function Recent() {
   const { accounts } = useGlobal()
-  const [recent, setRecent] = useLocalStorage([], 'recent')
+  const [recents, setRecents] = useLocalStorage([], 'recent')
+  console.log(window.localStorage.getItem('recent'), recents)
+  const recent = window.localStorage.getItem('recent') ? JSON.parse(window.localStorage.getItem('recent')) : []
   const status = ['rotate-cw', 'check-circle', 'octagon']
   const [hash, setHash] = useState(null)
 
@@ -15,7 +17,7 @@ export default function Recent() {
     <div className="recent">
       <div className="recent-head f-c-sb">
         <div className="recent-title">Recent Transactions</div>
-        <div className="recent-clear" onClick={() => {return setRecent(i => [])} }>Clear All</div>
+        <div className="recent-clear" onClick={() => {return setRecents(i => [])} }>Clear All</div>
       </div>
       <div className="recent-list" >
         <Scrollbars autoHeight={ true } autoHeightMax={ 320 }>

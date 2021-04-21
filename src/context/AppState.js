@@ -19,8 +19,8 @@ const state = {
   miniReceived: null,
   explorer:{
     ETH:'View on Etherscan',
-    BSC:'View on Hecoscan',
-    HECO:'View on Binancescan'
+    BSC:'View on Binancescan',
+    HECO:'View on Hecoscan'
   },
   swapSetting: {
     router:null,

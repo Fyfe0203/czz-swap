@@ -157,7 +157,7 @@ export default function useGetTokenValue() {
           return false
         }
 
-
+        setButtonText('FINDING_PRICE_ING')
         const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
@@ -168,7 +168,6 @@ export default function useGetTokenValue() {
         const changeAmount2 = changeAmount - czzfee
         let miniReceived = 0
         if (changeAmount2 > 0) {
-          // debugger
           const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
           const amounts1 = new TokenAmount(token, new BigNumber(result1))
           miniReceived = amounts1.toSignificant(6)
@@ -177,15 +176,14 @@ export default function useGetTokenValue() {
         // if from is network approve setting true
         const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
         setAuthorization(allowanceResult)
-        // console.log('allowanceResult',allowanceResult)
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo, miniReceived })
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
+        setLoading(false)
       } catch (error) {
         setButtonText('NONE_TRADE')
-        throw error
-      } finally {
         setLoading(false)
+        throw error
       }
     }
   }
@@ -207,20 +205,18 @@ export default function useGetTokenValue() {
     }
   }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol, accounts])
 
-  useEffect(() => {
-    getBalanceValue(from)
-  }, [from.tokenValue, from.currency, to.tokenValue, to.currency])
   
   useEffect(() => {
+    getBalanceValue(from)
     if (accounts) {
       if(loading){
         setButtonText('FINDING_PRICE_ING')
       } else if (to.currency == null) {
-      setButtonText('NONE_TO_TOKEN')
+        setButtonText('NONE_TO_TOKEN')
       } else if (from.tokenValue === '') {
-      setButtonText('NONE_AMOUNT')
+        setButtonText('NONE_AMOUNT')
       } else if (!hasBalance && to.tokenValue) {
-      setButtonText('NONE_BALANCE')
+        setButtonText('NONE_BALANCE')
       } else if (to.tokenValue && miniReceived === 0) {
         setButtonText('NONE_GAS')
       } else if (!networkStatus && to.tokenValue && impactPrice) {
@@ -229,13 +225,13 @@ export default function useGetTokenValue() {
         setButtonText('APPROVE' )
       } else if(approveLoading){
         setButtonText('APPROVE_ING')
-      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
+      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization && miniReceived >= 0) {
         setButtonText('SWAP')
       }
     } else {
       setButtonText('NONE_WALLET')
     }
-  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus,miniReceived])
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus, miniReceived])
 
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }

@@ -21,7 +21,7 @@ const InfoContainer = styled.div`
 `
 const ViewLink = styled.a.attrs(props => ({
   target: '_blank',
-  herf:props.herf
+  href:props.href
 }))`
   display:block;
   font-size:12px;
@@ -78,7 +78,7 @@ export default function SwapPending(props) {
   const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15 ,backgroundSize:'contain'}
   const iconStyle = { width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }
   
-  const loadingStatus =   <Loading color="blue" size="small" />
+  const loadingStatus =  <Loading color="blue" size="small" />
   return (
     <Modal title="SwapPending Detail" visible={visible} onClose={ () => onClose(null) } {...rest}>
       <SwapItem>
@@ -86,10 +86,10 @@ export default function SwapPending(props) {
           <Image style={imageStyle} src={fromImage} />
           <InfoContainer>
             { fromType }
-            {ext_tx_hash && <ViewLink href={`${fromUrl}tx/${ext_tx_hash}` }><Icon type="external-link" />{explorer[fromType]}</ViewLink>}
+            <ViewLink href={`${fromUrl}tx/${hash}` }><Icon type="external-link" />{explorer[fromType]}</ViewLink>
           </InfoContainer>
         </SwapName>
-        {ext_tx_hash ? <Icon type="check-circle" /> : loadingStatus}
+        <Icon type="check-circle" />
       </SwapItem>
       <Icon style={iconStyle} type="arrow-down" />
       <SwapItem>
@@ -97,7 +97,7 @@ export default function SwapPending(props) {
           <Image style={imageStyle} src={require('../../asset/svg/logos.svg').default} />
           <InfoContainer>
             ClassZZ Network
-           {tx_hash && <ViewLink href={`https://explorer.classzz.com/tx/${tx_hash}`}><Icon type="external-link" />View on classZZscan</ViewLink>}
+           {tx_hash && <ViewLink href={`https://scan.classzz.com/#/transactionHash?transHash=${tx_hash}`}><Icon type="external-link" />View on classZZscan</ViewLink>}
           </InfoContainer>
         </SwapName>
         {tx_hash ?  <Icon type="check-circle" /> : loadingStatus}
