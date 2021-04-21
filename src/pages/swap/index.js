@@ -64,7 +64,7 @@ export default function Swap() {
 
   const swapFooter = (
     <div className="swap-footer">
-      <div className="f-c"><span>{intl.get('MinimunReceived')}</span><span className={miniReceived === 0 ? 'red' : ''}><b>{miniReceived}</b> {to.currencys?.symbol || to.symbolName}</span></div>
+      <div className="f-c"><span>{intl.get('MinimunReceived')}</span><span className={miniReceived === 0 ? 'red' : ''}><b>{miniReceived}</b> {to.currency?.symbol}</span></div>
       <div className="f-c"><span>{intl.get('PriceImpact')}</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
       <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && toNonExponential(bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007))))}</b> {from.currency?.symbol}</span> </div>
     </div>
