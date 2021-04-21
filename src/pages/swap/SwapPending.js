@@ -48,7 +48,7 @@ export default function SwapPending(props) {
   
   const getStatus = async (query) => {
     try {
-      const res = await fetch(`https://testnet.classzz.com/v1/transactions/dh?${query}`)
+      const res = await fetch(`https://scan.classzz.com/v1/transactions/dh?${query}`)
       const result = await res.json()
       const { items } = result
       if (items) setStatus({ ...normalHash, ...items[0] })
