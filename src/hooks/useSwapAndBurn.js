@@ -2,13 +2,14 @@ import { useState,useEffect } from 'react'
 import { decToBn } from '../utils'
 import { message,LinkItem } from '../compontent'
 import useGlobal from './useGlobal'
+import useMidPrice from './useMidPrice'
 import useLocalStorage from './useLocalStorage'
 import Web3 from 'web3'
 import BigNumber from "bignumber.js"
 const  { toHex } = Web3.utils
 
 export default function useSwapAndBurn() {
-  const { from, to, currentProvider, accounts, setPending, pending, swapSetting,  setButtonText, setState} = useGlobal()
+  const { from, to, currentProvider, accounts, setPending, pending, swapSetting, setButtonText, setState } = useGlobal()
   const { tolerance, deadline } = swapSetting
   const [receipt, setReceipt] = useState(null)
   const [hash,setHash] = useState(null)

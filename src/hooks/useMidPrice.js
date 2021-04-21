@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Token, Route, TokenAmount, Pair} from '@uniswap/sdk'
 import { getCreate2Address } from '@ethersproject/address'
 import { pack, keccak256 } from '@ethersproject/solidity'
 import IUniswapV2Pair from '../abi/IUniswapV2Pair.json'
 import useGlobal from './useGlobal'
 import Web3 from "web3"
-import BigNumber from "bignumber.js";
-import {decToBn} from '../utils'
 
 export function getAddress(tokenA, tokenB, factoryAddreaa, initCodeHash) {
   let PAIR_ADDRESS_CACHE = {}
@@ -82,7 +80,7 @@ export default function useMidPrice() {
     }
   }
 
-  const fetchPrice = async () => {
+  const fetchPrice = useCallback( async () => {
     if (from.tokenValue && Number(to.tokenValue) > 0) {
       try {
         setLoading(true)
@@ -109,7 +107,7 @@ export default function useMidPrice() {
         setLoading(false)
       }
     }
-  }
+  },[to.tokenValue])
 
   const swapStatusList = [
     'Swap Now',

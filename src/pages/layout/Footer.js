@@ -48,7 +48,7 @@ export default function Footer() {
           <div className="f-c footer-lang">
         {
           localesList.map((item, index) => {
-            return <div className={lang === item.value ? 'active' : ''} onClick={ ()=> onChange(item.value)} key={ index }>{ item.type }</div>
+            return <div className={lang === item.value ? 'active' : ''} onClick={ ()=> onChange(item.value)} key={ index }>{ item.name }</div>
           })
         }
         </div>

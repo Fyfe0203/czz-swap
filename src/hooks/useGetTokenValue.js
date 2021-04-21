@@ -5,10 +5,8 @@ import { message, LinkItem } from '../compontent'
 import Web3 from "web3"
 import useGlobal from './useGlobal'
 import BigNumber from 'bignumber.js'
-import JSBI from 'jsbi'
 import { Token, TokenAmount } from '@uniswap/sdk'
 import useLocalStorage from './useLocalStorage'
-import useBalance from './useBalance'
 import { IUniswapV2Router02 } from '../abi'
 import useDebounce from './useDebounce'
 
@@ -19,13 +17,10 @@ export default function useGetTokenValue() {
   const [authorization, setAuthorization] = useState(true)
   const [isApprove, setIsApprove] = useState(true)
   const [recent, setRecent] = useLocalStorage([],'recent')
-  const { balance, getBalanceValue } = useBalance(from)
-
   // const getReceived = async () => {
   //   const receivedAmount = Number(from.tokenValue) - (from.tokenValue * Number(tolerance))
   //   const res = await swapTokenValue(receivedAmount)
   // }
-
   // approve && authorization
   const approveActions = async () => {
     const {currency,router:spender,explorerUrl} = from
@@ -193,10 +188,6 @@ export default function useGetTokenValue() {
     wait: 1000
   })
 
-  const [hasBalance,setHasBalance] =  useState(true)
-  useEffect(() => {
-    setHasBalance( Number(balance) > Number(from.tokenValue))
-  }, [balance])
 
   // Get token Value Effect
   useEffect(() => {
@@ -204,34 +195,6 @@ export default function useGetTokenValue() {
       debounceValue(from, to)
     }
   }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol, accounts])
-
-  
-  useEffect(() => {
-    getBalanceValue(from)
-    if (accounts) {
-      if(loading){
-        setButtonText('FINDING_PRICE_ING')
-      } else if (to.currency == null) {
-        setButtonText('NONE_TO_TOKEN')
-      } else if (from.tokenValue === '') {
-        setButtonText('NONE_AMOUNT')
-      } else if (!hasBalance && to.tokenValue) {
-        setButtonText('NONE_BALANCE')
-      } else if (to.tokenValue && miniReceived === 0) {
-        setButtonText('NONE_GAS')
-      } else if (!networkStatus && to.tokenValue && impactPrice) {
-        setButtonText('NONE_NETWORK')
-      } else if (!authorization  && to.tokenValue && impactPrice) {
-        setButtonText('APPROVE' )
-      } else if(approveLoading){
-        setButtonText('APPROVE_ING')
-      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization && miniReceived >= 0) {
-        setButtonText('SWAP')
-      }
-    } else {
-      setButtonText('NONE_WALLET')
-    }
-  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus, miniReceived])
 
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }

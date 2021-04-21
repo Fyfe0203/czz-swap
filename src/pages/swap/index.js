@@ -5,6 +5,7 @@ import useSwapAndBurn from '../../hooks/useSwapAndBurn'
 import useGlobal from '../../hooks/useGlobal'
 import useSwap from '../../hooks/useSwap'
 import useMidPrice from '../../hooks/useMidPrice'
+import useBalance from '../../hooks/useBalance'
 import Setting from './Setting'
 import SwapItem from './SwapItem'
 import BigNumber from 'bignumber.js'
@@ -28,19 +29,52 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const { networkStatus, from, to, setState, swapButtonText, priceStatus, miniReceived } = useGlobal()
+  const {accounts, networkStatus, from, to, setState, swapButtonText, priceStatus, miniReceived, setButtonText } = useGlobal()
   const { status } = useSwap()
-  const { loading: valueLoading, approveActions, approveLoading } = useGetTokenValue()
+  const { loading: valueLoading, approveActions, approveLoading,authorization } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
   const { loading: swapLoading, hash, fetchSwap,setHash,resSwap } = useSwapAndBurn()
+  const {balance, getBalanceValue } = useBalance(from)
   const [setting, setSetting] = useState(false)
   const { addEthereum } = useWallet()
   const [buttonLoading, setButtonLoading] = useState(false)
+  const [hasBalance, setHasBalance] = useState(true)
   
+  useEffect(() => {
+    setHasBalance( Number(balance) > Number(from.tokenValue))
+  }, [balance])
+
   useEffect(() => {
     setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
   }, [valueLoading, swapLoading, pirceLoading, approveLoading])
 
+  useEffect(() => {
+    getBalanceValue(from)
+    if (accounts) {
+      if(valueLoading || pirceLoading){
+        setButtonText('FINDING_PRICE_ING')
+      } else if (to.currency == null) {
+        setButtonText('NONE_TO_TOKEN')
+      } else if (from.tokenValue === '') {
+        setButtonText('NONE_AMOUNT')
+      } else if (!hasBalance && to.tokenValue) {
+        setButtonText('NONE_BALANCE')
+      } else if (to.tokenValue && miniReceived === 0) {
+        setButtonText('NONE_GAS')
+      } else if (!networkStatus && to.tokenValue && impactPrice) {
+        setButtonText('NONE_NETWORK')
+      } else if (!authorization  && to.tokenValue && impactPrice) {
+        setButtonText('APPROVE' )
+      } else if(approveLoading){
+        setButtonText('APPROVE_ING')
+      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization && miniReceived >= 0) {
+        setButtonText('SWAP')
+      }
+    } else {
+      setButtonText('NONE_WALLET')
+    }
+    }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading])
+  
   const reverseExchange = () => {
     setState({
       from: { ...to, tokenValue: from.tokenValue },
