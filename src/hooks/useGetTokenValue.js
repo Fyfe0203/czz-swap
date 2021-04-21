@@ -13,7 +13,7 @@ import { IUniswapV2Router02 } from '../abi'
 import useDebounce from './useDebounce'
 
 export default function useGetTokenValue() {
-  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus, impactPrice} = useGlobal()
+  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus, impactPrice, miniReceived} = useGlobal()
   const [loading,setLoading] = useState(false)
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
@@ -209,6 +209,9 @@ export default function useGetTokenValue() {
 
   useEffect(() => {
     getBalanceValue(from)
+  }, [from.tokenValue, from.currency, to.tokenValue, to.currency])
+  
+  useEffect(() => {
     if (accounts) {
       if(loading){
         setButtonText('FINDING_PRICE_ING')
@@ -218,6 +221,8 @@ export default function useGetTokenValue() {
       setButtonText('NONE_AMOUNT')
       } else if (!hasBalance && to.tokenValue) {
       setButtonText('NONE_BALANCE')
+      } else if (to.tokenValue && miniReceived === 0) {
+        setButtonText('NONE_GAS')
       } else if (!networkStatus && to.tokenValue && impactPrice) {
         setButtonText('NONE_NETWORK')
       } else if (!authorization  && to.tokenValue && impactPrice) {
@@ -230,6 +235,7 @@ export default function useGetTokenValue() {
     } else {
       setButtonText('NONE_WALLET')
     }
-  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus])
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus,miniReceived])
+
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }

@@ -22,6 +22,7 @@ export default function useSwap() {
     FINDING_PRICE_ING: intl.get('FindingaBestPrice'),
     SWITCH_ING: 'Swich Network in Pending',
     NONE_TRADE:'Insufficient liquidity for this trade.',
+    NONE_GAS:'Insufficient Casting GAS.',
   }
 
   // Insufficient liquidity for this trade.

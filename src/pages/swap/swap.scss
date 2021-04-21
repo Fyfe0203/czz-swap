@@ -62,11 +62,19 @@
       align-items: center;
       justify-content: space-between;
     }
+   
     span{
       color: #555;
+ 
       &:last-child{
       color: #181E3C;
         font-weight: 800;
+      }
+      &.red{
+        color: orangered;
+        b{
+          color: orangered;
+        }
       }
       &.price{
         &-0{
