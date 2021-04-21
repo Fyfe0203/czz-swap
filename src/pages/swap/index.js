@@ -28,7 +28,7 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const { networkStatus, from, to, setState, swapButtonText, priceStatus } = useGlobal()
+  const { networkStatus, from, to, setState, swapButtonText, priceStatus, miniReceived } = useGlobal()
   const { status } = useSwap()
   const { loading: valueLoading, approveActions, approveLoading } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
@@ -64,7 +64,7 @@ export default function Swap() {
 
   const swapFooter = (
     <div className="swap-footer">
-      <div className="f-c"><span>{intl.get('MinimunReceived')}</span> <span><b>{to.tokenValue}</b> {to.currencys?.symbol}</span></div>
+      <div className="f-c"><span>{intl.get('MinimunReceived')}</span> <span><b>{miniReceived}</b> {to.currencys?.symbol}</span></div>
       <div className="f-c"><span>{intl.get('PriceImpact')}</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
       <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && toNonExponential(bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007))))}</b> {from.currency?.symbol}</span> </div>
     </div>
@@ -156,7 +156,7 @@ export default function Swap() {
               {buttonLoading ? <Loading size="small" text={status[swapButtonText]} /> : status[swapButtonText]}
             </Button>
           </SwapBar>
-          {impactPrice && to.tokenValue ? swapFooter : null}
+          {impactPrice && miniReceived ? swapFooter : null}
         </SwapPanel>
       </SwapWrap>
     <Modal title={intl.get("AdvancedSettings")} visible={setting} onClose={ ()=>setSetting(false)}>

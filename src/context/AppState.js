@@ -16,6 +16,7 @@ const state = {
   to: { tokenValue: '' },
   priceStatus: 0,
   impactPrice: 0,
+  miniReceived: null,
   explorer:{
     ETH:'View on Etherscan',
     BSC:'View on Hecoscan',

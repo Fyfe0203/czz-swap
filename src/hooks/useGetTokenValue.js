@@ -174,17 +174,15 @@ export default function useGetTokenValue() {
 
         const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
         const amounts1 = new TokenAmount(token, new BigNumber(result1))
-        const outAmount1 = amounts1.toSignificant(6)
-
+        const miniReceived = amounts1.toSignificant(6)
 
         // if from is network approve setting true
         const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
         setAuthorization(allowanceResult)
         // console.log('allowanceResult',allowanceResult)
         let newTo = {...to,tokenValue:outAmount}
-        setState({ to: newTo })
+        setState({ to: newTo, miniReceived })
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
-
       } catch (error) {
         setButtonText('NONE_TRADE')
         throw error
