@@ -13,7 +13,7 @@ import { IUniswapV2Router02 } from '../abi'
 import useDebounce from './useDebounce'
 
 export default function useGetTokenValue() {
-  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus, impactPrice} = useGlobal()
+  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus, impactPrice, miniReceived} = useGlobal()
   const [loading,setLoading] = useState(false)
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
@@ -45,9 +45,9 @@ export default function useGetTokenValue() {
       message({
         icon: 'award',
         title: `Approvd White ${currency?.symbol}`,
-        content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Etherscan</LinkItem>
+        content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Explorer</LinkItem>
       })
-      
+
     } catch (error) {
       setRecent(item => [...item, { ...recentInfo, status: 0 }])
       throw error
@@ -93,8 +93,8 @@ export default function useGetTokenValue() {
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
       const tokenArray = isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
-      // debugger
-      const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call(null)
+      const tokenamount =  Web3.utils.toHex(new BigNumber(tokenValue))
+      const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call(null)
       console.log("SwapBurnGetAmount result ===", result)
       return result[2]
     } catch (error) {
@@ -109,7 +109,8 @@ export default function useGetTokenValue() {
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenArray = isFrom ? [weth, czz] : [czz, weth]
-      const result = await lpContract.methods.getAmountsOut(tokenValue, tokenArray).call()
+      const tokenamount =  Web3.utils.toHex(new BigNumber(tokenValue))
+      const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call()
       console.log("swapTokenBurnAmount result ===", result)
       return result[1]
     } catch (error) {
@@ -123,7 +124,6 @@ export default function useGetTokenValue() {
     try {
       const { czz, weth, provider, swaprouter } = pool
       const contract = await new Web3(provider)
-      debugger
       const gasPrice = await contract.eth.getGasPrice(function (price){
         return price
       });
@@ -146,10 +146,10 @@ export default function useGetTokenValue() {
         setLoading(true)
         setState({priceStatus:0})
         setButtonText('FINDING_PRICE_ING')
-        const inAmount = decToBn(Number(from.tokenValue), from.currency.decimals)
+        const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
         const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
-        const changeAmount = new BigNumber(Number(inAmountRes)).toString()
+        const changeAmount = new BigNumber(inAmountRes)
         console.log('inAmountExchangeValue == ', changeAmount)
         if (changeAmount === "0") {
           setButtonText('NONE_TRADE')
@@ -157,27 +157,29 @@ export default function useGetTokenValue() {
           return false
         }
 
-        const czzfee = await swapCastingAmount(to)
-        console.log("czzfee",czzfee)
-        const changeAmount2 = changeAmount - czzfee
-        if (changeAmount2 <= "0") {
-          setState({ to: {...to,tokenValue: ''} })
-          setButtonText('NONE_TRADE')
-          return false
-        }
-        
-        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
+
+        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
-        const result_1 = JSBI.BigInt(result)
-        const amounts = new TokenAmount(token, result_1)
+        const amounts = new TokenAmount(token, new BigNumber(result))
         const outAmount = amounts.toSignificant(6)
+
+        const czzfee = await swapCastingAmount(to)
+        const changeAmount2 = changeAmount - czzfee
+        let miniReceived = 0
+        if (changeAmount2 > 0) {
+          // debugger
+          const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
+          const amounts1 = new TokenAmount(token, new BigNumber(result1))
+          miniReceived = amounts1.toSignificant(6)
+        }
+
         // if from is network approve setting true
         const allowanceResult = from.currency.tokenAddress ? await allowanceAction(from) : true
         setAuthorization(allowanceResult)
         // console.log('allowanceResult',allowanceResult)
         let newTo = {...to,tokenValue:outAmount}
-        setState({ to: newTo })
+        setState({ to: newTo, miniReceived })
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
       } catch (error) {
         setButtonText('NONE_TRADE')
@@ -207,32 +209,33 @@ export default function useGetTokenValue() {
 
   useEffect(() => {
     getBalanceValue(from)
-    
-    return () => {
-      if (accounts) {
-        if(loading){
-          setButtonText('FINDING_PRICE_ING')
-        } else if (to.currency == null) {
-        setButtonText('NONE_TO_TOKEN')
-        } else if (from.tokenValue === '') {
-        setButtonText('NONE_AMOUNT')
-        } else if (!hasBalance && to.tokenValue) {
-        setButtonText('NONE_BALANCE')
-        } else if (!networkStatus && to.tokenValue && impactPrice) {
-          setButtonText('NONE_NETWORK')
-        } else if (!authorization  && to.tokenValue && impactPrice) {
-          setButtonText('APPROVE' )
-        } else if(approveLoading){
-          setButtonText('APPROVE_ING')
-        } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
-          setButtonText('SWAP')
-        }
-      } else {
-        setButtonText('NONE_WALLET')
+  }, [from.tokenValue, from.currency, to.tokenValue, to.currency])
+  
+  useEffect(() => {
+    if (accounts) {
+      if(loading){
+        setButtonText('FINDING_PRICE_ING')
+      } else if (to.currency == null) {
+      setButtonText('NONE_TO_TOKEN')
+      } else if (from.tokenValue === '') {
+      setButtonText('NONE_AMOUNT')
+      } else if (!hasBalance && to.tokenValue) {
+      setButtonText('NONE_BALANCE')
+      } else if (to.tokenValue && miniReceived === 0) {
+        setButtonText('NONE_GAS')
+      } else if (!networkStatus && to.tokenValue && impactPrice) {
+        setButtonText('NONE_NETWORK')
+      } else if (!authorization  && to.tokenValue && impactPrice) {
+        setButtonText('APPROVE' )
+      } else if(approveLoading){
+        setButtonText('APPROVE_ING')
+      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization) {
+        setButtonText('SWAP')
       }
+    } else {
+      setButtonText('NONE_WALLET')
     }
-  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus])
-
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus,miniReceived])
 
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }

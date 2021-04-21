@@ -20,7 +20,7 @@ const networks = [
     router: "0xB2451147c6154659c350EaC39ED37599bff4d32e",
     weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     czz: '0x150BbCfF6b1B4D528b48f1A300585Dea0b6490B6',
-    explorerUrl: 'https://eth-mainnet.token.im',
+    explorerUrl: 'https://eth-mainnet.token.im/',
     rpcUrls:'https://nodes.mewapi.io/rpc/eth',
     provider: new Web3.providers.HttpProvider("https://eth-mainnet.token.im"),
     image:'https://cryptologos.cc/logos/ethereum-eth-logo.svg'

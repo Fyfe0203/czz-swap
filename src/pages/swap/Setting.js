@@ -125,7 +125,7 @@ export default function Setting(props) {
       </SettingItem> */}
       <TabSelect list={toleranceArray} unit={'%'} title={intl.get("SlippageTolerance")} value={tolerance} onChange={val => setSwapSetting({ tolerance: val })} />
       {Number(tolerance) > 5 && <ItemError>{intl.get("YourTransactionMayBeFrontrun")}</ItemError>}
-      <TabSelect list={gasArray} unit={'GWEI'} title={intl.get("GasPrice")} value={ gas } onChange={val => setSwapSetting({gas:val})} />
+      {/* <TabSelect list={gasArray} unit={'GWEI'} title={intl.get("GasPrice")} value={ gas } onChange={val => setSwapSetting({gas:val})} /> */}
       <SettingItem title={intl.get("TransactionDeadline")}>
           <div className="f-1 tolerance-custom init">
             <Input type="text" onChange={val => setSwapSetting({ deadline: val })} pattern={/^\d*?$/} value={deadline} placeholder={TransactionDeadlineNumber} />

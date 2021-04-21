@@ -28,7 +28,7 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const { networkStatus, from, to, setState, swapButtonText, priceStatus } = useGlobal()
+  const { networkStatus, from, to, setState, swapButtonText, priceStatus, miniReceived } = useGlobal()
   const { status } = useSwap()
   const { loading: valueLoading, approveActions, approveLoading } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
@@ -64,14 +64,12 @@ export default function Swap() {
 
   const swapFooter = (
     <div className="swap-footer">
-      <div className="f-c"><span>{intl.get('MinimunReceived')}</span> <span><b>{to.tokenValue}</b> {to.currencys?.symbol}</span></div>
+      <div className="f-c"><span>{intl.get('MinimunReceived')}</span><span className={miniReceived === 0 ? 'red' : ''}><b>{miniReceived}</b> {to.currencys?.symbol || to.symbolName}</span></div>
       <div className="f-c"><span>{intl.get('PriceImpact')}</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
       <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && toNonExponential(bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007))))}</b> {from.currency?.symbol}</span> </div>
     </div>
   )
-
   const [confirmStatus, setConfirmStatus] = useState(false)
-
   const confirmButton = (
     <div className={`swap-button button-${priceStatus}`} onClick={priceStatus === 3 || swapLoading ? null : fetchSwap}>
       {swapLoading ? <Loading text="Swap Pending" size="small" /> : swapStatusList[priceStatus]}
@@ -98,7 +96,6 @@ export default function Swap() {
   //     <div className="swap-button" onClick={() => setSubmitStatus(false)}>Close</div>
   //   </div>
   // )
-
   const confirmSwapModal = (
     <div>
       <div className="confirm-pool">
@@ -157,7 +154,7 @@ export default function Swap() {
               {buttonLoading ? <Loading size="small" text={status[swapButtonText]} /> : status[swapButtonText]}
             </Button>
           </SwapBar>
-          {impactPrice && to.tokenValue ? swapFooter : null}
+          {impactPrice && miniReceived >= 0 ? swapFooter : null}
         </SwapPanel>
       </SwapWrap>
     <Modal title={intl.get("AdvancedSettings")} visible={setting} onClose={ ()=>setSetting(false)}>

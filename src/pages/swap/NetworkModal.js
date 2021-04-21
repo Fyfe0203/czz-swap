@@ -27,9 +27,9 @@ export default function NetworkModal(props) {
           { INFO_TEXT }
         </div> */}
         {networkNode.chainId && <div className="network-node">
-          <p>NetWorkName: <b>{chainName }</b></p>
-          <p>RPC URL:<b>{rpcUrls[0] }</b></p>
-          <p>Chain ID:<b>{chainId }</b></p>
+          <p> NetWorkName: <b>{chainName }</b></p>
+          <p>RPC URL: <b>{rpcUrls[0] }</b></p>
+          <p>Chain ID: <b>{chainId }</b></p>
           {/* <p>Currency Symbol:<b>{ }</b></p> */}
           <p>Block Explorer URL:<b>{blockExplorerUrls[0]}</b></p>
         </div>}
