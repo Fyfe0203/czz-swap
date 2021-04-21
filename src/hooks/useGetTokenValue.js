@@ -228,7 +228,5 @@ export default function useGetTokenValue() {
       setButtonText('NONE_WALLET')
     }
   }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, loading, authorization, priceStatus])
-
-
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }
