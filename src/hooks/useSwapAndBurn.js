@@ -6,7 +6,7 @@ import useMidPrice from './useMidPrice'
 import useLocalStorage from './useLocalStorage'
 import Web3 from 'web3'
 import BigNumber from "bignumber.js"
-const  { toHex } = Web3.utils
+const  { numberToHex } = Web3.utils
 
 export default function useSwapAndBurn() {
   const { from, to, currentProvider, accounts, setPending, pending, swapSetting, setButtonText, setState } = useGlobal()
@@ -99,7 +99,7 @@ export default function useSwapAndBurn() {
     
     const lpSwap = () => {
       lpContract.methods.swapAndBurn(
-          toHex(new BigNumber(amountIn)),
+          numberToHex(new BigNumber(amountIn)),
           0,                             // tolerancAmount, // 0
           from.currency?.tokenAddress,
           to.ntype,
@@ -116,7 +116,7 @@ export default function useSwapAndBurn() {
 
     const lp2Swap = () => {
       lpContract.methods.swapAndBurn(
-          toHex(new BigNumber(amountIn)),
+          numberToHex(new BigNumber(amountIn)),
           0,                             // tolerancAmount, // 0
           from.currency?.tokenAddress,
           to.ntype,
@@ -139,7 +139,7 @@ export default function useSwapAndBurn() {
           from.swaprouter, // change router setting
           from.weth,       // change weth setting
           deadlineVal,
-      ).send({ from: accounts,value: toHex(new BigNumber(amountIn))})
+      ).send({ from: accounts,value: numberToHex(new BigNumber(amountIn))})
       .on("transactionHash",swapTranscationHash)
       .on("receipt",swapReceipt)
       .on("error",swapError)
