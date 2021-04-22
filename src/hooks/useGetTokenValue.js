@@ -88,7 +88,8 @@ export default function useGetTokenValue() {
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
       const tokenArray = isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
-      const tokenamount =  Web3.utils.toHex(new BigNumber(tokenValue))
+      const tokenamount = Web3.utils.numberToHex(new BigNumber(tokenValue))
+      console.log("swapBurnAmount", tokenamount)
       const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call(null)
       console.log("SwapBurnGetAmount result ===", result)
       return result[2]
@@ -104,7 +105,8 @@ export default function useGetTokenValue() {
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenArray = isFrom ? [weth, czz] : [czz, weth]
-      const tokenamount =  Web3.utils.toHex(new BigNumber(tokenValue))
+      const tokenamount = Web3.utils.numberToHex(new BigNumber(tokenValue))
+      console.log("swapTokenBurnAmount", tokenamount)
       const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call()
       console.log("swapTokenBurnAmount result ===", result)
       return result[1]
@@ -145,7 +147,7 @@ export default function useGetTokenValue() {
         console.log('inAmount == ',inAmount)
         const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
         const changeAmount = new BigNumber(inAmountRes)
-        console.log('inAmountExchangeValue == ', changeAmount)
+        console.log('inAmountExchangeValue == ', changeAmount.toString())
         if (changeAmount === "0") {
           setButtonText('NONE_TRADE')
           setLoading(false)
@@ -161,7 +163,7 @@ export default function useGetTokenValue() {
 
         const czzfee = await swapCastingAmount(to)
         const changeAmount2 = changeAmount - czzfee
-        let miniReceived = 0
+        let miniReceived = "0"
         if (changeAmount2 > 0) {
           const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
           const amounts1 = new TokenAmount(token, new BigNumber(result1))
