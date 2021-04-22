@@ -36,7 +36,6 @@ export default function useGetTokenValue() {
       setAuthorization(true)
       setRecent(item => [...item, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
       setPending(pending.filter(i => i !== 'approve'))
-
       message({
         icon: 'award',
         title: `Approvd White ${currency?.symbol}`,
