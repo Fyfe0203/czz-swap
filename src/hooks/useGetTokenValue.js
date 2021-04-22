@@ -120,9 +120,7 @@ export default function useGetTokenValue() {
     try {
       const { czz, weth, provider, swaprouter } = pool
       const contract = await new Web3(provider)
-      const gasPrice = await contract.eth.getGasPrice(function (price){
-        return price
-      });
+      const gasPrice = await contract.eth.getGasPrice( (price) => price)
       let gas = gasPrice * 800000
       const result_1 =  new BigNumber(Number(gas)).toString()
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
@@ -141,7 +139,6 @@ export default function useGetTokenValue() {
       try {
         setLoading(true)
         setState({priceStatus:0})
-        setButtonText('FINDING_PRICE_ING')
         const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
         console.log('inAmount == ',inAmount)
         const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
@@ -152,8 +149,6 @@ export default function useGetTokenValue() {
           setLoading(false)
           return false
         }
-
-        setButtonText('FINDING_PRICE_ING')
         const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
@@ -162,7 +157,7 @@ export default function useGetTokenValue() {
 
         const czzfee = await swapCastingAmount(to)
         const changeAmount2 = changeAmount - czzfee
-        let miniReceived = "0"
+        let miniReceived = 0
         if (changeAmount2 > 0) {
           const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
           const amounts1 = new TokenAmount(token, new BigNumber(result1))
@@ -175,6 +170,7 @@ export default function useGetTokenValue() {
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo, miniReceived })
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
+        debugger
         setLoading(false)
       } catch (error) {
         setButtonText('NONE_TRADE')

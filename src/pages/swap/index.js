@@ -31,7 +31,7 @@ const SwapConfirmItem = ({item,status,index}) => {
 export default function Swap() {
   const {accounts, networkStatus, from, to, setState, swapButtonText, priceStatus, miniReceived, setButtonText } = useGlobal()
   const { status } = useSwap()
-  const { loading: valueLoading, approveActions, approveLoading,authorization } = useGetTokenValue()
+  const { loading: valueLoading, approveActions, approveLoading, authorization } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
   const { loading: swapLoading, hash, fetchSwap,setHash,resSwap } = useSwapAndBurn()
   const {balance, getBalanceValue } = useBalance(from)
