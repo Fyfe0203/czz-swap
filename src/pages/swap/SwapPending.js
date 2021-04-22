@@ -37,7 +37,8 @@ const ViewLink = styled.div`
 export default function SwapPending(props) {
   const {hash,visible,fromType,toType,fromUrl,toUrl,fromImage,toImage,onClose,id, ...rest} = props
   const { explorer } = useGlobal()
-  const [recent] = useLocalStorage([],'recent')
+  // const [recents] = useLocalStorage([], 'recent')
+  const recents = window.localStorage.getItem('recent') ? JSON.parse( window.localStorage.getItem('recent')) : []
   const normalHash = {
     ext_tx_hash: null,
     tx_hash: null,
@@ -54,13 +55,13 @@ export default function SwapPending(props) {
       const { items } = result
       if (items) setStatus({ ...normalHash, ...items[0] })
       if (items?.confirm_ext_tx_hash) {
-        const swapList = recent.map((item, index) => {
+        const swapList = recents.map(item => {
           if(item.id === id) item.status = 1
           return item
         })
+        debugger
         window.localStorage.setItem('recent',JSON.stringify(swapList) )
       }
-      // if (!items?.tx_hash || !items?.ext_tx_hash || !items?.confirm_ext_tx_hash) getStatus(query)
     } catch (error) {
       throw error
     }

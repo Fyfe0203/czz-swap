@@ -11,7 +11,7 @@ import { IUniswapV2Router02 } from '../abi'
 import useDebounce from './useDebounce'
 
 export default function useGetTokenValue() {
-  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText, networkStatus,priceStatus, impactPrice, miniReceived} = useGlobal()
+  const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText} = useGlobal()
   const [loading,setLoading] = useState(false)
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
@@ -44,10 +44,10 @@ export default function useGetTokenValue() {
       })
 
     } catch (error) {
+      setAuthorization(false)
       setRecent(item => [...item, { ...recentInfo, status: 0 }])
       throw error
     } finally {
-      setAuthorization(true)
       setApproveLoading(false)
       setPending(pending.filter(i => i!== 'approve'))
     }

@@ -8,7 +8,6 @@ import SwapPending from '../swap/SwapPending'
 export default function Recent() {
   const { accounts } = useGlobal()
   const [recents, setRecents] = useLocalStorage([], 'recent')
-  console.log(window.localStorage.getItem('recent'), recents)
   const recent = window.localStorage.getItem('recent') ? JSON.parse(window.localStorage.getItem('recent')) : []
   const status = ['rotate-cw', 'check-circle', 'octagon']
   const [hash, setHash] = useState(null)

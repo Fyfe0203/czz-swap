@@ -67,7 +67,7 @@ export default function Swap() {
         setButtonText('APPROVE' )
       } else if(approveLoading){
         setButtonText('APPROVE_ING')
-      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization && miniReceived >= 0) {
+      } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization && miniReceived > 0) {
         setButtonText('SWAP')
       }
     } else {
