@@ -71,7 +71,7 @@ export default function useSwapAndBurn() {
     const recentItem = {
       types: 'Swap',
       accounts,
-      content: `Swap ${from?.tokenValue} ${from.currency?.symbol} to ${to.currency?.symbol}`
+      content: `Swap ${from?.tokenValue} ${from.currency?.symbol} to ${to?.tokenValue} ${to.currency?.symbol}`
     }
 
     const swapTranscationHash = hashRes => {

@@ -170,7 +170,6 @@ export default function useGetTokenValue() {
         let newTo = {...to,tokenValue:outAmount}
         setState({ to: newTo, miniReceived })
         console.log("SWAP AMOUNT ==", from.tokenValue, "==", outAmount)
-        debugger
         setLoading(false)
       } catch (error) {
         setButtonText('NONE_TRADE')

@@ -36,9 +36,9 @@ export default function Swap() {
   const { loading: swapLoading, hash, fetchSwap,setHash,resSwap } = useSwapAndBurn()
   const {balance, getBalanceValue } = useBalance(from)
   const [setting, setSetting] = useState(false)
-  const { addEthereum } = useWallet()
   const [buttonLoading, setButtonLoading] = useState(false)
   const [hasBalance, setHasBalance] = useState(true)
+  const { addEthereum } = useWallet()
   
   useEffect(() => {
     setHasBalance( Number(balance) > Number(from.tokenValue))
