@@ -3,6 +3,7 @@
   "swap":"SWAP",
   "overview":"overview",
   "account":"Accounts",
+  "insurance": "Insurance",
   "copyAddress":"Copy",
   "changeAccount":"Change",
   "connectedWithMetaMask":"Connect MetaMask Wallet",

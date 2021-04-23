@@ -1,0 +1,127 @@
+.ins {
+  &-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &-content {
+    max-width: 519px;
+    // outline: 1px solid;
+  }
+
+  &-logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &-logo {
+    width: 254px;
+    height: 190px;
+    margin: 46px 0 36px 0;
+  }
+
+  &-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    font-weight: 900;
+    font-size: 24px;
+  }
+  &-desc {
+    color: #000000;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 160%;
+    margin-bottom: 26px;
+  }
+  &-card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 26px;
+
+    & .from-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 54px;
+
+      & > .from-logo {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 10px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      & > .from-name {
+        font-weight: bold;
+        font-size: 15px;
+        color: #000000;
+      }
+    }
+
+    & .to-wrap {
+      flex: 1;
+    }
+
+    & .local-czz-wrap {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+
+    & .lczz {
+      display: flex;
+      align-items: center;
+    }
+
+    & .lczz-logo {
+      width: 26px;
+      height: 26px;
+      margin-right: 10px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    & .lczz-name {
+      font-weight: bold;
+      font-size: 16px;
+      color: #000000;
+    }
+
+    & .lczz-amount {
+      font-weight: bold;
+      font-size: 24px;
+      color: #333333;
+    }
+
+    & .policy-wrap,
+    & .tvl-wrap {
+      display: flex;
+    }
+
+    & .policy-wrap {
+      margin-bottom: 12px;
+    }
+
+    & .potv-label {
+      font-weight: bold;
+      font-size: 14px;
+      color: #0000ff;
+      width: 60px;
+      margin-right: 10px;
+    }
+    & .potv-amount {
+      font-weight: bold;
+      font-size: 14px;
+      color: #000000;
+    }
+  }
+}
