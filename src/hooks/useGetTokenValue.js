@@ -9,6 +9,7 @@ import { Token, TokenAmount } from '@uniswap/sdk'
 import useLocalStorage from './useLocalStorage'
 import { IUniswapV2Router02 } from '../abi'
 import useDebounce from './useDebounce'
+import JSBI from "jsbi";
 
 export default function useGetTokenValue() {
   const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText} = useGlobal()
@@ -162,7 +163,7 @@ export default function useGetTokenValue() {
         const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
         const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
         const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
-        const amounts = new TokenAmount(token, new BigNumber(result))
+        const amounts = new TokenAmount(token, JSBI.BigInt(result))
         const outAmount = amounts.toSignificant(6)
 
         const czzfee = await swapCastingAmount(to)
@@ -170,7 +171,7 @@ export default function useGetTokenValue() {
         let miniReceived = 0
         if (changeAmount2 > 0) {
           const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
-          const amounts1 = new TokenAmount(token, new BigNumber(result1))
+          const amounts1 = new TokenAmount(token,JSBI.BigInt(result1))
           miniReceived = amounts1.toSignificant(6)
         }
 
