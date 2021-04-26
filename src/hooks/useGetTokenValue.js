@@ -82,16 +82,21 @@ export default function useGetTokenValue() {
   // Get Burn amount Post
   const swapBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { czz, weth, currency, provider, router, swaprouter } = pool
+      const { czz, weth, currency, provider, router, swaprouter, networkName, currentToken } = pool
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
-      const tokenArray = isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
+      let tokenArray = []
+      if (networkName === "ETH"){
+        tokenArray =  isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
+      }else{
+        tokenArray =  isFrom ? [tokenAddress, currentToken, weth, czz] : [czz, weth, currentToken, tokenAddress]
+      }
       const tokenamount = Web3.utils.numberToHex(new BigNumber(tokenValue))
       console.log("swapBurnAmount", tokenamount)
       const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call(null)
       console.log("SwapBurnGetAmount result ===", result)
-      return result[2]
+      return result[result.length -1]
     } catch (error) {
       setButtonText('NONE_TRADE')
       throw error
@@ -100,15 +105,20 @@ export default function useGetTokenValue() {
 
   const swapTokenBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { czz, weth, provider, swaprouter } = pool
+      const { czz, weth, provider, swaprouter, networkName, currentToken } = pool
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
-      const tokenArray = isFrom ? [weth, czz] : [czz, weth]
+      let tokenArray = []
+      if (networkName === "ETH"){
+        tokenArray = isFrom ? [weth, czz] : [czz, weth]
+      }else{
+        tokenArray =  isFrom ? [currentToken, weth, czz] : [czz, weth, currentToken]
+      }
       const tokenamount = Web3.utils.numberToHex(new BigNumber(tokenValue))
       console.log("swapTokenBurnAmount", tokenamount)
       const result = await lpContract.methods.getAmountsOut(tokenamount, tokenArray).call()
       console.log("swapTokenBurnAmount result ===", result)
-      return result[1]
+      return result[result.length -1]
     } catch (error) {
       console.log(error)
       setButtonText('NONE_TRADE')

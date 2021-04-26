@@ -48,35 +48,76 @@ export default function useMidPrice() {
   const [impactPrice, setImpactPrice] = useState(0)
 
   const fetchPair = async (lp) => {
-    const { networkId, currency, czz, weth, provider, factoryAddress, initCodeHash } = lp
-    const From = new Token(Number(networkId), currency?.tokenAddress,  currency?.decimals)
-    const Eczz = new Token(Number(networkId), czz, 8)
-    const WETH = new Token(Number(networkId), weth, 18)
-    try {
-      const FromPair = await fetchPairData(WETH, From, factoryAddress, initCodeHash, provider)
-      const route0 = new Route([FromPair], WETH)
-      const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
-      const route1 = new Route([ToPair], WETH)
-      const from_weth =  route0.midPrice.toSignificant(6)
-      const eczz_weth = route1.midPrice.toSignificant(6)
-      return eczz_weth / from_weth
-    } catch (error) {
-      throw new Error(error)
+    const { networkId, currency, czz, weth, provider, factoryAddress, initCodeHash, networkName, currentToken } = lp
+    if (networkName === "ETH"){
+      const From = new Token(Number(networkId), currency?.tokenAddress,  currency?.decimals)
+      const Eczz = new Token(Number(networkId), czz, 8)
+      const WETH = new Token(Number(networkId), weth, 18)
+      try {
+        const FromPair = await fetchPairData(WETH, From, factoryAddress, initCodeHash, provider)
+        const route0 = new Route([FromPair], WETH)
+        const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
+        const route1 = new Route([ToPair], WETH)
+        const from_weth = route0.midPrice.toSignificant(6)
+        const eczz_weth = route1.midPrice.toSignificant(6)
+        return eczz_weth / from_weth
+      } catch (error) {
+        throw new Error(error)
+      }
+    }else {
+      const From = new Token(Number(networkId), currency?.tokenAddress,  currency?.decimals)
+      const Eczz = new Token(Number(networkId), czz, 8)
+      const WETH = new Token(Number(networkId), weth, 18)
+      const CurrentToken = new Token(Number(networkId), currentToken, 18)
+      try {
+        const FromPair = await fetchPairData(CurrentToken, From, factoryAddress, initCodeHash, provider)
+        const route0 = new Route([FromPair], CurrentToken)
+        const ToPair = await fetchPairData(CurrentToken, WETH, factoryAddress, initCodeHash,  provider)
+        const route1 = new Route([ToPair], CurrentToken)
+        const ToPair1 = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
+        const route2 = new Route([ToPair1], WETH)
+        const from_weth = route0.midPrice.toSignificant(6)
+        const eczz_weth = route1.midPrice.toSignificant(6)
+        const eczz_weth2 = route2.midPrice.toSignificant(6)
+        debugger
+        return eczz_weth / from_weth / eczz_weth2
+      } catch (error) {
+        throw new Error(error)
+      }
     }
   }
 
   const fetchTokenPair = async (lp) => {
-    const { networkId, czz, weth, provider, factoryAddress, initCodeHash } = lp
-    const Eczz = new Token(Number(networkId), czz, 8)
-    const WETH = new Token(Number(networkId), weth, 18)
-    try {
-      const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
-      const route1 = new Route([ToPair], WETH)
-      const eczz_weth = route1.midPrice.toSignificant(6)
-      // debugger
-      return eczz_weth / 1
-    } catch (error) {
-      throw new Error(error)
+    const { networkId, czz, weth, provider, factoryAddress, initCodeHash, networkName, currentToken } = lp
+    if (networkName === "ETH"){
+      const Eczz = new Token(Number(networkId), czz, 8)
+      const WETH = new Token(Number(networkId), weth, 18)
+      try {
+        const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
+        const route1 = new Route([ToPair], WETH)
+        const eczz_weth = route1.midPrice.toSignificant(6)
+        return eczz_weth / 1
+      } catch (error) {
+        throw new Error(error)
+      }
+    }else {
+      const Eczz = new Token(Number(networkId), czz, 8)
+      const WETH = new Token(Number(networkId), weth, 18)
+      const CurrentToken = new Token(Number(networkId), currentToken, 18)
+      try {
+        const ToPair = await fetchPairData(WETH, Eczz, factoryAddress, initCodeHash,  provider)
+        const route = new Route([ToPair], WETH)
+
+        const ToPair1 = await fetchPairData(WETH, CurrentToken, factoryAddress, initCodeHash,  provider)
+        const route1 = new Route([ToPair1], WETH)
+
+        const eczz_weth = route.midPrice.toSignificant(6)
+        const eczz_weth1 = route1.midPrice.toSignificant(6)
+
+        return eczz_weth / eczz_weth1
+      } catch (error) {
+        throw new Error(error)
+      }
     }
   }
 
@@ -85,11 +126,10 @@ export default function useMidPrice() {
       try {
         setLoading(true)
         setButtonText('FINDING_PRICE_ING')
-        // debugger
         const ethRes = from.currency.tokenAddress ? await fetchPair(from) : await fetchTokenPair(from)
         const czzRes = to.currency.tokenAddress ? await fetchPair(to): await fetchTokenPair(to)
         const midPrice = ethRes / czzRes
-        // debugger
+        debugger
         // const tokenValue = decToBn(from.tokenValue,from.currency.decimals)
         const midProce2 =  Number(Number(Number(from.tokenValue) * midPrice).toFixed(to.currency.decimals))
         const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)

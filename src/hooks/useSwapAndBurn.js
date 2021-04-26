@@ -97,14 +97,20 @@ export default function useSwapAndBurn() {
     }
     
     const lpSwap = () => {
-      lpContract.methods.swapAndBurn(
+      let path = []
+      if (from.currency.networkName === "ETH"){
+        path = [from.currency.tokenAddress, from.currentToken, from.czz]
+      }else{
+        path = [from.currency.tokenAddress, from.currentToken, from.weth, from.czz]
+      }
+
+      lpContract.methods.swapAndBurnWithPath(
           numberToHex(new BigNumber(amountIn)),
           0,                             // tolerancAmount, // 0
-          from.currency?.tokenAddress,
           to.ntype,
-          to.currency?.tokenAddress,
+          to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000",
           from.swaprouter,              // change router setting
-          from.weth,                    // change weth setting
+          path,                    // change weth setting
           deadlineVal,
       )
       .send({ from: accounts })
@@ -113,47 +119,59 @@ export default function useSwapAndBurn() {
       .on("error",swapError)
     }
 
-    const lp2Swap = () => {
-      lpContract.methods.swapAndBurn(
-          numberToHex(new BigNumber(amountIn)),
-          0,                             // tolerancAmount, // 0
-          from.currency?.tokenAddress,
-          to.ntype,
-          to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000" ,
-          from.swaprouter, // change router setting
-          from.weth,       // change weth setting
-          deadlineVal,
-      )
-      .send({ from: accounts })
-      .on("transactionHash", swapTranscationHash)
-      .on("receipt",swapReceipt)
-      .on("error",swapError)
-    }
+    // const lp2Swap = () => {
+    //   let path = []
+    //   if (from.currency.networkName === "ETH"){
+    //     path = [from.currency.tokenAddress, from.currentToken, from.czz]
+    //   }else{
+    //     path = [from.currency.tokenAddress, from.currentToken, from.weth, from.czz]
+    //   }
+    //   lpContract.methods.swapAndBurnWithPath(
+    //       numberToHex(new BigNumber(amountIn)),
+    //       0,                             // tolerancAmount, // 0
+    //       to.ntype,
+    //       to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000" ,
+    //       from.swaprouter, // change router setting
+    //       path,       // change weth setting
+    //       deadlineVal,
+    //   )
+    //   .send({ from: accounts })
+    //   .on("transactionHash", swapTranscationHash)
+    //   .on("receipt",swapReceipt)
+    //   .on("error",swapError)
+    // }
 
     const ethSwap = () => {
-      lpContract.methods.swapAndBurnEth(
+      let path = []
+      if (from.currency.networkName === "ETH"){
+        path = [from.currentToken, from.czz]
+      }else{
+        path = [from.currentToken, from.weth, from.czz]
+      }
+
+      lpContract.methods.swapAndBurnEthWithPath(
           0,              // tolerancAmount, // 0
           to.ntype,
           to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000" ,
           from.swaprouter, // change router setting
-          from.weth,       // change weth setting
+          path,       // change weth setting
           deadlineVal,
       ).send({ from: accounts,value: numberToHex(new BigNumber(amountIn))})
       .on("transactionHash",swapTranscationHash)
       .on("receipt",swapReceipt)
       .on("error",swapError)
     }
-    // from.currency.tokenAddress ? lpSwap() : ethSwap()
-    debugger
-    if (from.currency.tokenAddress) {
-        if (!to.currency.tokenAddress) {
-          lp2Swap()
-        }else {
-          lpSwap()
-        }
-    }else{
-      ethSwap()
-    }
+
+    from.currency.tokenAddress ? lpSwap() : ethSwap()
+    // if (from.currency.tokenAddress) {
+    //     if (!to.currency.tokenAddress) {
+    //       lp2Swap()
+    //     }else {
+    //       lpSwap()
+    //     }
+    // }else{
+    //   ethSwap()
+    // }
   }
 
   const successMessage = (res) => {
