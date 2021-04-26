@@ -80,7 +80,7 @@ export default function useMidPrice() {
         const eczz_weth = route1.midPrice.toSignificant(6)
         const eczz_weth2 = route2.midPrice.toSignificant(6)
         debugger
-        return eczz_weth / from_weth / eczz_weth2
+        return  eczz_weth / from_weth * eczz_weth2
       } catch (error) {
         throw new Error(error)
       }
