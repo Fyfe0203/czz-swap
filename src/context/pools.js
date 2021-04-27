@@ -29,6 +29,14 @@ const pools = [
     image:"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x956F47F50A910163D8BF957Cf5846D573E7f87CA/logo.png"
   },
   {
+    tokenAddress: "0x488E0369f9BC5C40C002eA7c1fe4fd01A198801c",
+    name:'Golff.finance',
+    symbol: "GOF",
+    decimals: 18,
+    systemType: "ETH",
+    image:"https://hecoinfo.com/token/images/gof_32.png"
+  },
+  {
     tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     name:'USD//C',
     symbol: "USDC",
@@ -180,6 +188,14 @@ const pools = [
     decimals: 18,
     systemType: "HECO",
     image:"https://mdex.com/token-icons/heco/0x66a79d23e58475d2738179ca52cd0b41d73f0bea.png"
+  },
+  {
+    tokenAddress: "0x2aafe3c9118db36a20dd4a942b6ff3e78981dce1",
+    name:'Golff.finance',
+    symbol: "GOF",
+    decimals: 18,
+    systemType: "HECO",
+    image:"https://hecoinfo.com/token/images/gof_32.png"
   },
   {
     tokenAddress: "0xa71edc38d189767582c38a3145b5873052c3e47a",
@@ -340,6 +356,14 @@ const pools = [
     decimals: 18,
     systemType: "BSC",
     image:"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/assets/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82/logo.png"
+  },
+  {
+    tokenAddress: "0x2bcF9c1861FaE2d5a7D2b3242b71e2a8d461F61e",
+    name:'Golff.finance',
+    symbol: "GOF",
+    decimals: 18,
+    systemType: "BSC",
+    image:"https://hecoinfo.com/token/images/gof_32.png"
   },
   {
     tokenAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
