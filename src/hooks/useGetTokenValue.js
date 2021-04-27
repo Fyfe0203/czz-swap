@@ -129,16 +129,21 @@ export default function useGetTokenValue() {
 
   const swapCastingAmount = async (pool = {}) => {
     try {
-      const { czz, weth, provider, swaprouter } = pool
+      const { czz, weth, provider, swaprouter, networkName, currentToken} = pool
       const contract = await new Web3(provider)
       const gasPrice = await contract.eth.getGasPrice( (price) => price)
       let gas = gasPrice * 800000
       const result_1 =  new BigNumber(Number(gas)).toString()
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
-      const tokenArray = [weth, czz]
+      let tokenArray = []
+      if (networkName === "ETH"){
+        tokenArray = [weth, czz]
+      }else{
+        tokenArray = [currentToken, weth, czz]
+      }
       const result = await lpContract.methods.getAmountsOut(result_1, tokenArray).call(null)
       console.log("SwapBurnGetAmount result ===", result)
-      return result[1]
+      return result[result.length-1]
     } catch (error) {
       setButtonText('NONE_TRADE')
       throw error
