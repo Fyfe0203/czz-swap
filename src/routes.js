@@ -15,6 +15,13 @@ const routes = [
     path: '/swap',
     ico:'repeat',
     compontent: lazy(() => import('./pages/swap/index'))
+  },
+  {
+    name: 'insurance',
+    path: '/insurance',
+    icon: 'insurance',
+    exact: true,
+    compontent: lazy(() => import('./pages/insurance/index'))
   }
 ]
 export default  routes

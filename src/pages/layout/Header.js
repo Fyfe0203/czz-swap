@@ -11,7 +11,7 @@ export default function Header() {
   const locations = useLocation()
   const [menuStatus, setMenuStatus] = useState(false)
   const helpLink = <a href="https://app.gitbook.com/@classzz/s/guide-on-class-zz-cross-chain-transaction/~/drafts/-MY3KNQjpI0sQmiQWXnt/" target="_blank"><i className="ico-bookmark" /><span>HELP</span></a>
-  const nav = routes.map((item, index) => index < 2 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} ><i className={ `ico-${item.ico}`} /><span>{intl.get(item.name)}</span></NavLink>)
+  const nav = routes.map((item, index) => index < 3 && <NavLink exact={item.exact} activeClassName="selected" className="nav-link" to={item.path} key={index} ><i className={ `ico-${item.ico}`} /><span>{intl.get(item.name)}</span></NavLink>)
   useEffect(() => {
     setMenuStatus(false)
   }, [locations.pathname])
