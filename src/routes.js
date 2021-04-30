@@ -21,7 +21,14 @@ const routes = [
     path: '/insurance',
     icon: 'insurance',
     exact: true,
-    compontent: lazy(() => import('./pages/insurance/index'))
+    compontent: lazy(() => import('./pages/insurance/ins_list'))
+  },
+  {
+    name: 'harvest',
+    path: '/harvest',
+    icon: '',
+    exact: true,
+    compontent: lazy(() => import('./pages/insurance/ins_deal'))
   }
 ]
 export default  routes

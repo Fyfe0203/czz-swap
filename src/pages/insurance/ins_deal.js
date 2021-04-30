@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import "./ins_deal.scss";
 import czzLogo from "../../asset/svg/logos.svg";
+import { Link } from "react-router-dom";
 
 export default function InsDetail() {
   return (
@@ -44,7 +45,7 @@ export default function InsDetail() {
           <div className="approve-btn-wrap">
             <div className="approve-btn">Approve</div>
           </div>
-          <div className="go-swap-link">Don't have ECZZ ? Swap</div>
+          <Link to="/swap"><div className="go-swap-link">Don't have ECZZ ? Swap</div></Link>
         </div>
       </div>
     </div>

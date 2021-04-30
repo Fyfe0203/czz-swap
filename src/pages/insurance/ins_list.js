@@ -5,6 +5,7 @@ import ethLogo from '../../asset/svg/ETH.svg'
 import czzLogo from '../../asset/svg/logos.svg'
 import bscLogo from '../../asset/svg/BSC.svg'
 import hecoLogo from '../../asset/svg/HECO.svg'
+import { Link } from 'react-router-dom'
 
 export default function Insurance() {
   const insItems = [
@@ -58,40 +59,42 @@ export default function Insurance() {
         <div className="ins-card-list">
           {insItems.map((item, index) => {
             return (
-              <div className="ins-card" key={index}>
-                <div className="from-wrap">
-                  <div
-                    className="from-logo"
-                    style={{ backgroundImage: `url(${item.fromLogo})` }}
-                  ></div>
-                  <div className="from-name">{item.fromName}</div>
-                </div>
-                <div className="to-wrap">
-                  <div className="local-czz-wrap">
-                    <div className="lczz">
-                      <div
-                        className="lczz-logo"
-                        style={{ backgroundImage: `url(${czzLogo})` }}
-                      ></div>
-                      <div className="lczz-name">{item.toName}</div>
+              <Link to="/harvest">
+                <div className="ins-card" key={index}>
+                  <div className="from-wrap">
+                    <div
+                      className="from-logo"
+                      style={{ backgroundImage: `url(${item.fromLogo})` }}
+                    ></div>
+                    <div className="from-name">{item.fromName}</div>
+                  </div>
+                  <div className="to-wrap">
+                    <div className="local-czz-wrap">
+                      <div className="lczz">
+                        <div
+                          className="lczz-logo"
+                          style={{ backgroundImage: `url(${czzLogo})` }}
+                        ></div>
+                        <div className="lczz-name">{item.toName}</div>
+                      </div>
+                    </div>
+                    <div className="policy-tvl">
+                      <div className="tvl-wrap">
+                        <div className="potv-label">TVL</div>
+                        <div className="potv-val">${item.tvlVal}</div>
+                      </div>
+                      <div className="policy-wrap">
+                        <div className="potv-label">Policy</div>
+                        <div className="potv-val">${item.policyVal}</div>
+                      </div>
+                      <div className="amount-wrap">
+                        <div className="potv-label">Amount</div>
+                        <div className="potv-val">${item.amountVal}</div>
+                      </div>
                     </div>
                   </div>
-                  <div className="policy-tvl">
-                    <div className="tvl-wrap">
-                      <div className="potv-label">TVL</div>
-                      <div className="potv-val">${item.tvlVal}</div>
-                    </div>
-                    <div className="policy-wrap">
-                      <div className="potv-label">Policy</div>
-                      <div className="potv-val">${item.policyVal}</div>
-                    </div>
-                    <div className="amount-wrap">
-                      <div className="potv-label">Amount</div>
-                      <div className="potv-val">${item.amountVal}</div>
-                    </div>
-                  </div>
                 </div>
-              </div>
+              </Link>
             )
           })}
         </div>
