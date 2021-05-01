@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import useGlobal from '../../hooks/useGlobal'
 import useBalance from '../../hooks/useBalance'
 import SwapSelect from './SwapSelect'
+import SwapRoute from './SwapRoute'
 import styled from 'styled-components'
 import intl from 'react-intl-universal'
 
+
+const AmountInput = styled.input``
+
+
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-const AmountInput = styled.input``
 
 export default function SwapItem({ pool, exchange, type}) {
   const { from, setState } = useGlobal()
@@ -26,13 +30,14 @@ export default function SwapItem({ pool, exchange, type}) {
   return (
     <div className="swap-item">
       <div className="f-c-sb swap-head">
-        <div className="swap-info">{`${type === 0 ? 'From':'To'} ${pool.networkType ? pool.networkType : ''}`}</div>
+        <div className="swap-info">{`${type === 0 ? 'From' : 'To'} ${pool.networkType ? pool.networkType : ''}`}  { pool.currency ? pool.swap[pool.route]?.name : ''}</div>
         <div className="f-c swap-info">
         {intl.get("Balance") + balance} {exchange}
         </div>
       </div>
       <div className="swap-block f-c">
         <div className="swap-init f-1">
+          { pool?.currency && <SwapRoute  types={type} pool={pool} />}
           <AmountInput placeholder="0.0"
             value={ pool?.tokenValue }
             className={`swap-input ${pool?.tokenValue?.length > 11 ? 'max' : ''}`}

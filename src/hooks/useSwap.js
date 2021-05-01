@@ -29,7 +29,7 @@ export default function useSwap() {
   // Insufficient BNB balance
 
   const initSwap = () => {
-    const id = window.ethereum.chainId
+    const id = window?.ethereum?.chainId || networks[0].chainId
     const currentNetwork = networks.filter(i => i.chainId === id)
     const fromState = accounts && window.ethereum && id && currentNetwork.length ? currentNetwork[0] : networks[0]
     const currency = pools.filter(i => i.systemType === fromState?.networkType)[0]

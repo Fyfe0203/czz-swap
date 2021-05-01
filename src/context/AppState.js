@@ -37,7 +37,7 @@ const state = {
     // { name: 'CZZ Audit', link: 'https://docs.classzz.com/CZZ_audit.pdf',ico:'shield' },
     // { name: 'CZZ Audit 2.0', link: 'https://docs.classzz.com/CZZ_audit 2.0.pdf',ico:'archive' },
     { name: 'CzzClub', link: 'http://czz.club', ico: 'message-square' },
-    { name: 'CZZ Explorer', link: 'http://explorer.classzz.com', ico: 'globe' },
+    { name: 'CZZ Explorer', link: 'https://scan.classzz.com', ico: 'globe' },
   ]
 }
 export default state

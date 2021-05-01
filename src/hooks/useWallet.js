@@ -23,7 +23,7 @@ export default function useWallet() {
   
   const handleNewAccounts = newAccounts => {
     updateAccounts(newAccounts[0])
-    storage.setItem('address',newAccounts[0])
+    storage.setItem('address', newAccounts[0])
   }
 
   const handlenNewChainId = chainId => {
@@ -33,17 +33,15 @@ export default function useWallet() {
         networkId: parseInt(chainId, 16),
         chainId
       },
-      // networkStatus:chainId === from.chainId
     })
   }
 
   // init wallet
-  const initWallet = () => {
+  const initWallet = async () => {
     if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined' && MetaMaskOnboarding.isMetaMaskInstalled() && storage.getItem('address')) {
-      window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
-        handleNewAccounts(accounts)
-        handlenNewChainId(window.ethereum.chainId)
-      })
+      const account = await window.ethereum.request({ method: 'eth_accounts' })
+      handleNewAccounts(account)
+      handlenNewChainId(window.ethereum.chainId)
       window.ethereum.on('chainIdChanged', (chainId) => {
         console.log('chainIdChanged',chainId)
       })

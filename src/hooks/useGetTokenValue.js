@@ -83,7 +83,8 @@ export default function useGetTokenValue() {
   // Get Burn amount Post
   const swapBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { czz, weth, currency, provider, router, swaprouter, networkName, currentToken } = pool
+      const { czz,  currency, provider, router, networkName, currentToken } = pool
+      const { swaprouter, weth } = pool.swap[pool.route]
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
@@ -106,7 +107,8 @@ export default function useGetTokenValue() {
 
   const swapTokenBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { czz, weth, provider, swaprouter, networkName, currentToken } = pool
+      const { czz, provider, networkName, currentToken } = pool
+      const { swaprouter, weth } = pool.swap[pool.route]
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       let tokenArray = []
@@ -129,7 +131,8 @@ export default function useGetTokenValue() {
 
   const swapCastingAmount = async (pool = {}) => {
     try {
-      const { czz, weth, provider, swaprouter, networkName, currentToken} = pool
+      const { czz, provider,networkName, currentToken} = pool
+      const { swaprouter, weth } = pool.swap[pool.route]
       const contract = await new Web3(provider)
       const gasPrice = await contract.eth.getGasPrice( (price) => price)
       let gas = gasPrice * 800000

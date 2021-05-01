@@ -12,8 +12,7 @@ import Recent from './Recent'
 import NetworkModal from '../swap/NetworkModal'
 import './index.scss'
 // https://chainid.network/chains.json
-// Insufficient liquidity for this trade.
-// Insufficient BNB balance
+
 import useWallet from '../../hooks/useWallet'
 import intl from 'react-intl-universal'
 
@@ -27,6 +26,7 @@ export default function Connect(props) {
   const [balance, setBalance] = useState(null)
   const [networkLoading, setNetworkLoading] = useState(true)
   const { walletconnectAction } = useWalletConnect()
+
   const setShowConnectWallet = (status) => {
     setState({
       showConnectWallet:status

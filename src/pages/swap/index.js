@@ -71,7 +71,11 @@ export default function Swap() {
         setButtonText('SWAP')
       }
     } else {
-      setButtonText('NONE_WALLET')
+      if (valueLoading || pirceLoading) {
+        setButtonText('FINDING_PRICE_ING')
+      } else {
+        setButtonText('NONE_WALLET')
+      }
     }
     }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading])
   
@@ -176,7 +180,7 @@ export default function Swap() {
   return (
     <Fragment>
       <SwapWrap className="swap-wrap">
-        <SwapPanel className="swap">
+        <SwapPanel>
           <div className="f-c-sb">
             <h2 className="swap-title">{intl.get('swap')}</h2>
             <div className="swap-setting ico-settings" onClick={ ()=>setSetting(true)} />
@@ -207,5 +211,13 @@ export default function Swap() {
 
 const Item = styled.div``
 const SwapBar = styled.div``
-const SwapPanel = styled.div``
+const SwapPanel = styled.div`
+  width:450px;
+  max-width:450px;
+  min-width:450px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 25px 25px 20px;
+  border-radius: 10px;
+`
 const SwapWrap = styled.div``

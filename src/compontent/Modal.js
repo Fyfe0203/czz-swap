@@ -13,7 +13,7 @@ export default function Modal(props) {
         visible &&
         <Fragment>
           <div className="modal-wrap" onClick={close} ref={ maskRef } >
-            <div className="modal" {...rest}  >
+            <div className="modal" {...rest}>
               <div className="ico-x modal-close" onClick={()=> props.onClose(false)}/>
                 {
                   title &&

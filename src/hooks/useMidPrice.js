@@ -48,7 +48,9 @@ export default function useMidPrice() {
   const [impactPrice, setImpactPrice] = useState(0)
 
   const fetchPair = async (lp) => {
-    const { networkId, currency, czz, weth, provider, factoryAddress, initCodeHash, networkName, currentToken } = lp
+    const { networkId, currency, czz, provider, networkName, currentToken } = lp
+    const { swaprouter, factoryAddress, weth, initCodeHash } = lp.swap[lp.route]
+    
     if (networkName === "ETH"){
       const From = new Token(Number(networkId), currency?.tokenAddress,  currency?.decimals)
       const Eczz = new Token(Number(networkId), czz, 8)
@@ -79,7 +81,6 @@ export default function useMidPrice() {
         const from_weth = route0.midPrice.toSignificant(6)
         const eczz_weth = route1.midPrice.toSignificant(6)
         const eczz_weth2 = route2.midPrice.toSignificant(6)
-        debugger
         return  eczz_weth / from_weth * eczz_weth2
       } catch (error) {
         throw new Error(error)
@@ -88,7 +89,9 @@ export default function useMidPrice() {
   }
 
   const fetchTokenPair = async (lp) => {
-    const { networkId, czz, weth, provider, factoryAddress, initCodeHash, networkName, currentToken } = lp
+    const { networkId, czz, provider,  networkName, currentToken } = lp
+    const { swaprouter, factoryAddress, weth, initCodeHash } = lp.swap[lp.route]
+    
     if (networkName === "ETH"){
       const Eczz = new Token(Number(networkId), czz, 8)
       const WETH = new Token(Number(networkId), weth, 18)

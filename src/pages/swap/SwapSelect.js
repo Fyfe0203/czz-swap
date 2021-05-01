@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import { Modal } from '../../compontent/index'
+import { Modal, Image } from '../../compontent/index'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
 import intl from 'react-intl-universal'
@@ -39,10 +39,11 @@ export default React.memo( function SelectId({ types, pool }) {
   const selectToken = item => {
     const currentNetwork = networks.filter(i => i.networkType === item.systemType)[0]
     let oldItem = types === 1 ? to : from
-    const symbolItem = { ...oldItem, ...currentNetwork, tokenValue: oldItem.tokenValue, currency: item }
+    const symbolItem = { ...oldItem, ...currentNetwork, tokenValue: oldItem.tokenValue, currency: item ,route:oldItem.route || 0}
     let toOld = currentNetwork.networkType === to?.networkType ? { tokenValue: '' } : to
-    const networkStatus = types === 0 ? wallet?.chainId === symbolItem.chainId : state?.networkStatus
-    types === 1 ? setState({ to: { ...symbolItem, tokenValue: '' } }) : setState({ from: symbolItem ,to:toOld, networkStatus })
+    // const networkStatus = types === 0 ? wallet?.chainId === symbolItem.chainId : state?.networkStatus
+    const stateValue = types === 1 ? { to: { ...symbolItem, tokenValue: '' } } : { from: symbolItem, to: toOld }
+    setState(stateValue)
     setListStatus(false)
   }
 
@@ -107,10 +108,10 @@ export default React.memo( function SelectId({ types, pool }) {
     <Fragment>
       <div className="select select-inner f-c" onClick={(() => setListStatus(true))}>
         <div className="f-c f-1">
-          {currency?.image && <i className="img" style={{ backgroundImage: `url(${currency?.image})` }} />}
+          {currency?.image && <Image src={currency?.image} size="32" style={{marginRight:10}} />}
           <div className="select-inner-val">
             <h3>{currency?.symbol || <span>{intl.get('SelectaToken')}</span>}</h3>
-            {currency?.name && <div className="select-inner-desc">{ currency?.name }</div>}
+            {/* {currency?.name && <div className="select-inner-desc">{ currency?.name }</div>} */}
           </div>
         </div>
         <div className="ico ico-chevron-down" />
