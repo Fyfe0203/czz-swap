@@ -30,7 +30,10 @@ export default function SwapItem({ pool, exchange, type}) {
   return (
     <div className="swap-item">
       <div className="f-c-sb swap-head">
-        <div className="swap-info">{`${type === 0 ? 'From' : 'To'} ${pool.networkType ? pool.networkType : ''}`}  { pool.currency ? pool.swap[pool.route]?.name : ''}</div>
+        <div className="swap-info">
+          <span style={{marginRight: 10}}>{`${type === 0 ? 'From' : 'To'} ${pool.networkType ? pool.networkType : ''}`}</span>
+          {pool.currency ? `Dex:${pool.swap[pool.route]?.name}` : ''}
+        </div>
         <div className="f-c swap-info">
         {intl.get("Balance") + balance} {exchange}
         </div>
