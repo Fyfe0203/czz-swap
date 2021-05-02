@@ -48,9 +48,9 @@ export default function useMidPrice() {
   const [impactPrice, setImpactPrice] = useState(0)
 
   const fetchPair = async (lp) => {
-    const { networkId, currency, czz, provider, networkName, currentToken } = lp
-    const { swaprouter, factoryAddress, weth, initCodeHash } = lp.swap[lp.route]
-    
+    const { networkId, currency, czz, provider, networkName, weth } = lp
+    const { factoryAddress, currentToken, initCodeHash } = lp.swap[lp.route]
+
     if (networkName === "ETH"){
       const From = new Token(Number(networkId), currency?.tokenAddress,  currency?.decimals)
       const Eczz = new Token(Number(networkId), czz, 8)
@@ -89,9 +89,9 @@ export default function useMidPrice() {
   }
 
   const fetchTokenPair = async (lp) => {
-    const { networkId, czz, provider,  networkName, currentToken } = lp
-    const { swaprouter, factoryAddress, weth, initCodeHash } = lp.swap[lp.route]
-    
+    const { networkId, czz, provider,  networkName, weth } = lp
+    const { factoryAddress, currentToken, initCodeHash } = lp.swap[lp.route]
+
     if (networkName === "ETH"){
       const Eczz = new Token(Number(networkId), czz, 8)
       const WETH = new Token(Number(networkId), weth, 18)
@@ -129,10 +129,16 @@ export default function useMidPrice() {
       try {
         setLoading(true)
         setButtonText('FINDING_PRICE_ING')
-        const ethRes = from.currency.tokenAddress ? await fetchPair(from) : await fetchTokenPair(from)
-        const czzRes = to.currency.tokenAddress ? await fetchPair(to): await fetchTokenPair(to)
+        let ethRes = 1
+        if (from.currency.tokenAddress !== from.czz) {
+           ethRes = from.currency.tokenAddress ? await fetchPair(from) : await fetchTokenPair(from)
+        }
+
+        let czzRes = 1
+        if (to.currency.tokenAddress !== to.czz) {
+          czzRes = to.currency.tokenAddress ? await fetchPair(to) : await fetchTokenPair(to)
+        }
         const midPrice = ethRes / czzRes
-        debugger
         // const tokenValue = decToBn(from.tokenValue,from.currency.decimals)
         const midProce2 =  Number(Number(Number(from.tokenValue) * midPrice).toFixed(to.currency.decimals))
         const price = Number(((midProce2 - Number(to.tokenValue)) / midProce2) * 100).toFixed(2)

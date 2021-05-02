@@ -83,8 +83,8 @@ export default function useGetTokenValue() {
   // Get Burn amount Post
   const swapBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { czz,  currency, provider, router, networkName, currentToken } = pool
-      const { swaprouter, weth } = pool.swap[pool.route]
+      const { czz,  currency, provider, router, networkName, weth } = pool
+      const { swaprouter, currentToken } = pool.swap[pool.route]
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       const tokenAddress = currency?.tokenAddress || router
@@ -107,8 +107,8 @@ export default function useGetTokenValue() {
 
   const swapTokenBurnAmount = async (pool = {}, tokenValue, isFrom = false) => {
     try {
-      const { czz, provider, networkName, currentToken } = pool
-      const { swaprouter, weth } = pool.swap[pool.route]
+      const { czz, provider, networkName, weth } = pool
+      const { swaprouter, currentToken } = pool.swap[pool.route]
       const contract = await new Web3(provider)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       let tokenArray = []
@@ -131,8 +131,8 @@ export default function useGetTokenValue() {
 
   const swapCastingAmount = async (pool = {}) => {
     try {
-      const { czz, provider,networkName, currentToken} = pool
-      const { swaprouter, weth } = pool.swap[pool.route]
+      const { czz, provider,networkName, weth} = pool
+      const { swaprouter, currentToken } = pool.swap[pool.route]
       const contract = await new Web3(provider)
       const gasPrice = await contract.eth.getGasPrice( (price) => price)
       let gas = gasPrice * 800000
@@ -158,29 +158,46 @@ export default function useGetTokenValue() {
       try {
         setLoading(true)
         setState({priceStatus:0})
-        const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
-        console.log('inAmount == ',inAmount)
-        const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
-        const changeAmount = new BigNumber(inAmountRes)
-        console.log('inAmountExchangeValue == ', changeAmount.toString())
-        if (changeAmount === "0") {
-          setButtonText('NONE_TRADE')
-          setLoading(false)
-          return false
-        }
-        const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to,changeAmount,false)
-        const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.weth
-        const token = new Token(to.networkId, tokenAddress, to.currency.decimals)
-        const amounts = new TokenAmount(token, JSBI.BigInt(result))
-        const outAmount = amounts.toSignificant(6)
 
-        const czzfee = await swapCastingAmount(to)
-        const changeAmount2 = changeAmount - czzfee
+        let changeAmount = 0
+        const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
+        if (from.currency.tokenAddress !== from.czz) {
+          console.log('inAmount == ',inAmount)
+          const inAmountRes = from.currency.tokenAddress ? await swapBurnAmount(from, inAmount, true) : await swapTokenBurnAmount(from, inAmount, true)
+          changeAmount = new BigNumber(inAmountRes)
+          console.log('inAmountExchangeValue == ', changeAmount.toString())
+          if (changeAmount === "0") {
+            setButtonText('NONE_TRADE')
+            setLoading(false)
+            return false
+          }
+        }else{
+          changeAmount = new BigNumber(inAmount)
+        }
+
+        let outAmount = 0
         let miniReceived = 0
-        if (changeAmount2 > 0) {
-          const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
-          const amounts1 = new TokenAmount(token,JSBI.BigInt(result1))
-          miniReceived = amounts1.toSignificant(6)
+        const tokenAddress = to.currency.tokenAddress ? to.currency.tokenAddress : to.currentToken
+        const totoken = new Token(to.networkId, tokenAddress, to.currency.decimals)
+        if (to.currency.tokenAddress !== to.czz) {
+          const result = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount, false) : await swapTokenBurnAmount(to, changeAmount, false)
+
+          const amounts = new TokenAmount(totoken, JSBI.BigInt(result))
+          outAmount = amounts.toSignificant(6)
+
+          const czzfee = await swapCastingAmount(to)
+          const changeAmount2 = changeAmount - czzfee
+          if (changeAmount2 > 0) {
+            const result1 = to.currency.tokenAddress ? await swapBurnAmount(to, changeAmount2, false) : await swapTokenBurnAmount(to,changeAmount2,false)
+            const amounts1 = new TokenAmount(totoken, JSBI.BigInt(result1))
+            miniReceived = amounts1.toSignificant(6)
+          }
+        }else{
+          const czzfee = await swapCastingAmount(to)
+          const amounts1 = new TokenAmount(totoken, JSBI.BigInt(changeAmount))
+          outAmount = amounts1.toSignificant(6)
+          const amounts2 = new TokenAmount(totoken, JSBI.BigInt(changeAmount - czzfee))
+          miniReceived = amounts2.toSignificant(6)
         }
 
         // if from is network approve setting true

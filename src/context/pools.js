@@ -23,7 +23,7 @@ const pools = [
   {
     name:'ECZZ',
     symbol: "ECZZ",
-    decimals: 18,
+    decimals: 8,
     systemType: "ETH",
     tokenAddress: "0x150BbCfF6b1B4D528b48f1A300585Dea0b6490B6",
     image:'https://docs.classzz.com/svg/logo.svg'
@@ -31,7 +31,7 @@ const pools = [
   {
     name:'BCZZ',
     symbol: "BCZZ",
-    decimals: 18,
+    decimals: 8,
     systemType: "BSC",
     tokenAddress: "0x2Fb9376cFf6fb7f5fe99665aE1Ec2FdDD5099134",
     image:'https://docs.classzz.com/svg/logo.svg'
@@ -39,9 +39,9 @@ const pools = [
   {
     name:'HCZZ',
     symbol: "HCZZ",
-    decimals: 18,
+    decimals: 8,
     systemType: "HECO",
-    tokenAddress: "0x956f47f50a910163d8bf957cf5846d573e7f87ca",
+    tokenAddress: "0x112489c758D405874e9Ece0586FD50B315216fcA",
     image:'https://docs.classzz.com/svg/logo.svg'
   },
   {

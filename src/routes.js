@@ -1,5 +1,4 @@
 import { lazy } from 'react' //react-router-com''
-import intl from 'react-intl-universal'
 
 const routes = [
   {
