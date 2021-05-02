@@ -35,7 +35,7 @@ export default function SwapItem({ pool, exchange, type}) {
           {pool.currency ? `Dex:${pool.swap[pool.route]?.name}` : ''}
         </div>
         <div className="f-c swap-info">
-        {intl.get("Balance") + balance} {exchange}
+        {intl.get("Balance") + balance.toFixed(4)} {exchange}
         </div>
       </div>
       <div className="swap-block f-c">
