@@ -26,7 +26,7 @@ export default function useSwapAndBurn() {
       toImage: to.currency.image,
     }
   }
-  
+
   const stopPending = id => {
     setLoading(false)
     setPending(pending.filter(i => i.id !== id))
@@ -53,7 +53,7 @@ export default function useSwapAndBurn() {
     resSwap()
   }
 
- 
+
   const fetchSwap = () => {
     setLoading(true)
     setButtonText('SWAP_ING')
@@ -64,7 +64,7 @@ export default function useSwapAndBurn() {
     )
 
     const amountIn = decToBn(Number(from?.tokenValue), from.currency?.decimals)
-    
+
     // history params
     const swapTime = new Date().getTime()
     const deadlineVal = deadline ? swapTime + deadline : 100000000000000
@@ -95,8 +95,8 @@ export default function useSwapAndBurn() {
       setButtonText('SWAP')
       console.log('Swap Error ===>', error)
     }
-    
-    const lpSwap = () => {
+
+    const lpSwap = (toaddress) => {
       let path = []
       if (from.currency.networkName === "ETH"){
         path = [from.currency.tokenAddress, from.currentToken, from.czz]
@@ -108,7 +108,7 @@ export default function useSwapAndBurn() {
           numberToHex(new BigNumber(amountIn)),
           0,                             // tolerancAmount, // 0
           to.ntype,
-          to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000",
+          toaddress,
           from.swaprouter,              // change router setting
           path,                    // change weth setting
           deadlineVal,
@@ -119,29 +119,19 @@ export default function useSwapAndBurn() {
       .on("error",swapError)
     }
 
-    // const lp2Swap = () => {
-    //   let path = []
-    //   if (from.currency.networkName === "ETH"){
-    //     path = [from.currency.tokenAddress, from.currentToken, from.czz]
-    //   }else{
-    //     path = [from.currency.tokenAddress, from.currentToken, from.weth, from.czz]
-    //   }
-    //   lpContract.methods.swapAndBurnWithPath(
-    //       numberToHex(new BigNumber(amountIn)),
-    //       0,                             // tolerancAmount, // 0
-    //       to.ntype,
-    //       to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000" ,
-    //       from.swaprouter, // change router setting
-    //       path,       // change weth setting
-    //       deadlineVal,
-    //   )
-    //   .send({ from: accounts })
-    //   .on("transactionHash", swapTranscationHash)
-    //   .on("receipt",swapReceipt)
-    //   .on("error",swapError)
-    // }
+    const czzSwap = (toaddress) => {
+      lpContract.methods.burn(
+          numberToHex(new BigNumber(amountIn)),
+          to.ntype,
+          toaddress
+      )
+      .send({ from: accounts })
+      .on("transactionHash", swapTranscationHash)
+      .on("receipt",swapReceipt)
+      .on("error",swapError)
+    }
 
-    const ethSwap = () => {
+    const ethSwap = (toaddress) => {
       let path = []
       if (from.currency.networkName === "ETH"){
         path = [from.currentToken, from.czz]
@@ -152,7 +142,7 @@ export default function useSwapAndBurn() {
       lpContract.methods.swapAndBurnEthWithPath(
           0,              // tolerancAmount, // 0
           to.ntype,
-          to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000" ,
+          toaddress,
           from.swaprouter, // change router setting
           path,       // change weth setting
           deadlineVal,
@@ -162,7 +152,18 @@ export default function useSwapAndBurn() {
       .on("error",swapError)
     }
 
-    from.currency.tokenAddress ? lpSwap() : ethSwap()
+
+    let toaddress = to.currency.tokenAddress ? to.currency.tokenAddress : "0x0000000000000000000000000000000000000000"
+    if (to.currency.tokenAddress === to.czz) {
+      toaddress = to.czz
+    }
+
+    if (from.currency.tokenAddress !== from.czz) {
+      from.currency.tokenAddress ? lpSwap(toaddress) : ethSwap(toaddress)
+    }else{
+      czzSwap(toaddress)
+    }
+
     // if (from.currency.tokenAddress) {
     //     if (!to.currency.tokenAddress) {
     //       lp2Swap()
@@ -187,6 +188,6 @@ export default function useSwapAndBurn() {
       setButtonText('SWAP_ING')
     }
   }, [loading])
-  
+
   return {loading,receipt,hash,fetchSwap,setHash,resSwap}
 }
