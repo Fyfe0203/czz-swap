@@ -75,7 +75,7 @@ export default function useSwapAndBurn() {
     }
 
     const swapTranscationHash = hashRes => {
-      console.log('Swap Hash Result ===', hashRes)
+      console.log('Swap Hash Result ===', hashRes) 
       const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime}
       setRecent(recent => [...recent, swapResresult])
       setHash(swapResresult)

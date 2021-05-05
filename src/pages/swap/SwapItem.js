@@ -52,7 +52,7 @@ export default function SwapItem({ pool, exchange, type}) {
             maxLength={79}
             spellCheck="false"/>
         </SwapItemInit>
-        {type===0 ? <MaxBalance onClick={ () => valChange(balance === 0 ? '' : balance.toFixed(4)) } >MAX</MaxBalance> : null} 
+        {/* {type===0 ? <MaxBalance onClick={ () => valChange(balance === 0 ? '' : balance.toFixed(4)) } >MAX</MaxBalance> : null}  */}
         <SwapSelect types={type} pool={pool} />
       </SwapItemBlock>
     </SwapItemBox>
