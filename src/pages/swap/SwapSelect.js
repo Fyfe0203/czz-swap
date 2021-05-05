@@ -26,7 +26,7 @@ const TokenItem = ({ item, onClick, currency }) => {
 
 export default React.memo( function SelectId({ types, pool }) {
   const state = useGlobal()
-  const { pools, networks, setState, from, to, wallet } = state
+  const { pools, networks, setState, from, to } = state
   const { currency } = pool
   // const { poolsBalance } = useSwap()
   const [networkTabs,setNetworkTabs] = useState([])

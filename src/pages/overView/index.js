@@ -17,8 +17,8 @@ export default function OverView() {
           <p>{intl.get('EnablingConnectivityBetweenIslandsOfDeFi')}</p>
           <p><Link className="swap-button" style={{ width: 210 }} to="/swap" >{intl.get('StartSwapNow')}</Link></p>
           <div className="swap-button-bar">
-            <a href="https://docs.classzz.com/CZZ_audit.pdf" target="_bank" className="ico-shield"><span>Audit HECO/ETH</span></a>
-            <a href="https://docs.classzz.com/CZZ_audit2.0.pdf" target="_bank" className="ico-book"><span>Audit BSC</span></a>
+            <a href="https://docs.classzz.com/CZZ_audit.pdf" target="_bank" className="ico-shield"><span>Audit Report (Heco/ETH)</span></a>
+            <a href="https://docs.classzz.com/CZZ_audit2.0.pdf" target="_bank" className="ico-book"><span>Audit Report (BSC)</span></a>
           </div>
         </div>
         <div className="imgs" style={{backgroundImage:`url(${banner})`}}></div>

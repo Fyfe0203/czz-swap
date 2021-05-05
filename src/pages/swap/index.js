@@ -219,5 +219,24 @@ const SwapPanel = styled.div`
   background: #fff;
   padding: 25px 25px 20px;
   border-radius: 10px;
+  @media screen and (max-width:600px){
+    max-width:inherit;
+    min-width:inherit;
+    margin:0 10px;
+    .mask{
+      align-items:flex-end;
+      .modal{
+        width: 100%;
+      }
+    }
+    
+  }
 `
-const SwapWrap = styled.div``
+
+const SwapWrap = styled.div`
+  @media screen and (max-width:600px){
+    width: 100%;
+    height: inherit;
+    padding:50px 0;
+  }
+`

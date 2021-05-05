@@ -8,7 +8,18 @@ import intl from 'react-intl-universal'
 
 
 const AmountInput = styled.input``
-
+const MaxBalance = styled.div`
+  background:#333;
+  color:#fff;
+  padding:3px 6px;
+  border-radius:2px;
+  margin-right:8px;
+  font-size:12px;
+  cursor: pointer;
+  &:hover{
+    background:#555;
+  }
+`
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -35,7 +46,7 @@ export default function SwapItem({ pool, exchange, type}) {
           {pool.currency ? `Dex:${pool.swap[pool.route]?.name}` : ''}
         </div>
         <div className="f-c swap-info">
-        {intl.get("Balance") + balance.toFixed(4)} {exchange}
+          {intl.get("Balance") + balance.toFixed(4)} {exchange}
         </div>
       </div>
       <div className="swap-block f-c">
@@ -56,6 +67,7 @@ export default function SwapItem({ pool, exchange, type}) {
             maxLength={79}
             spellCheck="false"/>
         </div>
+        {type===0 ? <MaxBalance onClick={ () => valChange(balance === 0 ? '' : balance.toFixed(4)) } >MAX</MaxBalance> : null} 
         <SwapSelect types={type} pool={pool} />
       </div>
     </div>

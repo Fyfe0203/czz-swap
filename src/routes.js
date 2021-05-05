@@ -1,4 +1,4 @@
-import { lazy } from 'react' //react-router-com''
+import { lazy } from 'react'
 
 const routes = [
   {
