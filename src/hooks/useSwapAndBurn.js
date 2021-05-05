@@ -96,7 +96,7 @@ export default function useSwapAndBurn() {
       console.log('Swap Error ===>', error)
     }
 
-    const lpSwap = (toaddress) => {
+    const lpSwap = (swaprouter, toaddress) => {
       let path = []
       if (from.currency.networkName === "ETH"){
         path = [from.currency.tokenAddress, from.currentToken, from.czz]
@@ -109,7 +109,7 @@ export default function useSwapAndBurn() {
           0,                             // tolerancAmount, // 0
           to.ntype,
           toaddress,
-          from.swaprouter,              // change router setting
+          swaprouter,              // change router setting
           path,                    // change weth setting
           deadlineVal,
       )
@@ -131,7 +131,7 @@ export default function useSwapAndBurn() {
       .on("error",swapError)
     }
 
-    const ethSwap = (toaddress) => {
+    const ethSwap = (swaprouter, toaddress) => {
       let path = []
       if (from.currency.networkName === "ETH"){
         path = [from.currentToken, from.czz]
@@ -143,7 +143,7 @@ export default function useSwapAndBurn() {
           0,              // tolerancAmount, // 0
           to.ntype,
           toaddress,
-          from.swaprouter, // change router setting
+          swaprouter, // change router setting
           path,       // change weth setting
           deadlineVal,
       ).send({ from: accounts,value: numberToHex(new BigNumber(amountIn))})
@@ -158,21 +158,15 @@ export default function useSwapAndBurn() {
       toaddress = to.czz
     }
 
+    const { swaprouter } = from.swap[from.route]
+    const { swaprouter: swaprouter2 } = to.swap[to.route]
+    toaddress = toaddress + '#' + swaprouter2
+    debugger
     if (from.currency.tokenAddress !== from.czz) {
-      from.currency.tokenAddress ? lpSwap(toaddress) : ethSwap(toaddress)
+      from.currency.tokenAddress ? lpSwap(swaprouter, toaddress) : ethSwap(swaprouter, toaddress)
     }else{
       czzSwap(toaddress)
     }
-
-    // if (from.currency.tokenAddress) {
-    //     if (!to.currency.tokenAddress) {
-    //       lp2Swap()
-    //     }else {
-    //       lpSwap()
-    //     }
-    // }else{
-    //   ethSwap()
-    // }
   }
 
   const successMessage = (res) => {
