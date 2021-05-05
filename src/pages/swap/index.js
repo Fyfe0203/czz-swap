@@ -216,12 +216,13 @@ const SwapPanel = styled.div`
   min-width:450px;
   margin: 0 auto;
   background: #fff;
-  padding: 25px 25px 20px;
+  padding: 0 25px 20px;
   border-radius: 10px;
   @media screen and (max-width:600px){
     max-width:inherit;
     min-width:inherit;
     margin:0 10px;
+    padding: 0 10px 10px;
     .mask{
       align-items:flex-end;
       .modal{

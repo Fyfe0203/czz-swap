@@ -6,49 +6,6 @@ import SwapRoute from './SwapRoute'
 import styled from 'styled-components'
 import intl from 'react-intl-universal'
 
-
-const SwapItemBox = styled.div`
-  background:#f2f2f2;
-  margin-bottom:20px;
-  border-radius: 5px;
-  padding:15px;
-`
-
-const SwapItemBlock = styled.div`
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-top:10px;
-    align-items:center;
-`
-
-const SwapItemHead = styled.div`
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0;
-`
-
-const AmountInput = styled.input``
-const SwapItemInit = styled.div``
-const SwapItemInfo = styled.div`
-  display:flex;
-  font-size:12px;
-  align-items:center;
-`
-const MaxBalance = styled.div`
-  background:#333;
-  color:#fff;
-  padding:3px 6px;
-  border-radius:2px;
-  margin-right:8px;
-  font-size:12px;
-  cursor: pointer;
-  &:hover{
-    background:#555;
-  }
-`
-
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
@@ -101,3 +58,48 @@ export default function SwapItem({ pool, exchange, type}) {
     </SwapItemBox>
   )
 }
+
+const SwapItemBox = styled.div`
+  background:#f2f2f2;
+  margin-bottom:20px;
+  border-radius: 5px;
+  padding:15px;
+  @media screen and (max-width:600px){
+    padding:10px;
+  }
+`
+
+const SwapItemBlock = styled.div`
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top:10px;
+    align-items:center;
+`
+
+const SwapItemHead = styled.div`
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0;
+`
+
+const AmountInput = styled.input``
+const SwapItemInit = styled.div``
+const SwapItemInfo = styled.div`
+  display:flex;
+  font-size:12px;
+  align-items:center;
+`
+const MaxBalance = styled.div`
+  background:#333;
+  color:#fff;
+  padding:3px 6px;
+  border-radius:2px;
+  margin-right:8px;
+  font-size:12px;
+  cursor: pointer;
+  &:hover{
+    background:#555;
+  }
+`
