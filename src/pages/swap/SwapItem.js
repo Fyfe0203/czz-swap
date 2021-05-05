@@ -7,7 +7,35 @@ import styled from 'styled-components'
 import intl from 'react-intl-universal'
 
 
+const SwapItemBox = styled.div`
+  background:#f2f2f2;
+  margin-bottom:20px;
+  border-radius: 5px;
+  padding:15px;
+`
+
+const SwapItemBlock = styled.div`
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top:10px;
+    align-items:center;
+`
+
+const SwapItemHead = styled.div`
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0;
+`
+
 const AmountInput = styled.input``
+const SwapItemInit = styled.div``
+const SwapItemInfo = styled.div`
+  display:flex;
+  font-size:12px;
+  align-items:center;
+`
 const MaxBalance = styled.div`
   background:#333;
   color:#fff;
@@ -39,19 +67,19 @@ export default function SwapItem({ pool, exchange, type}) {
   }
 
   return (
-    <div className="swap-item">
-      <div className="f-c-sb swap-head">
-        <div className="swap-info">
-          <span style={{marginRight: 10}}>{`${type === 0 ? 'From' : 'To'} ${pool.networkType ? pool.networkType : ''}`}</span>
-          {pool.currency ? `Dex:${pool.swap[pool.route]?.name}` : ''}
-        </div>
+    <SwapItemBox>
+      <SwapItemHead>
+        <SwapItemInfo>
+          {/* {pool.currency ? `Dex:${pool.swap[pool.route]?.name}` : ''} */}
+          { pool?.currency && <SwapRoute types={type} pool={pool} />}
+          <span style={{ marginRight: 10 }}>{`${type === 0 ? 'From' : 'To'} ${pool.networkType ? pool.networkType : ''}`}</span>
+        </SwapItemInfo>
         <div className="f-c swap-info">
           {intl.get("Balance") + balance.toFixed(4)} {exchange}
         </div>
-      </div>
-      <div className="swap-block f-c">
-        <div className="swap-init f-1">
-          { pool?.currency && <SwapRoute  types={type} pool={pool} />}
+      </SwapItemHead>
+      <SwapItemBlock>
+        <SwapItemInit className="swap-init f-1">
           <AmountInput placeholder="0.0"
             value={ pool?.tokenValue }
             className={`swap-input ${pool?.tokenValue?.length > 11 ? 'max' : ''}`}
@@ -66,10 +94,10 @@ export default function SwapItem({ pool, exchange, type}) {
             minLength={1}
             maxLength={79}
             spellCheck="false"/>
-        </div>
+        </SwapItemInit>
         {type===0 ? <MaxBalance onClick={ () => valChange(balance === 0 ? '' : balance.toFixed(4)) } >MAX</MaxBalance> : null} 
         <SwapSelect types={type} pool={pool} />
-      </div>
-    </div>
+      </SwapItemBlock>
+    </SwapItemBox>
   )
 }

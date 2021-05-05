@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect} from 'react'
+import React, { Fragment, useState, useEffect, useLayoutEffect} from 'react'
 import { Modal, Loading, message, Button, Image } from '../../compontent'
 import useGetTokenValue from '../../hooks/useGetTokenValue'
 import useSwapAndBurn from '../../hooks/useSwapAndBurn'
@@ -48,7 +48,7 @@ export default function Swap() {
     setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
   }, [valueLoading, swapLoading, pirceLoading, approveLoading])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getBalanceValue(from)
     if (accounts) {
       if(valueLoading || pirceLoading){
@@ -231,8 +231,11 @@ const SwapPanel = styled.div`
     
   }
 `
-
 const SwapWrap = styled.div`
+  height:calc(100vh - 180px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @media screen and (max-width:600px){
     width: 100%;
     height: inherit;

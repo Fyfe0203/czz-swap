@@ -16,7 +16,11 @@ export default function SwapRoute({ types, pool }) {
   return (
     <Fragment>
       <RouteBox onClick={() => setVisible(true)}>
-        <Image width="32" height="32" src={ pool.swap[pool.route].image} />
+        <div className="f-c f-1">
+          <Image width="24" height="24" src={pool.swap[pool.route].image} style={{ borderRadius: 90, marginRight:4 }} />
+          <div className="f-1">{pool.swap[pool.route]?.name}</div>
+        </div>
+        <Icon type="chevron-right" />
       </RouteBox>
       <Modal title="Select Route" visible={ visible } onClose={setVisible}>
         <RouteContainer>
@@ -39,12 +43,15 @@ export default function SwapRoute({ types, pool }) {
 }
 
 const RouteBox = styled.div`
-  width:32px;
-  height:32px;
-  margin-right:8px;
-  background:#444;
-  border-radius:90px;
+  display:flex;
+  align-items:center;
+  background:#fff;
+  padding:4px;
+  border-radius:4px;
+  margin-right:10px;
+  width:120px;
 `
+
 const RouteContainer = styled.div``
 const RouteItem = styled.div`
   display:flex;

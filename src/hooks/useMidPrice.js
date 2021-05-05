@@ -159,7 +159,7 @@ export default function useMidPrice() {
   },[to.tokenValue])
 
   const swapStatusList = [
-    'Swap Now',
+    'Confirm Swap',
     'Swap Anyway',
     'Swap Anyway',
     'Price Impact Too High'
