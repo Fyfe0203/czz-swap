@@ -48,8 +48,8 @@ export default function Swap() {
     setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
   }, [valueLoading, swapLoading, pirceLoading, approveLoading])
 
-  const statusEffect = async () => {
-    await getBalanceValue(from)
+  useEffect(() => {
+    getBalanceValue(from)
     if (accounts) {
       if(valueLoading || pirceLoading){
         setButtonText('FINDING_PRICE_ING')
@@ -77,10 +77,7 @@ export default function Swap() {
         setButtonText('NONE_WALLET')
       }
     }
-  }
-  useEffect(() => {
-    statusEffect()
-  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading])
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading,hasBalance])
   
   const reverseExchange = () => {
     setState({
