@@ -222,6 +222,14 @@ const pools = [
     image:"https://hecoinfo.com/token/images/gof_32.png"
   },
   {
+    tokenAddress: "0x099626783842d35c221e5d01694c2b928eb3b0ad",
+    name:'Dogeswap',
+    symbol: "DOG",
+    decimals: 18,
+    systemType: "HECO",
+    image:"https://graph.dogeswap.com/static/images/tokens/0x099626783842d35c221e5d01694c2b928eb3b0ad.png"
+  },
+  {
     tokenAddress: "0xa71edc38d189767582c38a3145b5873052c3e47a",
     name:'Heco-Peg USDT',
     symbol: "USDT",

@@ -24,7 +24,7 @@ const networks = [
       initCodeHash:"0x2ad889f82040abccb2649ea6a874796c1601fb67f91a747a80e08860c73ddf24",
     },{
       name:"DogeSwap",
-      image:"https://cryptologos.cc/logos/dogecoin-doge-logo.svg?v=010",
+      image:"https://graph.dogeswap.com/static/images/tokens/0x099626783842d35c221e5d01694c2b928eb3b0ad.png",
       swaprouter:"0x539A9Fbb81D1D2DC805c698B55C8DF81cbA6b350",
       factoryAddress:"0x0419082bb45f47Fe5c530Ea489e16478819910F3",
       currentToken:"0x5545153ccfca01fbd7dd11c0b23ba694d9509a6f",
