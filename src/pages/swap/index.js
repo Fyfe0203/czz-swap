@@ -48,8 +48,8 @@ export default function Swap() {
     setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
   }, [valueLoading, swapLoading, pirceLoading, approveLoading])
 
-  useEffect(() => {
-    getBalanceValue(from)
+  const statusEffect = async () => {
+    await getBalanceValue(from)
     if (accounts) {
       if(valueLoading || pirceLoading){
         setButtonText('FINDING_PRICE_ING')
@@ -77,7 +77,10 @@ export default function Swap() {
         setButtonText('NONE_WALLET')
       }
     }
-    }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading])
+  }
+  useEffect(() => {
+    statusEffect()
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading])
   
   const reverseExchange = () => {
     setState({
@@ -116,7 +119,6 @@ export default function Swap() {
 
   useEffect(() => {
     if (hash) setConfirmStatus(false)
-      // setSubmitStatus(true)
   }, [hash])
 
   // This swap has a price impact of at least 5%. Please confirm that you would like to continue whit this swap
