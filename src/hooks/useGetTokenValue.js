@@ -196,8 +196,12 @@ export default function useGetTokenValue() {
           const czzfee = await swapCastingAmount(to)
           const amounts1 = new TokenAmount(totoken, JSBI.BigInt(changeAmount))
           outAmount = amounts1.toSignificant(6)
-          const amounts2 = new TokenAmount(totoken, JSBI.BigInt(changeAmount - czzfee))
-          miniReceived = amounts2.toSignificant(6)
+          if (changeAmount - czzfee < 0) {
+            miniReceived = 0
+          }else {
+            const amounts2 = new TokenAmount(totoken, JSBI.BigInt(changeAmount - czzfee))
+            miniReceived = amounts2.toSignificant(6)
+          }
         }
 
         // if from is network approve setting true

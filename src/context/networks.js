@@ -54,7 +54,7 @@ const networks = [
     route:0,
     swap:[{
       name: "uniswap",
-      image:'https://app.uniswap.org/static/media/logo.742edb09.svg',
+      image:'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
       swaprouter:"0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
       factoryAddress:"0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
       currentToken:"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
