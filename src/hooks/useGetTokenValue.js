@@ -226,7 +226,7 @@ export default function useGetTokenValue() {
     if (from.currency && from?.tokenValue && to.currency?.symbol) {
       debounceValue(from, to)
     }
-  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol, accounts])
+  }, [from?.tokenValue, to.currency?.symbol, from.currency?.symbol, accounts,from.route,to.route])
 
   return {loading,authorization,isApprove,approveActions,approveLoading}
 }
