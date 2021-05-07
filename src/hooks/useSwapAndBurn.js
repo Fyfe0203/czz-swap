@@ -75,7 +75,7 @@ export default function useSwapAndBurn() {
     }
 
     const swapTranscationHash = hashRes => {
-      console.log('Swap Hash Result ===', hashRes) 
+      console.log('Swap Hash Result ===', hashRes)
       const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime}
       setRecent(recent => [...recent, swapResresult])
       setHash(swapResresult)
@@ -161,7 +161,6 @@ export default function useSwapAndBurn() {
     const { swaprouter } = from.swap[from.route]
     const { swaprouter: swaprouter2 } = to.swap[to.route]
     toaddress = toaddress + '#' + swaprouter2
-    debugger
     if (from.currency.tokenAddress !== from.czz) {
       from.currency.tokenAddress ? lpSwap(swaprouter, toaddress) : ethSwap(swaprouter, toaddress)
     }else{
