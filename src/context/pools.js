@@ -228,6 +228,20 @@ const pools = [
     decimals: 18,
     systemType: "HECO",
     image:"https://graph.dogeswap.com/static/images/tokens/0x099626783842d35c221e5d01694c2b928eb3b0ad.png"
+  },{
+    tokenAddress: "0x7663bc3ae9858cae71722aedee364e125c278bdf",
+    name:'Hai Stablecoin',
+    symbol: "HAI",
+    decimals: 18,
+    systemType: "HECO",
+    image:"https://graph.dogeswap.com/static/images/tokens/0x7663bc3ae9858cae71722aedee364e125c278bdf.png"
+  },{
+    tokenAddress: "0xa74b0514b403bdb573bf22df0062d43f6498a164",
+    name:'HKR',
+    symbol: "HKR",
+    decimals: 18,
+    systemType: "HECO",
+    image:"https://graph.dogeswap.com/static/images/tokens/0xa74b0514b403bdb573bf22df0062d43f6498a164.png"
   },
   {
     tokenAddress: "0xa71edc38d189767582c38a3145b5873052c3e47a",
