@@ -111,7 +111,7 @@ export default function useSwapAndBurn() {
           toaddress,
           swaprouter,              // change router setting
           path,                    // change weth setting
-          deadlineVal,
+          deadlineVal
       )
       .send({ from: accounts })
       .on("transactionHash", swapTranscationHash)
@@ -133,20 +133,20 @@ export default function useSwapAndBurn() {
 
     const ethSwap = (swaprouter, toaddress) => {
       let path = []
-      if (from.currency.networkName === "ETH"){
+      if (from.currency.systemType === "ETH"){
         path = [from.currentToken, from.czz]
       }else{
         path = [from.currentToken, from.weth, from.czz]
       }
-
+      debugger
       lpContract.methods.swapAndBurnEthWithPath(
           0,              // tolerancAmount, // 0
           to.ntype,
           toaddress,
           swaprouter, // change router setting
           path,       // change weth setting
-          deadlineVal,
-      ).send({ from: accounts,value: numberToHex(new BigNumber(amountIn))})
+          deadlineVal
+      ).send({ from: accounts,value: new BigNumber(amountIn)})
       .on("transactionHash",swapTranscationHash)
       .on("receipt",swapReceipt)
       .on("error",swapError)
