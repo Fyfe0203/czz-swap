@@ -61,6 +61,14 @@ const pools = [
     image:"https://hecoinfo.com/token/images/gof_32.png"
   },
   {
+    tokenAddress: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
+    name:'SHIBA INU',
+    symbol: "SHIB",
+    decimals: 18,
+    systemType: "ETH",
+    image:"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE/logo.png"
+  },
+  {
     tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     name:'USD//C',
     symbol: "USDC",
@@ -242,6 +250,13 @@ const pools = [
     decimals: 18,
     systemType: "HECO",
     image:"https://graph.dogeswap.com/static/images/tokens/0xa74b0514b403bdb573bf22df0062d43f6498a164.png"
+  },{
+    tokenAddress: "0xc38072aa3f8e049de541223a9c9772132bb48634",
+    name:'Poly-Peg SHIB',
+    symbol: "SHIB",
+    decimals: 18,
+    systemType: "HECO",
+    image:"https://graph.dogeswap.com/static/images/tokens/0xc38072aa3f8e049de541223a9c9772132bb48634.png"
   },
   {
     tokenAddress: "0xa71edc38d189767582c38a3145b5873052c3e47a",
