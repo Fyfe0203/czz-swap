@@ -98,7 +98,7 @@ export default function useSwapAndBurn() {
 
     const lpSwap = (swaprouter, toaddress) => {
       let path = []
-      if (from.currency.networkName === "ETH"){
+      if (from.currency.systemType === "ETH"){
         path = [from.currency.tokenAddress, from.currentToken, from.czz]
       }else{
         path = [from.currency.tokenAddress, from.currentToken, from.weth, from.czz]

@@ -58,10 +58,10 @@ export default function useGetTokenValue() {
     const { provider, currency, router: spender,tokenValue } = from
     const { tokenAddress } = currency
     const allowanceTotal = await allowance({ provider, tokenAddress, spender, accounts })
-    const amountToken = decToBn(tokenValue).toNumber()
-    const allonceNum = decToBn(allowanceTotal).toNumber()
+    const amountToken = new BigNumber(decToBn(tokenValue))
+    const allonceNum = new BigNumber(decToBn(allowanceTotal))
     console.log('Allowance result==', allonceNum)
-    return allonceNum > amountToken
+    return allonceNum.comparedTo(amountToken)
   }
 
   // const networkError = () => {
