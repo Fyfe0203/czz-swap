@@ -50,6 +50,7 @@ const RouteBox = styled.div`
   border-radius:4px;
   margin-right:10px;
   width:120px;
+  cursor: pointer;
 `
 
 const RouteContainer = styled.div``

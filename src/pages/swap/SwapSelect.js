@@ -108,7 +108,7 @@ export default React.memo( function SelectId({ types, pool }) {
     <Fragment>
       <div className="select select-inner f-c" onClick={(() => setListStatus(true))}>
         <div className="f-c f-1">
-          {currency?.image && <Image src={currency?.image} size="32" style={{marginRight:10}} />}
+          {currency?.image && <Image src={currency?.image} size="28" style={{marginRight:10}} />}
           <div className="select-inner-val">
             <h3>{currency?.symbol || <span>{intl.get('SelectaToken')}</span>}</h3>
             {/* {currency?.name && <div className="select-inner-desc">{ currency?.name }</div>} */}

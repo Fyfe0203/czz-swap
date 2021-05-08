@@ -13,7 +13,7 @@ export default function useSwapAndBurn() {
   const [receipt, setReceipt] = useState(null)
   const [hash,setHash] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [recent,setRecent] = useLocalStorage([],'recent')
+  const [recents,setRecents] = useLocalStorage([],'recent')
 
   const getHashUrl = address => {
     return {
@@ -76,8 +76,8 @@ export default function useSwapAndBurn() {
 
     const swapTranscationHash = hashRes => {
       console.log('Swap Hash Result ===', hashRes)
-      const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime}
-      setRecent(recent => [...recent, swapResresult])
+      const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime,fromRoute:from.swap[from.route],toRoute:to.swap[to.route]}
+      setRecents(recent => [...recent, swapResresult])
       setHash(swapResresult)
       setPending([...pending, swapResresult])
     }
