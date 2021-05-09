@@ -61,6 +61,14 @@ const pools = [
     image:"https://hecoinfo.com/token/images/gof_32.png"
   },
   {
+    tokenAddress: "0xc7283b66eb1eb5fb86327f08e1b5816b0720212b",
+    name:'TRIBE',
+    symbol: "Tribe",
+    decimals: 18,
+    systemType: "ETH",
+    image:"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B/logo.png"
+  },
+  {
     tokenAddress: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
     name:'SHIBA INU',
     symbol: "SHIB",
@@ -236,6 +244,20 @@ const pools = [
     decimals: 18,
     systemType: "HECO",
     image:"https://graph.dogeswap.com/static/images/tokens/0x099626783842d35c221e5d01694c2b928eb3b0ad.png"
+  },{
+    tokenAddress: "0x38999fa3a7320bd2c3609bf0f8cb5cd4c11d3fe1",
+    name:'Poly-Peg TRIBE',
+    symbol: "TRIBE",
+    decimals: 18,
+    systemType: "HECO",
+    image:"https://mdex.com/token-icons/heco/0x38999fa3a7320bd2c3609bf0f8cb5cd4c11d3fe1.png"
+  },{
+    tokenAddress: "0x485cdbff08a4f91a16689e73893a11ae8b76af6d",
+    name:'Poly-Peg FEI',
+    symbol: "FEI",
+    decimals: 18,
+    systemType: "HECO",
+    image:"https://mdex.com/token-icons/heco/0x485cdbff08a4f91a16689e73893a11ae8b76af6d.png"
   },{
     tokenAddress: "0x7663bc3ae9858cae71722aedee364e125c278bdf",
     name:'Hai Stablecoin',
