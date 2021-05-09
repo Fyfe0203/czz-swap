@@ -13,7 +13,7 @@ export default function useSwapAndBurn() {
   const [receipt, setReceipt] = useState(null)
   const [hash,setHash] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [recents,setRecents] = useLocalStorage([],'recent')
+  const [recent,setRecent] = useLocalStorage('recent',[])
 
   const getHashUrl = address => {
     return {
@@ -35,7 +35,7 @@ export default function useSwapAndBurn() {
   // reset swap token loop
   const resSwap = () => {
     const state = {
-      form: {
+      from: {
         ...from,
         tokenValue: '',
       },
@@ -50,6 +50,7 @@ export default function useSwapAndBurn() {
   // Swap Success
   const swapSuccess = (receipt) => {
     successMessage(receipt)
+    debugger
     resSwap()
   }
 
@@ -77,7 +78,7 @@ export default function useSwapAndBurn() {
     const swapTranscationHash = hashRes => {
       console.log('Swap Hash Result ===', hashRes)
       const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime,fromRoute:from.swap[from.route],toRoute:to.swap[to.route]}
-      setRecents(recent => [...recent, swapResresult])
+      setRecent([...recent, swapResresult])
       setHash(swapResresult)
       setPending([...pending, swapResresult])
     }
@@ -138,7 +139,6 @@ export default function useSwapAndBurn() {
       }else{
         path = [from.currentToken, from.weth, from.czz]
       }
-      debugger
       lpContract.methods.swapAndBurnEthWithPath(
           0,              // tolerancAmount, // 0
           to.ntype,

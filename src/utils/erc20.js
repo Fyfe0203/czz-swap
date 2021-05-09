@@ -82,12 +82,10 @@ export const approve = async ({ spender, provider, tokenAddress, accounts }) => 
     const res = await lpContract.methods
       .approve(spender,amount)
       .send({ from: accounts })
-    // debugger
     console.log('approve result===',res)
     return res
   } catch (error) {
-    console.warn(error)
-    return false
+    throw error
   }
 }
 // 代币余额查询

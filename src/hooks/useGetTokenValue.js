@@ -17,7 +17,7 @@ export default function useGetTokenValue() {
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
   const [isApprove, setIsApprove] = useState(true)
-  const [recents, setRecents] = useLocalStorage([],'recent')
+  const [recent, setRecent] = useLocalStorage('recent',[])
   // const getReceived = async () => {
   //   const receivedAmount = Number(from.tokenValue) - (from.tokenValue * Number(tolerance))
   //   const res = await swapTokenValue(receivedAmount)
@@ -25,29 +25,28 @@ export default function useGetTokenValue() {
   // approve && authorization
   const approveActions = async () => {
     const {currency,router:spender,explorerUrl} = from
-    const recentInfo = {content:`Approved ${currency?.symbol}`}
+    const recentInfo = {content:`Approved ${currency?.symbol}`,accounts,types:'Approved'}
     try {
       setApproveLoading(true)
-      setState({priceStatus:null})
       setPending([...pending, 'approve'])
       const res = await approve({ provider: currentProvider, tokenAddress: currency?.tokenAddress, spender, accounts })
       console.log('Approve result ======',res)
-      setIsApprove(res)
-      setApproveLoading(false)
       setAuthorization(true)
-      setRecents(item => [...item, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
+      setApproveLoading(false)
       setPending(pending.filter(i => i !== 'approve'))
+      setRecent([...recent, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
+      setIsApprove(res)
       message({
         icon: 'award',
         title: `Approvd White ${currency?.symbol}`,
         content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Explorer</LinkItem>
       })
-
     } catch (error) {
       setAuthorization(false)
-      setRecents(item => [...item, { ...recentInfo, status: 0 }])
+      setRecent([...recent, { ...recentInfo, status: 0 }])
       throw error
     } finally {
+      setAuthorization(false)
       setApproveLoading(false)
       setPending(pending.filter(i => i!== 'approve'))
     }

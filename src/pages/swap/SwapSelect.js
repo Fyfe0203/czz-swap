@@ -10,7 +10,7 @@ const TokenItem = ({ item, onClick, currency }) => {
   return (
     <div className={`f-c token-item ${currency?.tokenAddress === item.tokenAddress ? 'active' : ''}`} onClick={() => onClick(item)}>
       <div className="token-info f-c">
-        {item.image && <div className="img" style={{backgroundImage:`url(${item.image})`}} />}
+        {item.image && <Image src={item.image} style={{borderRadius:90,marginRight:10}} size="28" />}
         <div className="f-1">
           <h2>{item.symbolName || item.symbol}</h2>
           {/* <div className="token-address">{item.name}</div> */}
@@ -84,7 +84,10 @@ export default React.memo( function SelectId({ types, pool }) {
     <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
       <div className="token-list">
         <div className="token-network">
-          {networkTabs.map((item, index) => <div key={ index } className={ item.chainId === chainId ? 'selected' : ''} onClick={ () => filterNetwork(item)}>{ item.networkType }</div>)}
+          {networkTabs.map((item, index) =>
+            <div key={index} className={item.chainId === chainId ? 'selected' : ''} onClick={() => filterNetwork(item)}>
+              {item.networkType}
+            </div>)}
         </div>
         <div className="token-search">
           <i className="ico ico-search" />
@@ -108,7 +111,7 @@ export default React.memo( function SelectId({ types, pool }) {
     <Fragment>
       <div className="select select-inner f-c" onClick={(() => setListStatus(true))}>
         <div className="f-c f-1">
-          {currency?.image && <Image src={currency?.image} size="28" style={{marginRight:10}} />}
+          {currency?.image && <Image src={currency?.image} size="28" style={{marginRight:10,borderRadius:90}} />}
           <div className="select-inner-val">
             <h3>{currency?.symbol || <span>{intl.get('SelectaToken')}</span>}</h3>
             {/* {currency?.name && <div className="select-inner-desc">{ currency?.name }</div>} */}

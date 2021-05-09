@@ -3,15 +3,22 @@ import './style.scss'
 import { Link } from 'react-router-dom'
 import banner from '../../asset/svg/welcomes.svg'
 import intl from 'react-intl-universal'
-
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function OverView() {
   let arr = ['ETH', 'BSC', 'HECO', 'TRON', "SOL", "DOT"]
   let exchange = `Uniswap,SushiSwap,PancakeSwap,Medx,DogeSwap,KSwap,Mooniswap,Balancer,Kyber,BakerySwap,JustSwap,DODO`
-  let exchangeName = ['ETH','ETH','BSC','HECO','HECO','OKEX','ETH','ETH','ETH','BSC','TRON','ETH,BSC']
+  let exchangeName = ['ETH', 'ETH', 'BSC', 'HECO', 'HECO', 'OKEX', 'ETH', 'ETH', 'ETH', 'BSC', 'TRON', 'ETH,BSC']
+  const [rec, setRec] = useLocalStorage('rec',[])
   return (
     <Fragment>
       <div className="home">
+        <button onClick={() => setRec([...rec,{a:'b',val:'NEW ITEMS'}])}>
+          new
+        </button>
+        {
+          rec.length && rec.map((item, index) => <div key={index}>{item.a} { item.val}</div>)
+        }
         <div className="home-container">
           <h1>{intl.get('PoweredByTeWaka')}</h1>
           <p>{intl.get('EnablingConnectivityBetweenIslandsOfDeFi')}</p>

@@ -3,6 +3,7 @@ import useGlobal from '../../hooks/useGlobal'
 import {Loading,Icon,Image,Modal,Button} from '../../compontent'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 const SwapItem = styled.div`
   display:flex;
@@ -21,11 +22,13 @@ const SwapName = styled.div`
 const InfoContainer = styled.div`
   font-weight:700;
   flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 `
 const ViewLink = styled.div`
   display:block;
   font-size:12px;
-  margin-top:10px;
   font-weight:normal;
   cursor: pointer;
   color:blue;
@@ -41,17 +44,21 @@ const DexBox = styled.div`
   align-items:center;
   font-size:12px;
   font-weight:normal;
+  color:#888;
+  margin-top:4px;
 `
 const SwapInfo = styled.div`
-  display:flex;
-  flex-direction:column;
+`
+
+const SwapContentInfo = styled.div`
+  font-size:12px;
+  margin:20px 0;
 `
 
 export default function SwapPending(props) {
-  const {hash,visible,fromType,fromRoute,toRoute,toType,fromUrl,toUrl,fromImage,toImage,onClose,id, ...rest} = props
+  const {hash,visible,fromType,fromRoute,toRoute,toType,fromUrl,toUrl,fromImage,toImage,onClose,id,content} = props
   const { explorer } = useGlobal()
-  // const [recents] = useLocalStorage([], 'recent')
-  const recents = window.localStorage.getItem('recent') ? JSON.parse( window.localStorage.getItem('recent')) : []
+  const [recent,setRecent] = useLocalStorage('recent',[])
   const normalHash = {
     ext_tx_hash: null,
     tx_hash: null,
@@ -67,13 +74,12 @@ export default function SwapPending(props) {
       const result = await res.json()
       const { items } = result
       if (items) setStatus({ ...normalHash, ...items[0] })
-      if (items?.confirm_ext_tx_hash) {
-        const swapList = recents.map(item => {
+      if (items[0]?.confirm_ext_tx_hash) {
+        const swapList = recent.map(item => {
           if(item.id === id) item.status = 1
           return item
         })
-        // debugger
-        window.localStorage.setItem('recent',JSON.stringify(swapList) )
+        setRecent(swapList)
       }
     } catch (error) {
       throw error
@@ -90,17 +96,17 @@ export default function SwapPending(props) {
     }
   }, [hash])
   
-  const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15 ,backgroundSize:'contain'}
+  const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15, backgroundSize: 'contain', borderRadius: 90}
   const iconStyle = { width: 60, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }
   
   const loadingStatus =  <Loading color="blue" size="small" />
   return (
-    <Modal title="SwapPending Detail" visible={visible} onClose={ () => onClose(null) } {...rest}>
+    <Modal title="SwapDetail" visible={visible} onClose={() => onClose(null)}>
       <SwapItem>
         <SwapName>
           <Image style={imageStyle} src={fromImage} />
           <InfoContainer>
-            <SwapInfo><DexBox><Image style={{borderRadius: 90,marginRight:5}} size="16" src={ fromRoute?.image } />{ fromRoute?.name}</DexBox>{fromType} </SwapInfo>
+            <SwapInfo>{fromType}<DexBox>DEX:{ fromRoute?.name}</DexBox></SwapInfo>
             <ViewLink onClick={()=>window.open(`${fromUrl}tx/${hash}`) }><Icon type="external-link" />{explorer[fromType]}</ViewLink>
           </InfoContainer>
         </SwapName>
@@ -122,13 +128,14 @@ export default function SwapPending(props) {
         <SwapName>
           <Image style={imageStyle}  src={toImage} />
           <InfoContainer>
-            <SwapInfo>{toType}<DexBox><Image style={{borderRadius: 90,marginRight:5}} size="16" src={ toRoute?.image } />{ toRoute?.name}</DexBox></SwapInfo>
+            <SwapInfo>{toType}<DexBox>DEX:{ toRoute?.name}</DexBox></SwapInfo>
             {confirm_ext_tx_hash && <ViewLink onClick={ ()=>window.open(`${toUrl}tx/${confirm_ext_tx_hash}`)}> <Icon type="external-link" />{explorer[toType]}</ViewLink>}
           </InfoContainer>
         </SwapName>
         {confirm_ext_tx_hash ? <Icon type="check-circle" /> : loadingStatus}
       </SwapItem>
-      <Button style={{margin:'10px 0'}} className="block" onClick={ () => onClose(null) }>Close</Button>
+      <SwapContentInfo>{ content }</SwapContentInfo>
+      <Button style={{margin:'25px 0 10px'}} className="block" onClick={ () => onClose(null) }>Close</Button>
     </Modal>
   )
 }

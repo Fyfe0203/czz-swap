@@ -19,10 +19,13 @@ import intl from 'react-intl-universal'
 const SwapConfirmItem = ({item,status,index}) => {
   return (
     <div className="confirm-node">
-      <Image src={item.currency.image} style={{width:36,height:36,borderRadius: 90,marginRight: 20}} />
+      <Image src={item.currency.image} style={{borderRadius: 90,marginRight: 20}} size="36" />
       <div className="confirm-symbol">
-        <b style={{color: status>0 && index === 1 ? 'red' : ''}}>{item.tokenValue}</b>
-        <span>{item.currency.symbol}</span>
+        <div className="confirm-symbol-title">
+          <b style={{color: status>0 && index === 1 ? 'red' : ''}}>{item.tokenValue}</b>
+          <span>{item.currency.symbol}</span>
+        </div>
+        <span>DEX:{item.swap[item.route].name}</span>
       </div>
     </div>
   )
@@ -33,7 +36,7 @@ export default function Swap() {
   const { status } = useSwap()
   const { loading: valueLoading, approveActions, approveLoading, authorization } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
-  const { loading: swapLoading, hash, fetchSwap,setHash,resSwap } = useSwapAndBurn()
+  const { loading: swapLoading, hash, fetchSwap, setHash, resSwap } = useSwapAndBurn()
   const {balance, getBalanceValue } = useBalance(from)
   const [setting, setSetting] = useState(false)
   const [buttonLoading, setButtonLoading] = useState(false)
@@ -41,8 +44,8 @@ export default function Swap() {
   const { addEthereum } = useWallet()
   
   useEffect(() => {
-    setHasBalance( Number(balance) > Number(from.tokenValue))
-  }, [balance])
+    setHasBalance(Number(balance) >= Number(from.tokenValue))
+  }, [balance,from.tokenValue])
 
   useEffect(() => {
     setButtonLoading(swapLoading || valueLoading || pirceLoading || approveLoading)
@@ -194,15 +197,15 @@ export default function Swap() {
           {impactPrice && miniReceived >= 0 ? swapFooter : null}
         </SwapPanel>
       </SwapWrap>
-    <Modal title={intl.get("AdvancedSettings")} visible={setting} onClose={ ()=>setSetting(false)}>
-      <Setting />
-    </Modal>
-    <Modal title="Confirm Swap" visible={confirmStatus} onClose={ ()=>setConfirmStatus(false)}>
-      { confirmSwapModal }
-    </Modal>
-    {/* <Modal visible={submitStatus} onClose={ ()=>setConfirmStatus(false)}>
-      { transactionSubmit }
-    </Modal> */}
+      <Modal title={intl.get("AdvancedSettings")} visible={setting} onClose={ ()=>setSetting(false)}>
+        <Setting />
+      </Modal>
+      <Modal title="Confirm Swap" visible={confirmStatus} onClose={ ()=>setConfirmStatus(false)}>
+        { confirmSwapModal }
+      </Modal>
+      {/* <Modal visible={submitStatus} onClose={ ()=>setConfirmStatus(false)}>
+        { transactionSubmit }
+      </Modal> */}
       <SwapPending visible={hash} onClose={() => { setHash(null); resSwap()}} {...hash} />
    </Fragment>
   )
