@@ -52,10 +52,12 @@ export default function Swap() {
   }, [valueLoading, swapLoading, pirceLoading, approveLoading])
 
   useLayoutEffect(() => {
-    getBalanceValue(from)
+    // getBalanceValue(from)
     if (accounts) {
       if(valueLoading || pirceLoading){
         setButtonText('FINDING_PRICE_ING')
+      } else if (approveLoading) {
+        setButtonText('APPROVE_ING')
       } else if (to.currency == null) {
         setButtonText('NONE_TO_TOKEN')
       } else if (from.tokenValue === '') {
@@ -68,8 +70,6 @@ export default function Swap() {
         setButtonText('NONE_NETWORK')
       } else if (!authorization  && to.tokenValue && impactPrice) {
         setButtonText('APPROVE' )
-      } else if(approveLoading){
-        setButtonText('APPROVE_ING')
       } else if (to.tokenValue && from.tokenValue && priceStatus === 0 && hasBalance && authorization && miniReceived > 0) {
         setButtonText('SWAP')
       }
@@ -80,7 +80,7 @@ export default function Swap() {
         setButtonText('NONE_WALLET')
       }
     }
-  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading,hasBalance])
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading, hasBalance])
   
   const reverseExchange = () => {
     setState({

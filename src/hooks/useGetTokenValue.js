@@ -28,6 +28,7 @@ export default function useGetTokenValue() {
     const recentInfo = {content:`Approved ${currency?.symbol}`,accounts,types:'Approved'}
     try {
       setApproveLoading(true)
+      setButtonText('APPROVE_ING')
       setPending([...pending, 'approve'])
       const res = await approve({ provider: currentProvider, tokenAddress: currency?.tokenAddress, spender, accounts })
       console.log('Approve result ======',res)
@@ -46,6 +47,7 @@ export default function useGetTokenValue() {
       setRecent([...recent, { ...recentInfo, status: 0 }])
       throw error
     } finally {
+      setButtonText('SWAP_NOW')
       setAuthorization(false)
       setApproveLoading(false)
       setPending(pending.filter(i => i!== 'approve'))
