@@ -1,11 +1,13 @@
-import React, { Fragment } from 'react'
-import './index.scss'
+import React, { useState } from 'react'
+import './ins_list.scss'
 import insLogo from '../../asset/svg/insurance.svg'
 import ethLogo from '../../asset/svg/ETH.svg'
 import czzLogo from '../../asset/svg/logos.svg'
 import bscLogo from '../../asset/svg/BSC.svg'
 import hecoLogo from '../../asset/svg/HECO.svg'
 import { Link } from 'react-router-dom'
+import { Modal } from '../../compontent'
+import InsPolicyPop from './ins_policy_pop'
 
 export default function Insurance() {
   const insItems = [
@@ -37,9 +39,19 @@ export default function Insurance() {
       tvlVal: '738232.21',
     },
   ]
+
+  const [showInsPolicy, setShowInsPolicy] = useState(false)
+
+  const onConfirm = () => {
+    // do something..
+
+    // close modal
+    setShowInsPolicy(false)
+  }
+
   return (
-    <div className="ins-wrap">
-      <div className="ins-content">
+    <div className="ins-policy-wrap">
+      <div className="ins-policy-content">
         <div className="ins-logo-wrap">
           <div
             className="ins-logo"
@@ -49,8 +61,8 @@ export default function Insurance() {
         <div className="ins-head">Insurance Policy</div>
         <div className="ins-desc-wrap">
           <div className="ins-desc">
-            CZZswap takes approximate 1 minute to complete, you may be subject to
-            exchange rate volatility during this time. An insurance policy is
+            CZZswap takes approximate 1 minute to complete, you may be subject
+            to exchange rate volatility during this time. An insurance policy is
             available to mitigate this risk. The premium rate 0.1%, and the
             proceeds of sale will be distributed to reserve providers of the
             insurance contract.
@@ -98,6 +110,15 @@ export default function Insurance() {
             )
           })}
         </div>
+        <div onClick={() => setShowInsPolicy(true)}>
+          open insurance policy popup. (for testing)
+        </div>
+        <Modal visible={showInsPolicy} onClose={() => setShowInsPolicy(false)}>
+          <InsPolicyPop
+            onConfirm={onConfirm}
+            onCancel={() => setShowInsPolicy(false)}
+          ></InsPolicyPop>
+        </Modal>
       </div>
     </div>
   )

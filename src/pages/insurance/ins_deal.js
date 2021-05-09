@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
-import "./ins_deal.scss";
-import czzLogo from "../../asset/svg/logos.svg";
-import { Link } from "react-router-dom";
+import React, { Fragment } from 'react'
+import './ins_deal.scss'
+import czzLogo from '../../asset/svg/logos.svg'
+import { Link } from 'react-router-dom'
 
 export default function InsDetail() {
   return (
@@ -12,8 +12,10 @@ export default function InsDetail() {
             <div></div>
           </div>
           <div className="lczz-logo-wrap">
-            <div className="lczz-logo" style={{ backgroundImage: `url(${czzLogo})` }}>
-          </div>
+            <div
+              className="lczz-logo"
+              style={{ backgroundImage: `url(${czzLogo})` }}
+            ></div>
           </div>
           <div className="rewards-txt">Pending Rewards ECZZ</div>
           <div className="rewards-amount">11920.02</div>
@@ -45,9 +47,11 @@ export default function InsDetail() {
           <div className="approve-btn-wrap">
             <div className="approve-btn">Approve</div>
           </div>
-          <Link to="/swap"><div className="go-swap-link">Don't have ECZZ ? Swap</div></Link>
+          <Link to="/swap">
+            <div className="go-swap-link">Don't have ECZZ ? Swap</div>
+          </Link>
         </div>
       </div>
     </div>
-  );
+  )
 }
