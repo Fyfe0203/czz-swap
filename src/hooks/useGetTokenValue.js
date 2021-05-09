@@ -46,11 +46,6 @@ export default function useGetTokenValue() {
       setAuthorization(false)
       setRecent([...recent, { ...recentInfo, status: 0 }])
       throw error
-    } finally {
-      setButtonText('SWAP_NOW')
-      setAuthorization(false)
-      setApproveLoading(false)
-      setPending(pending.filter(i => i!== 'approve'))
     }
   }
 
