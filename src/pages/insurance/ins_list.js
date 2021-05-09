@@ -11,15 +11,15 @@ import InsPolicyPop from './ins_policy_pop'
 
 export default function Insurance() {
   const insItems = [
-    {
-      fromLogo: ethLogo,
-      fromName: 'ETH',
-      // toLogo: '',
-      toName: 'ECZZ',
-      amountVal: '11139020.34',
-      policyVal: '89922.22',
-      tvlVal: '8338432.32',
-    },
+    // {
+    //   fromLogo: ethLogo,
+    //   fromName: 'ETH',
+    //   // toLogo: '',
+    //   toName: 'ECZZ',
+    //   amountVal: '11139020.34',
+    //   policyVal: '89922.22',
+    //   tvlVal: '8338432.32',
+    // },
     {
       fromLogo: bscLogo,
       fromName: 'BSC',
@@ -96,13 +96,13 @@ export default function Insurance() {
                         <div className="potv-val">${item.tvlVal}</div>
                       </div>
                       <div className="policy-wrap">
-                        <div className="potv-label">Policy</div>
+                        <div className="potv-label">Fee</div>
                         <div className="potv-val">${item.policyVal}</div>
                       </div>
-                      <div className="amount-wrap">
+                      {/* <div className="amount-wrap">
                         <div className="potv-label">Amount</div>
                         <div className="potv-val">${item.amountVal}</div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
