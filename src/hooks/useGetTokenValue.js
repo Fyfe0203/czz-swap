@@ -61,7 +61,7 @@ export default function useGetTokenValue() {
     const amountToken = new BigNumber(decToBn(tokenValue))
     const allonceNum = new BigNumber(decToBn(allowanceTotal))
     console.log('Allowance result==', allonceNum)
-    return allonceNum.comparedTo(amountToken)
+    return allonceNum.comparedTo(amountToken) > 0
   }
 
   // const networkError = () => {
