@@ -17,7 +17,7 @@ export default function SwapRoute({ types, pool }) {
     <Fragment>
       <RouteBox onClick={() => setVisible(true)}>
         <div className="f-c f-1">
-          <Image width="24" height="24" src={pool.swap[pool.route].image} style={{ borderRadius: 90, marginRight:4 }} />
+          <Image width="18" height="18" src={pool.swap[pool.route].image} style={{ borderRadius: 90, marginRight:4 }} />
           <div className="f-1">{pool.swap[pool.route]?.name}</div>
         </div>
         <Icon type="chevron-right" />
@@ -46,8 +46,8 @@ const RouteBox = styled.div`
   display:flex;
   align-items:center;
   background:#fff;
-  padding:4px;
-  border-radius:4px;
+  padding:6px 4px;
+  border-radius:3px;
   margin-right:10px;
   width:120px;
   cursor: pointer;

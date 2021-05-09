@@ -17,7 +17,7 @@ export default function useGetTokenValue() {
   const [approveLoading,setApproveLoading] = useState(false)
   const [authorization, setAuthorization] = useState(true)
   const [isApprove, setIsApprove] = useState(true)
-  const [recent, setRecent] = useLocalStorage([],'recent')
+  const [recents, setRecents] = useLocalStorage([],'recent')
   // const getReceived = async () => {
   //   const receivedAmount = Number(from.tokenValue) - (from.tokenValue * Number(tolerance))
   //   const res = await swapTokenValue(receivedAmount)
@@ -35,7 +35,7 @@ export default function useGetTokenValue() {
       setIsApprove(res)
       setApproveLoading(false)
       setAuthorization(true)
-      setRecent(item => [...item, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
+      setRecents(item => [...item, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
       setPending(pending.filter(i => i !== 'approve'))
       message({
         icon: 'award',
@@ -45,7 +45,7 @@ export default function useGetTokenValue() {
 
     } catch (error) {
       setAuthorization(false)
-      setRecent(item => [...item, { ...recentInfo, status: 0 }])
+      setRecents(item => [...item, { ...recentInfo, status: 0 }])
       throw error
     } finally {
       setApproveLoading(false)

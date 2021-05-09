@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import useLocalStorage from '../../hooks/useLocalStorage'
 import {Loading,Icon,Image,Modal,Button} from '../../compontent'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -8,16 +7,20 @@ import PropTypes from 'prop-types'
 const SwapItem = styled.div`
   display:flex;
   justify-content:space-around;
-  padding:18px 0;
+  padding:15px;
+  background:#f4f4f4;
+  border-radius:4px;
   align-items:center;
 `
 const SwapName = styled.div`
   flex:1;
   display:flex;
   align-items:center;
+  margin-right:20px;
 `
 const InfoContainer = styled.div`
   font-weight:700;
+  flex:1;
 `
 const ViewLink = styled.div`
   display:block;
@@ -33,9 +36,19 @@ const ViewLink = styled.div`
     margin-right:6px;
   }
 `
+const DexBox = styled.div`
+  display:flex;
+  align-items:center;
+  font-size:12px;
+  font-weight:normal;
+`
+const SwapInfo = styled.div`
+  display:flex;
+  flex-direction:column;
+`
 
 export default function SwapPending(props) {
-  const {hash,visible,fromType,toType,fromUrl,toUrl,fromImage,toImage,onClose,id, ...rest} = props
+  const {hash,visible,fromType,fromRoute,toRoute,toType,fromUrl,toUrl,fromImage,toImage,onClose,id, ...rest} = props
   const { explorer } = useGlobal()
   // const [recents] = useLocalStorage([], 'recent')
   const recents = window.localStorage.getItem('recent') ? JSON.parse( window.localStorage.getItem('recent')) : []
@@ -59,7 +72,7 @@ export default function SwapPending(props) {
           if(item.id === id) item.status = 1
           return item
         })
-        debugger
+        // debugger
         window.localStorage.setItem('recent',JSON.stringify(swapList) )
       }
     } catch (error) {
@@ -78,7 +91,7 @@ export default function SwapPending(props) {
   }, [hash])
   
   const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15 ,backgroundSize:'contain'}
-  const iconStyle = { width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }
+  const iconStyle = { width: 60, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }
   
   const loadingStatus =  <Loading color="blue" size="small" />
   return (
@@ -87,7 +100,7 @@ export default function SwapPending(props) {
         <SwapName>
           <Image style={imageStyle} src={fromImage} />
           <InfoContainer>
-            { fromType }
+            <SwapInfo><DexBox><Image style={{borderRadius: 90,marginRight:5}} size="16" src={ fromRoute?.image } />{ fromRoute?.name}</DexBox>{fromType} </SwapInfo>
             <ViewLink onClick={()=>window.open(`${fromUrl}tx/${hash}`) }><Icon type="external-link" />{explorer[fromType]}</ViewLink>
           </InfoContainer>
         </SwapName>
@@ -109,7 +122,7 @@ export default function SwapPending(props) {
         <SwapName>
           <Image style={imageStyle}  src={toImage} />
           <InfoContainer>
-            { toType }
+            <SwapInfo>{toType}<DexBox><Image style={{borderRadius: 90,marginRight:5}} size="16" src={ toRoute?.image } />{ toRoute?.name}</DexBox></SwapInfo>
             {confirm_ext_tx_hash && <ViewLink onClick={ ()=>window.open(`${toUrl}tx/${confirm_ext_tx_hash}`)}> <Icon type="external-link" />{explorer[toType]}</ViewLink>}
           </InfoContainer>
         </SwapName>
