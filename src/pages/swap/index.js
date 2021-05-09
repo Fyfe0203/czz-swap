@@ -56,6 +56,8 @@ export default function Swap() {
     if (accounts) {
       if(valueLoading || pirceLoading){
         setButtonText('FINDING_PRICE_ING')
+      } else if (swapLoading) {
+        setButtonText('SWAP_ING')
       } else if (approveLoading) {
         setButtonText('APPROVE_ING')
       } else if (to.currency == null) {
@@ -80,7 +82,7 @@ export default function Swap() {
         setButtonText('NONE_WALLET')
       }
     }
-  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading, hasBalance])
+  }, [accounts, from.tokenValue, from.currency, to.tokenValue, to.currency, impactPrice, approveLoading, valueLoading, authorization, priceStatus, miniReceived, pirceLoading, hasBalance,swapLoading])
   
   const reverseExchange = () => {
     setState({
