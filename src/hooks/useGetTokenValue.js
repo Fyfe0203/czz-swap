@@ -46,7 +46,7 @@ export default function useGetTokenValue() {
       setAuthorization(false)
       setRecent([...recent, { ...recentInfo, status: 0 }])
       throw error
-    }finally {
+    } finally {
       setApproveLoading(false)
       setPending(pending.filter(i => i!== 'approve'))
     }

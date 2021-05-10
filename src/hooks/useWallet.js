@@ -178,9 +178,10 @@ export default function useWallet() {
       })
       if (success) {
         console.log(`${symbol} successfully added to wallet!`)
-      } else {
-        throw new Error('Something went wrong.')
       }
+      // else {
+      //   throw new Error('Something went wrong.')
+      // }
     } catch (error) {
       throw error
     }
