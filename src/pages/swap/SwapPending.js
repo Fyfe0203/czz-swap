@@ -54,9 +54,18 @@ const SwapContentInfo = styled.div`
   font-size:12px;
   margin:20px 0;
 `
+const NetworkInfo = styled.div`
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  font-size:12px;
+  margin-right:15px;
+  line-height:2;
+`
 
 export default function SwapPending(props) {
-  const {hash,visible,fromType,fromRoute,toRoute,toType,fromUrl,toUrl,fromImage,toImage,onClose,id,content} = props
+  const {hash,visible,fromType,fromRoute,toRoute,toType,fromUrl,toUrl,fromImage,toImage,onClose,id,content,fromSymbol,toSymbol} = props
   const { explorer } = useGlobal()
   const [recent,setRecent] = useLocalStorage('recent',[])
   const normalHash = {
@@ -96,7 +105,7 @@ export default function SwapPending(props) {
     }
   }, [hash])
   
-  const imageStyle = { width: 30, height: 30, margin: "0 0", marginRight: 15, backgroundSize: 'contain', borderRadius: 90}
+  const imageStyle = { width: 30, height: 30, margin: "0 0", backgroundSize: 'contain', borderRadius: 90}
   const iconStyle = { width: 60, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }
   
   const loadingStatus =  <Loading color="blue" size="small" />
@@ -104,9 +113,11 @@ export default function SwapPending(props) {
     <Modal title="SwapDetail" visible={visible} onClose={() => onClose(null)}>
       <SwapItem>
         <SwapName>
-          <Image style={imageStyle} src={fromImage} />
+          <NetworkInfo>
+            <Image style={imageStyle} src={fromImage} />{fromType}
+          </NetworkInfo>
           <InfoContainer>
-            <SwapInfo>{fromType}<DexBox>DEX:{ fromRoute?.name}</DexBox></SwapInfo>
+            <SwapInfo>{fromSymbol}<DexBox>DEX:{ fromRoute?.name}</DexBox></SwapInfo>
             <ViewLink onClick={()=>window.open(`${fromUrl}tx/${hash}`) }><Icon type="external-link" />{explorer[fromType]}</ViewLink>
           </InfoContainer>
         </SwapName>
@@ -115,7 +126,10 @@ export default function SwapPending(props) {
       <Icon style={iconStyle} type="arrow-down" />
       <SwapItem>
         <SwapName>
-          <Image style={imageStyle} src={require('../../asset/svg/logos.svg').default} />
+          <NetworkInfo>
+            <Image style={imageStyle} src={require('../../asset/svg/logos.svg').default} />
+            CZZ
+          </NetworkInfo>
           <InfoContainer>
             ClassZZ Network
            {tx_hash && <ViewLink onClick={()=>window.open(`https://scan.classzz.com/#/transactionHash?transHash=${tx_hash}`)}><Icon type="external-link" />View on classZZscan</ViewLink>}
@@ -126,9 +140,11 @@ export default function SwapPending(props) {
       <Icon style={iconStyle} type="arrow-down" />
       <SwapItem>
         <SwapName>
-          <Image style={imageStyle}  src={toImage} />
+          <NetworkInfo>
+            <Image style={imageStyle} src={toImage} />{toType}
+          </NetworkInfo>
           <InfoContainer>
-            <SwapInfo>{toType}<DexBox>DEX:{ toRoute?.name}</DexBox></SwapInfo>
+            <SwapInfo>{toSymbol}<DexBox>DEX:{ toRoute?.name}</DexBox></SwapInfo>
             {confirm_ext_tx_hash && <ViewLink onClick={ ()=>window.open(`${toUrl}tx/${confirm_ext_tx_hash}`)}> <Icon type="external-link" />{explorer[toType]}</ViewLink>}
           </InfoContainer>
         </SwapName>

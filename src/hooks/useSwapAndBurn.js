@@ -8,7 +8,7 @@ import BigNumber from "bignumber.js"
 const  { numberToHex } = Web3.utils
 
 export default function useSwapAndBurn() {
-  const { from, to, currentProvider, accounts, setPending, pending, swapSetting, setButtonText, setState } = useGlobal()
+  const { from, to, currentProvider, accounts, setPending, pending, swapSetting, setButtonText, setState, miniReceived } = useGlobal()
   const { tolerance, deadline } = swapSetting
   const [receipt, setReceipt] = useState(null)
   const [hash,setHash] = useState(null)
@@ -20,10 +20,14 @@ export default function useSwapAndBurn() {
       explorerUrl: `${from.explorerUrl}tx/${address}`,
       fromUrl: from.explorerUrl,
       fromType: from.networkType,
+      fromSymbol: from.currency?.symbol,
+      toSymbol: to.currency?.symbol,
       toType: to.networkType,
       toUrl: to.explorerUrl,
       fromImage: from.currency.image,
       toImage: to.currency.image,
+      fromRoute: from.swap[from.route],
+      toRoute: to.swap[to.route]
     }
   }
 
@@ -72,13 +76,13 @@ export default function useSwapAndBurn() {
     const recentItem = {
       types: 'Swap',
       accounts,
-      content: `Swap ${from?.tokenValue} ${from.currency?.symbol} to ${to?.tokenValue} ${to.currency?.symbol}`
+      content: `Swap ${from?.tokenValue} ${from.currency?.symbol} to ${miniReceived} ${to.currency?.symbol}`
     }
 
     const swapTranscationHash = hashRes => {
       console.log('Swap Hash Result ===', hashRes)
-      const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime,fromRoute:from.swap[from.route],toRoute:to.swap[to.route]}
-      setRecent([...recent, swapResresult])
+      const swapResresult = { ...recentItem, status: 0, hash: hashRes, ...getHashUrl(hashRes), id:swapTime}
+      setRecent([swapResresult,...recent])
       setHash(swapResresult)
       setPending([...pending, swapResresult])
     }
