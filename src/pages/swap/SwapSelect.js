@@ -58,7 +58,6 @@ export default React.memo( function SelectId({ types, pool }) {
     setListStatus(false)
   }
 
-
   const filterNetwork = (nodes = null) => {
     const current = types === 1 ? networks.filter(i => i.networkType !== from.networkType) : networks
     const node = nodes || current[0]
@@ -90,8 +89,11 @@ export default React.memo( function SelectId({ types, pool }) {
     filterNetwork(pool)
   }, [pool])
   
-  const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
-
+  const notFound = <div className="token-empty">
+    <i className="img" style={{ backgroundImage: `url(${require('../../asset/svg/noResults.svg').default})` }} />
+    <h2>Oops!</h2>
+    <p>Not Found token! </p>
+  </div>
   const [addStatus, setAddStatus] = useState(false)
 
   const tokenModal = (
