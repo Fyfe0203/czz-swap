@@ -1,7 +1,17 @@
 import React, { Fragment, useRef } from 'react'
+import styled from 'styled-components'
+const Titles = styled.div`
+  flex:1;
+  padding:10px;
+`
+const ModalHead = styled.div`
+  padding:10px;
+  display:flex;
+  align-items:center;
+`
 
 export default function Modal(props) {
-  const { visible = false, title = null, maskClose = true, ...rest } = props
+  const { visible = false, title = null, maskClose = true,excat, ...rest } = props
   const maskRef = useRef()
   const close = (e) => {
     if (e.target === maskRef.current)  maskClose && props.onClose(false)
@@ -17,11 +27,10 @@ export default function Modal(props) {
               <div className="ico-x modal-close" onClick={()=> props.onClose(false)}/>
                 {
                   title &&
-                <div className="f-c-sb modal-header">
-                  <h2 className="modal-title">
-                    {title}
-                  </h2>
-                </div>
+                <ModalHead className="f-c-sb">
+                  { excat }
+                  <Titles>{title}</Titles>
+                </ModalHead>
                 }
                 <div className="modal-content">
                   { props.children }

@@ -13,11 +13,6 @@ export const AppProvider = ({ children }) => {
     let web3Provider
     if (window.ethereum) {
       web3Provider = window.ethereum
-      // try {
-      //   window.ethereum.enable()
-      // } catch (error) {
-      //   console.error("User denied account access")
-      // }
     } else if (window.web3) {
       web3Provider = window.web3.currentProvider
       console.log("MetaMask Legacy dapp browsers")
@@ -25,14 +20,12 @@ export const AppProvider = ({ children }) => {
     try {
       let provider = new Web3()
       provider.setProvider(web3Provider)
-      // const accounts = await provider.eth.getAccounts()
-      // actions.updateAccounts(accounts[0])
       actions.setProvider(provider)
     } catch (err) { 
       console.log('error',err)
     }
-   
   }
+
   useEffect(() => {
     initSwap()
   }, [window.ethereum])

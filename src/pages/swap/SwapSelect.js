@@ -1,17 +1,28 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import useGlobal from '../../hooks/useGlobal'
-import { Modal, Image } from '../../compontent/index'
+import { Modal, Image, Icon } from '../../compontent/index'
 import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
 import intl from 'react-intl-universal'
+import TokenSearch from './TokenSearch'
+
 const SearchInput = styled.input``
+const AddButton = styled.a`
+  text-align:center;
+  padding:10px 0;
+  color:blue;
+  cursor: pointer;
+  font-size:12px;
+  border-top:1px solid #eee;
+  display:block;
+`
 
 const TokenItem = ({ item, onClick, currency }) => {
   return (
     <div className={`f-c token-item ${currency?.tokenAddress === item.tokenAddress ? 'active' : ''}`} onClick={() => onClick(item)}>
       <div className="token-info f-c">
         {item.image && <Image src={item.image} style={{borderRadius:90,marginRight:10}} size="28" />}
-        <div className="f-1">
+        <div className="f-1" style={{marginLeft:10}}>
           <h2>{item.symbolName || item.symbol}</h2>
           {/* <div className="token-address">{item.name}</div> */}
         </div>
@@ -80,30 +91,38 @@ export default React.memo( function SelectId({ types, pool }) {
   }, [pool])
   
   const notFound = <div className="token-empty"><i className="img" style={{backgroundImage:`url(${require('../../asset/svg/noResults.svg').default})`}} /> <h2>Oops!</h2><p>Not Found token! </p></div>
+
+  const [addStatus, setAddStatus] = useState(false)
+
   const tokenModal = (
-    <Modal visible={listStatus} onClose={ setListStatus } style={{padding: 0}}>
-      <div className="token-list">
-        <div className="token-network">
-          {networkTabs.map((item, index) =>
-            <div key={index} className={item.chainId === chainId ? 'selected' : ''} onClick={() => filterNetwork(item)}>
-              {item.networkType}
-            </div>)}
-        </div>
-        <div className="token-search">
-          <i className="ico ico-search" />
-          <div className="token-search-input">
-            <SearchInput value={ keyword } className="c-input" onChange={filterToken} placeholder={intl.get('SearchToken')} type="text" />
+    <Modal excat={addStatus ? <Icon type="arrow-left" onClick={ () => setAddStatus(false)} /> : null } visible={listStatus} onClose={setListStatus} style={{ padding: 0 }} title={addStatus ? 'Add Token' : null }>
+      {addStatus ? <TokenSearch /> :
+        <Fragment>
+        <div className="token-list">
+          <div className="token-network">
+            {networkTabs.map((item, index) =>
+              <div key={index} className={item.chainId === chainId ? 'selected' : ''} onClick={() => filterNetwork(item)}>
+                {item.networkType}
+              </div>)}
           </div>
-          {keyword && <i className="ico-x clean" onClick={ cleanSearch } />}
-        </div>
-        <Scrollbars style={{ maxHeight: 400, height: 400 }}>
-          <div className="token-table">
-              {pools && filters && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
-                return <TokenItem key={ index } currency={currency} item={item} onClick={ selectToken } />
-            }) : notFound}
+          <div className="token-search">
+            <i className="ico ico-search" />
+            <div className="token-search-input">
+              <SearchInput value={ keyword } className="c-input" onChange={filterToken} placeholder={intl.get('SearchToken')} type="text" />
+            </div>
+            {keyword && <i className="ico-x clean" onClick={ cleanSearch } />}
           </div>
-        </Scrollbars>
-      </div>
+          <Scrollbars style={{ maxHeight: 400, height: 400 }}>
+            <div className="token-table">
+                {pools && filters && pools.filter(filters).length ? pools.filter(filters).map((item, index) => {
+                  return <TokenItem key={ index } currency={currency} item={item} onClick={ selectToken } />
+              }) : notFound}
+            </div>
+            </Scrollbars>
+            <AddButton onClick={()=> setAddStatus(true) }>Add Token</AddButton>
+          </div>
+         </Fragment>
+        }
     </Modal>
   )
 

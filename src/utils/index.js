@@ -1,8 +1,5 @@
 import BigNumber from 'bignumber.js'
-import JSBI from 'jsbi'
-import web3 from 'web3'
 
-window.JSBI = JSBI
 export const formatAddress = (address) => {
   if (address) { 
     return address.slice(0, 6) + '...' + address.slice(-6)
@@ -65,16 +62,3 @@ export const throttle = (fn, delay = 3000) => {
     }, delay)
   }
 }
-
-const MAX_FEE = web3.utils.toBN('9999')
-export const getFee = (amount, feePercent) => {
-  return web3.utils.toBN(amount)
-    .mul(web3.utils.toBN(feePercent))
-    .div(MAX_FEE.addn(1))
-    .toString()
-}
-
-window.getFee = getFee
-window.web3 = web3
-window.bnToDec = bnToDec
-window.decToBn = decToBn

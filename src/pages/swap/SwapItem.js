@@ -11,14 +11,12 @@ const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 export default function SwapItem({ pool, exchange, type}) {
   const { from, setState } = useGlobal()
-  const {  balance } = useBalance(pool)
-
+  const { balance } = useBalance(pool)
   const enforcer = (nextUserInput) => {
     if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
       valChange(nextUserInput)
     }
   }
-
   const valChange = tokenValue => {
     setState({from:{...from,tokenValue}})
   }
@@ -52,7 +50,7 @@ export default function SwapItem({ pool, exchange, type}) {
             maxLength={79}
             spellCheck="false"/>
         </SwapItemInit>
-        {type===0 ? <MaxBalance onClick={ () => valChange(balance === 0 ? '' : balance) } >MAX</MaxBalance> : null} 
+        {type === 0 ? <MaxBalance onClick={ () => valChange(balance === 0 ? '' : balance) } >MAX</MaxBalance> : null} 
         <SwapSelect types={type} pool={pool} />
       </SwapItemBlock>
     </SwapItemBox>

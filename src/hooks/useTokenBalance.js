@@ -1,26 +1,22 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import useBlock from './useBlock'
 import useGlobal from './useGlobal'
 import { getBalance } from '../utils/erc20'
 
 const useTokenBalance = ({tokenAddress,abi}) => {
-  const [balance, setBalance] = useState(new BigNumber(0))
   const { accounts: account } = useGlobal()
   const ethereum = window.ethereum
   const block = useBlock()
-  const fetchBalance = useCallback(async () => {
-    const balance = await getBalance({ethereum, tokenAddress, account, abi})
-    setBalance(new BigNumber(balance))
-  }, [account, ethereum, tokenAddress])
-
-  useEffect(() => {
+  
+  return useMemo(async () => {
     if (account && ethereum) {
-      fetchBalance()
+      const balance = await getBalance({ ethereum, tokenAddress, account, abi })
+      return new BigNumber(balance)
+    } else {
+      return 0
     }
   }, [account, ethereum, block, tokenAddress])
-
-  return balance
 }
 
 export default useTokenBalance

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { decToBn } from '../utils'
-import { allowance,approve } from '../utils/erc20'
+import { allowance, approve } from '../utils/erc20'
 import { message, LinkItem } from '../compontent'
 import Web3 from "web3"
 import useGlobal from './useGlobal'
@@ -10,6 +10,7 @@ import useLocalStorage from './useLocalStorage'
 import { IUniswapV2Router02 } from '../abi'
 import useDebounce from './useDebounce'
 import JSBI from "jsbi";
+import { getToken } from '../utils/erc20'
 
 export default function useGetTokenValue() {
   const { currentProvider, accounts, setPending, pending, from, to, setState, setButtonText} = useGlobal()
@@ -37,6 +38,7 @@ export default function useGetTokenValue() {
       setPending(pending.filter(i => i !== 'approve'))
       setRecent([...recent, {...recentInfo, status:1, "explorerUrl": `${explorerUrl}tx/${res.transactionHash}` }])
       setIsApprove(res)
+      setButtonText('SWAP')
       message({
         icon: 'award',
         title: `Approvd White ${currency?.symbol}`,
@@ -109,6 +111,7 @@ export default function useGetTokenValue() {
       const { czz, provider, networkName, weth } = pool
       const { swaprouter, currentToken } = pool.swap[pool.route]
       const contract = await new Web3(provider)
+      getToken(contract)
       const lpContract = await new contract.eth.Contract(IUniswapV2Router02, swaprouter)
       let tokenArray = []
       if (networkName === "ETH"){
@@ -157,7 +160,6 @@ export default function useGetTokenValue() {
       try {
         setLoading(true)
         setState({priceStatus:0})
-
         let changeAmount = 0
         const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
         if (from.currency.tokenAddress !== from.czz) {

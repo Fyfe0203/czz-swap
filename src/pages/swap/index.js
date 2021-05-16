@@ -15,6 +15,7 @@ import useWallet from '../../hooks/useWallet'
 import {decToBn,bnToDec,toNonExponential} from '../../utils'
 import './swap.scss'
 import intl from 'react-intl-universal'
+import TokenSearch from './TokenSearch'
 
 const SwapConfirmItem = ({item,status,index}) => {
   return (

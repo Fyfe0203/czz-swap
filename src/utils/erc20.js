@@ -15,11 +15,20 @@ export const getContract = (provider, address, abi = ABI_TOKEN, ) => {
   return contract
 }
 
-
+// token Infos
+export const getToken = async ({ provider, address }) => {
+  const contract = getContract(provider, address)
+  const [name, symbol, decimals, totalSupply] = await Promise.all([
+    contract.methods.name().call(),
+    contract.methods.symbol().call(),
+    contract.methods.decimals().call(),
+    contract.methods.totalSupply().call(),
+  ])
+  return { name, symbol, decimals, totalSupply }
+}
 
 // 查询主币余额
 export const getBalanceEth = async (provider, tokenAddress) => {
-  // debugger
   if (provider) {
     const blance = await provider.eth.getBalance(tokenAddress)
     return blance
@@ -43,14 +52,35 @@ export const getSymbol = async (provider, tokenAddress, accounts,abi) => {
 export const getName = async (provider, tokenAddress, accounts) => {
   const lpContract = getContract(provider, tokenAddress)
   try {
-    const name = await lpContract.methods
-      .name({ from: accounts })
-      .call()
+    const name = await lpContract.methods.name().call()
     return name
+  } catch (error) {
+    console.log(error)
+  }
+  
+}
+
+// 查询代币名称
+export const getDecimals = async (provider, tokenAddress, accounts) => {
+  const lpContract = getContract(provider, tokenAddress)
+  try {
+    const decimals = await lpContract.methods
+      .decimals()
+      .call()
+      debugger
+    
+    return decimals
   } catch (e) {
     return ''
   }
 }
+
+// "chainId": 128,
+// "name": "COMPLUS",
+// "symbol": "COM",
+// "decimals": 18,
+// "logoURI":
+
 
 // getowner 
 // tokenAddress :from token
@@ -88,10 +118,10 @@ export const approve = async ({ spender, provider, tokenAddress, accounts }) => 
     throw error
   }
 }
+
 // 代币余额查询
 export const getBalance = async (  provider, tokenAddress, userAddress ) => {
   const lpContract = getContract(provider, tokenAddress)
-  // debugger
   try {
     const balance = await lpContract.methods
       .balanceOf(userAddress)
