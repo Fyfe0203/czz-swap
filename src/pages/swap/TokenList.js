@@ -222,7 +222,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     setCurrentList(allToken.filter(i => i.systemType === item.networkType))
   }
 
-  const searchTokenActions = useCallback( async(key) => {
+  const searchTokenActions = useCallback( async(key,current) => {
     if (searchKey.length > 0 && current) {
       setCurrentList([])
       setLoading(true)
@@ -233,6 +233,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
         if (filterList.length > 0) {
           setCurrentList(filterList)
         } else {
+          debugger
           searchToken({ current, tokenAddress: address })
         }
       } else {
@@ -248,9 +249,10 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     // filter network token list
   const filterNetwork = (item) => {
     setCurrent(item)
-    getCurrentList(item)
     if (searchKey.length) {
-      searchTokenActions(searchKey)
+      searchTokenActions(searchKey, item)
+    } else {
+      getCurrentList(item)
     }
   }
 
@@ -301,7 +303,9 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   }, [visible])
 
   useEffect(() => {
-    searchTokenActions(searchKey)
+    if (allToken && current) {
+      searchTokenActions(searchKey, current)
+    }
   }, [searchKey])
 
   useEffect(() => {
@@ -312,10 +316,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     if (allToken && current) {
       getCurrentList(current)
     }
-    if (current && searchKey) {
-      searchTokenActions(searchKey)
-    }
-  }, [allToken, current])
+  }, [allToken])
 
   useEffect(() => {
     if(token) setIsActive(allToken.some(i=>i.tokenAddress === token?.address))
