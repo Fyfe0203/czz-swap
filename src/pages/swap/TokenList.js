@@ -60,6 +60,9 @@ const ItemBlock = styled.div`
 const ItemName = styled.div`
   font-size:12px;
   opacity:.5;
+  transform:scale(.8);
+  transform-origin:0;
+  margin-top:3px;
 `
 const ItemSymbol = styled.div`
   font-size:15px;
@@ -82,7 +85,8 @@ const SearchBox = styled.div`
 const SearchTokenInput = styled.input`
   width:100%;
   padding:15px 0;
-  font-size:16px;
+  font-size:14px;
+  color:#444;
   background:transparent;
   outline:none;
   border:none;
@@ -149,11 +153,20 @@ const ItemBalance = styled.div`
   font-size:12px;
   opacity:.5;
 `
-
+const Tips = styled.div`
+  font-size:12px;
+  color:#666;
+  text-align:center;
+  padding:10px 0;
+  border-top:1px solid #eee;
+`
+const CustomInfo = styled.div`
+  font-size:12px;
+`
 const ListItem = props => {
   const { image, symbol, name, ...rest } = props
   const { itemLoading, getPoolBalance, poolBalance } = useBalance()
-  
+
   useEffect(() => {
     getPoolBalance(props)
   }, [])
@@ -326,6 +339,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
           </Fragment> : listBlock
         }
       </ListContainer>
+      <Tips>Tip: Custom tokens are stored locally in your browser <CustomInfo>{ customToken.length} Custom Tokens</CustomInfo></Tips>
     </Modal>
   )
 }
