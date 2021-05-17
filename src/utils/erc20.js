@@ -24,6 +24,7 @@ export const getToken = async ({ provider, address }) => {
     contract.methods.decimals().call(),
     contract.methods.totalSupply().call(),
   ])
+  debugger
   return { name, symbol, decimals, totalSupply, address }
 }
 
