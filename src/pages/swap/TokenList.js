@@ -233,7 +233,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   }
 
   const filterAddressToken = address => {
-    return currentList.filter(i => i.address === address)
+    return currentList.filter(i => i.tokenAddress === address)
   }
 
 
@@ -265,6 +265,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
       const address = isAddress(key)
       if (address) {
         const filterList = filterAddressToken(address)
+        debugger
         if (filterList.length === 0) {
           searchToken({ current, tokenAddress: address })
         } else {
