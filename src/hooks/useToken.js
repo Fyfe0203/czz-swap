@@ -28,6 +28,8 @@ export default function useToken() {
         return res
       } catch (error) {
         return {}
+      } finally {
+        setLoading(false)
       }
     } else {
       return {}

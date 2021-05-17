@@ -17,15 +17,19 @@ export const getContract = (provider, address, abi = ABI_TOKEN, ) => {
 
 // token Infos
 export const getToken = async ({ provider, address }) => {
-  const contract = getContract(provider, address)
-  const [name, symbol, decimals, totalSupply] = await Promise.all([
-    contract.methods.name().call(),
-    contract.methods.symbol().call(),
-    contract.methods.decimals().call(),
-    contract.methods.totalSupply().call(),
-  ])
-  debugger
-  return { name, symbol, decimals, totalSupply, address }
+  if (provider && address) {
+    const contract = getContract(provider, address)
+    const [name, symbol, decimals, totalSupply] = await Promise.all([
+      contract.methods.name().call(),
+      contract.methods.symbol().call(),
+      contract.methods.decimals().call(),
+      contract.methods.totalSupply().call(),
+    ])
+    const item = { name, symbol, decimals: +decimals, totalSupply, address }
+    return item
+  } else {
+    return {}
+  }
 }
 
 // 查询主币余额
