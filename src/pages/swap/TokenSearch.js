@@ -106,7 +106,7 @@ export default function TokenSearch() {
   const queryChange = ({ target }) => {
     setVal(target.value)
     // if (isAddress(target.value)) {
-    searchToken({ current, tokenAddress: target.value })
+      searchToken({ current, tokenAddress: target.value })
     // } else {
       
     // }

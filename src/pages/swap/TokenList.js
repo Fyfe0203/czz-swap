@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useCallback,Fragment } from 'react'
 import styled from 'styled-components'
-import { Modal,Image, Icon,Loading } from '../../compontent'
+import { Modal,Image, Icon, Loading } from '../../compontent'
 import useGlobal from '../../hooks/useGlobal'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { Scrollbars } from 'rc-scrollbars'
-import { getToken } from '../../utils/erc20'
-import { getAddress } from '@ethersproject/address'
-import { Fragment } from 'react'
 import useBalance from '../../hooks/useBalance'
+import useToken from '../../hooks/useToken'
 
 const ListTab = styled.div`
   display:flex;
@@ -49,6 +47,7 @@ const TokenItem = styled.div`
   .img{
     margin:0;
     border-radius:90px;
+    background-color:#eee;
   }
   &:hover{
     background:rgba(90,90,90,.1);
@@ -89,6 +88,10 @@ const SearchTokenInput = styled.input`
   border:none;
 `
 const ResultText = styled.div``
+const ResultBox = styled.div`
+  height:480px;
+  margin:0 15px;
+`
 const ResultItem = styled.div`
   display:flex;
   align-items:center;
@@ -140,7 +143,7 @@ const SearchEmpty = styled.div`
   flex-direction:column;
   font-size:14px;
   color:blue;
-  height:480px;
+  height:460px;
 `
 const ItemBalance = styled.div`
   font-size:12px;
@@ -150,14 +153,14 @@ const ItemBalance = styled.div`
 const ListItem = props => {
   const { image, symbol, name, ...rest } = props
   const { itemLoading, getPoolBalance, poolBalance } = useBalance()
-
+  
   useEffect(() => {
     getPoolBalance(props)
   }, [])
   
   return (
     <TokenItem {...rest}>
-      <Image className="img" src={image} size="30" />
+      <Image className="img" src={image} size="34" />
       <ItemBlock>
         <ItemSymbol>{symbol}</ItemSymbol>
         <ItemName>{name}</ItemName>
@@ -167,84 +170,60 @@ const ListItem = props => {
   )
 }
 
-function EmptyBlock({text}) {
+function EmptyBlock({text,loading}) {
   return (
     <SearchEmpty>
-      <Image size={200} src={require('../../asset/svg/tokenFailed.svg').default} />
-      <div>{text}</div>
+      {loading ? <Loading color="blue" /> : <Fragment>
+        <Image size={280} src={require('../../asset/svg/tokenFailed.svg').default} />
+        <div>{text}</div>
+        </Fragment>
+      }
     </SearchEmpty>
   )
 }
 
 export default function TokenList({ pool, onSelect, onClose, type, visible}) {
-  const { pools, from, to, networks, setState } = useGlobal()
   const [customToken, setCustomToken] = useLocalStorage('customToken', [])
-  // const  {isAddress, token, loading, setToken, searchToken} = useToken()
+  const { pools, from, to, networks, setState } = useGlobal()
+  const {loading:searchLoading, searchToken, isAddress, token} = useToken()
   const [allToken, setAllToken] = useState(pools)
   const [current, setCurrent] = useState('')
   const [searchKey, setSearchKey] = useState('')
   const [currentList, setCurrentList] = useState([])
   const [currentNetworks, setCurrentNetworks] = useState([])
-  const [token, setToken] = useState([])
-  const [loading, setLoading] = useState([])
-
-  const isAddress = (value) => {
-    try {
-      return getAddress(value)
-    } catch {
-      return false
-    }
-  }
   const [isActive, setIsActive] = useState(false)
-  const activeAction = () => {
-    setIsActive(pools.some(i=>i.tokenAddress === token?.address))
+  const [loading, setLoading] = useState(false)
+
+  const getCurrentList = item => {
+    setCurrentList(allToken.filter(i => i.systemType === item.networkType))
+  }
+    // filter network token list
+  const filterNetwork = (item) => {
+    setCurrent(item)
+    getCurrentList(item)
   }
 
-  const addCustom = () => {
-    const { networkName: networkType } = currentNetworks
-    const newItem = { ...token, networkType, tokenAddress: token.address }
-    setCustomToken([...customToken, newItem])
-    setIsActive(true)
-    setSearchKey('')
-    setToken({})
-    setAllToken([...pools, ...JSON.parse(window.localStorage.getItem('customToken'))])
-  }
   // get coustom token list for localStorage
   const initList = () => {
-    setAllToken([...pools,...customToken])
+    setSearchKey('')
+    setLoading(false)
     const currentItem = type === 1 ? networks.filter(i => from.chainId !== i.chainId) : networks
     setCurrentNetworks(currentItem)
     const currentPool = networks.filter(i => i.networkId === pool.networkId)
-    // setCurrent(currentPool.length ? currentPool[0] : networks[0])
     filterNetwork(currentPool.length ? currentPool[0] : networks[0])
-  }
-
-  useLayoutEffect(() => {
-    initList()
-  }, [visible])
-
-  const queryToken = async ({ provider, address }) => {
-    try {
-      setLoading(true)
-      const res = await getToken({ provider, address })
-      setToken(res)
-      return res
-    } catch (error) {
-      setToken(null)
-    } finally {
-      setLoading(false)
-    }
+    setAllToken([...pools,...customToken])
   }
 
   const filterToken = word => {
     const key = word.toLowerCase()
-    const list = currentList.filter(i => i.name.toLowerCase().indexOf(key) !== -1 || i.symbol.toLowerCase().indexOf(key) !== -1)
-    setCurrentList(list)
+    return currentList.filter(i => i.name.toLowerCase().indexOf(key) !== -1 || i.symbol.toLowerCase().indexOf(key) !== -1)
   }
 
-  const filterAddressToken = (address) => {
+  const filterAddressToken = address => {
     return currentList.filter(i => i.address === address)
   }
+
+
 
   // select token
   const selectTokenItem = currency => {
@@ -253,52 +232,62 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     onClose(false)
   }
 
-  // filter network token list
-  const filterNetwork = (item) => {
-    setCurrent(item)
-    setCurrentList(allToken.filter(i => i.systemType === item.networkType))
-  }
-
-  // clear search key
-  const cleanSearchKey = () => {
-    setToken(null)
+  const cleanSearch = () => {
     setSearchKey('')
   }
-  
-  const searchToken = () => {
-    if (searchKey.length > 0) {
-      const address = isAddress(searchKey)
-      if (address) {
-        const filterList = filterAddressToken(address)
-        filterList.length === 0 ? queryToken({ provider: current.provider, address }) : setCurrentList(filterList)
-      } else {
-        filterToken(searchKey)
-      }
-    } else if (searchKey === '') {
-      initList()
-    }
+
+  const addCustomHanle = () => {
+    cleanSearch()
+    const newItem = { ...token, tokenAddress: token.address }
+    const allLocal = [...customToken, newItem]
+    setCustomToken(allLocal)
+    setAllToken([...pools,...allLocal])
+    setIsActive(true)
   }
 
-  useLayoutEffect(() => {
-    searchToken()
-  }, [searchKey])
-
-  useLayoutEffect(() => {
-    if (searchKey.length > 0) {
-      const address = isAddress(searchKey)
+  const searchTokenActions = useCallback( async(key) => {
+    if (searchKey.length > 0 && current) {
+      setCurrentList([])
+      setLoading(true)
+      const address = isAddress(key)
       if (address) {
         const filterList = filterAddressToken(address)
-        filterList.length === 0 ? queryToken({ provider: current.provider, address }) : setCurrentList(filterList)
+        if (filterList.length === 0) {
+          searchToken({ current, tokenAddress: address })
+        } else {
+          setCurrentList(filterList)
+        }
+        setLoading(false)
       } else {
-        filterToken(searchKey)
+        const selfFilter = filterToken(key)
+        // const searchLocal = await searchToken({ current, tokenAddress: key })
+        console.log(selfFilter)
+        setCurrentList(selfFilter)
+        setLoading(false)
       }
+    } else if (key === '') {
+      getCurrentList(current)
     }
-  }, [current.networkId])
+  },[searchKey])
 
   useEffect(() => {
-    filterNetwork(current)
-  }, [allToken])
+    searchTokenActions(searchKey)
+  }, [searchKey,current])
 
+  useEffect(() => {
+    if (allToken && current) {
+      getCurrentList(current)
+    }
+  }, [allToken, current])
+
+  useLayoutEffect(() => {
+    initList()
+  }, [visible])
+  
+  useEffect(() => {
+    if(token) setIsActive(allToken.some(i=>i.tokenAddress === token?.address))
+  }, [token])
+  
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
       {currentList.length ? currentList.map(item => <ListItem onClick={ ()=> selectTokenItem(item) } key={item.name} {...item} />) : <EmptyBlock text="None Token" />}
@@ -306,20 +295,22 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   )
 
   const tokenBlock = (
-    <ResultItem>
-      <ResultInfo>
-        <Image className="img" size="32" src={token?.logoURI} />
-        <ResultText>
-          <h2>{token?.symbol}</h2>
-          <span>{token?.name}</span>
-        </ResultText>
-      </ResultInfo>
-      {isActive ? <AddCustom><Icon type="check-circle" />Active</AddCustom> : <AddCustomButton onClick={addCustom}>Add</AddCustomButton>}
-    </ResultItem>
+    <ResultBox>
+      <ResultItem>
+        <ResultInfo>
+          <Image className="img" size="32" src={token?.logoURI} />
+          <ResultText>
+            <h2>{token?.symbol}</h2>
+            <span>{token?.name}</span>
+          </ResultText>
+        </ResultInfo>
+        {isActive ? <AddCustom><Icon type="check-circle" />Active</AddCustom> : <AddCustomButton onClick={addCustomHanle}>Add</AddCustomButton>}
+      </ResultItem>
+    </ResultBox>
   )
 
   return (
-    <Modal onClose={onClose} visible={visible} style={{ padding:'15px 15px 0'}}>
+    <Modal onClose={onClose} visible={visible} style={{ padding: '15px 15px 0' }} maskClose={ false }>
       <ListTab>
         {currentNetworks.map((item, index) => <TabItem className={ `${current?.networkId === item.networkId ? 'selected':''}`} key={index} {...item} onClick={() => filterNetwork(item)} >{ item.networkType }</TabItem>)}
       </ListTab>
@@ -327,12 +318,11 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
         <SearchBox>
           <SearchTokenInput placeholder="Search Name or Paste Address" value={searchKey} onChange={e => setSearchKey(e.target.value)} />
         </SearchBox>
-        {searchKey.length ? <Icon className="close" type="x" onClick={cleanSearchKey} /> : null}
+        {searchKey.length ? <Icon className="close" type="x" onClick={cleanSearch} /> : null}
       </SearchContainer>
       <ListContainer>
         {searchKey ? <Fragment>
-            {currentList.length ? listBlock : <EmptyBlock text="Not Found Token" />}
-            {token?.name ? tokenBlock : null}
+            {token?.name ? tokenBlock : (currentList.length ? listBlock : <EmptyBlock loading={ searchLoading || loading } text="Not Found Token" />)}
           </Fragment> : listBlock
         }
       </ListContainer>

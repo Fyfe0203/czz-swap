@@ -23,28 +23,29 @@ export default function useToken() {
 
   const findToken = async ({ provider, address }) => {
     try {
-      setLoading(true)
       const res = await getToken({ provider, address })
-      setToken(res)
       return res
     } catch (error) {
-      setToken(null)
-    } finally {
-      setLoading(false)
+      return { }
     }
   }
-  const searchToken = async ({ current, tokenAddress }) => { 
-    const { provider,networkType } = current
-    const address = isAddress(tokenAddress)
-    if (tokenList[networkType]) {
-      const tokenResult = tokenList[networkType].filter(i => i.address === address)
-      if (tokenResult.length > 0) {
-        setToken(tokenResult[0])
-      } else {
-        findToken({provider,address})
+  const searchToken = async ({ current, tokenAddress }) => {
+    try {
+      setToken({})
+      setLoading(true)
+      const { provider, networkType } = current
+      const address = isAddress(tokenAddress)
+      if (tokenList[networkType]) {
+        const tokenResult = tokenList[networkType].filter(i => i.address === address)
+        if (tokenResult.length > 0) {
+          setToken({ ...tokenResult[0], custom: true, systemType: networkType, image: tokenResult[0]?.logoURI })
+        } else {
+          const res = await findToken({ provider, address })
+          setToken( { ...res, systemType: networkType, custom: true, image: null })
+        }
       }
-    } else {
-      findToken({provider,address})
+    } finally {
+      setLoading(false)
     }
   }
 
