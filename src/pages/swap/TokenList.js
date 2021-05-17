@@ -266,12 +266,12 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
       if (address) {
         const filterList = filterAddressToken(address)
         debugger
-        if (filterList.length === 0) {
-          searchToken({ current, tokenAddress: address })
-        } else {
+        if (filterList.length > 0) {
           setCurrentList(filterList)
+          setLoading(false)
+        } else {
+          searchToken({ current, tokenAddress: address })
         }
-        setLoading(false)
       } else {
         const selfFilter = filterToken(key)
         // const searchLocal = await searchToken({ current, tokenAddress: key })
