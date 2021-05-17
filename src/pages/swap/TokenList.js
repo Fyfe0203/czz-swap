@@ -339,7 +339,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
           </Fragment> : listBlock
         }
       </ListContainer>
-      <Tips>Tip: Custom tokens are stored locally in your browser <CustomInfo>{ customToken.length} Custom Tokens</CustomInfo></Tips>
+      <Tips>Tip: Custom tokens are stored locally in your browser {customToken.length ? <CustomInfo>{ customToken.length} Custom Tokens</CustomInfo> : null}</Tips>
     </Modal>
   )
 }
