@@ -32,9 +32,11 @@ export default function useToken() {
         setLoading(false)
       }
     } else {
+      setLoading(false)
       return {}
     }
   }
+
   const searchToken = async ({ current, tokenAddress }) => {
     try {
       setToken({})
@@ -43,10 +45,12 @@ export default function useToken() {
       const address = isAddress(tokenAddress)
       if (tokenList[networkType]) {
         const tokenResult = tokenList[networkType].filter(i => i.address === address)
+        debugger
         if (tokenResult.length > 0) {
           setToken({ ...tokenResult[0], custom: true, systemType: networkType, image: tokenResult[0]?.logoURI })
         } else {
           const res = await findToken({ provider, address })
+          debugger
           setToken( { ...res, systemType: networkType, custom: true, image: null })
         }
       }

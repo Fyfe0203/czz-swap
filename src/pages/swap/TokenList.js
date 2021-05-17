@@ -165,12 +165,10 @@ const CustomInfo = styled.div`
 `
 const ListItem = props => {
   const { image, symbol, name, ...rest } = props
-  const { itemLoading, getPoolBalance, poolBalance } = useBalance()
-
+  const { getPoolBalance, poolBalance } = useBalance()
   useEffect(() => {
     getPoolBalance(props)
   }, [])
-  
   return (
     <TokenItem {...rest}>
       <Image className="img" src={image} size="34" />
@@ -210,51 +208,6 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   const getCurrentList = item => {
     setCurrentList(allToken.filter(i => i.systemType === item.networkType))
   }
-    // filter network token list
-  const filterNetwork = (item) => {
-    setCurrent(item)
-    getCurrentList(item)
-  }
-
-  // get coustom token list for localStorage
-  const initList = () => {
-    setSearchKey('')
-    setLoading(false)
-    const currentItem = type === 1 ? networks.filter(i => from.chainId !== i.chainId) : networks
-    setCurrentNetworks(currentItem)
-    const currentPool = networks.filter(i => i.networkId === pool.networkId)
-    filterNetwork(currentPool.length ? currentPool[0] : networks[0])
-    setAllToken([...pools,...customToken])
-  }
-
-  const filterToken = word => {
-    const key = word.toLowerCase()
-    return currentList.filter(i => i.name.toLowerCase().indexOf(key) !== -1 || i.symbol.toLowerCase().indexOf(key) !== -1)
-  }
-
-  const filterAddressToken = address => {
-    return currentList.filter(i => i.tokenAddress === address)
-  }
-
-  // select token
-  const selectTokenItem = currency => {
-    const item = type === 1 ? { ...to, ...current, currency, tokenValue: '' } : { ...from,...current, currency }
-    type === 1 ? setState({ to: item }) : setState({ from: item })
-    onClose(false)
-  }
-
-  const cleanSearch = () => {
-    setSearchKey('')
-  }
-
-  const addCustomHanle = () => {
-    cleanSearch()
-    const newItem = { ...token, tokenAddress: token.address }
-    const allLocal = [...customToken, newItem]
-    setCustomToken(allLocal)
-    setAllToken([...pools,...allLocal])
-    setIsActive(true)
-  }
 
   const searchTokenActions = useCallback( async(key) => {
     if (searchKey.length > 0 && current) {
@@ -278,22 +231,80 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     } else if (key === '') {
       getCurrentList(current)
     }
-  },[searchKey])
+  }, [searchKey])
+  
+    // filter network token list
+  const filterNetwork = (item) => {
+    setCurrent(item)
+    getCurrentList(item)
+    if (searchKey.length) {
+      searchTokenActions(searchKey)
+    }
+  }
+
+  // get coustom token list for localStorage
+  const initList = () => {
+    setSearchKey('')
+    setLoading(false)
+    const currentItem = type === 1 ? networks.filter(i => from.chainId !== i.chainId) : networks
+    setCurrentNetworks(currentItem)
+    let currentPool = networks.filter(i => i.networkId === pool.networkId)
+    filterNetwork(currentPool.length ? currentPool[0] : networks[0])
+    setAllToken([...pools,...customToken])
+  }
+
+  // filter token
+  const filterToken = word => {
+    const key = word.toLowerCase()
+    return currentList.filter(i => i.name.toLowerCase().indexOf(key) !== -1 || i.symbol.toLowerCase().indexOf(key) !== -1)
+  }
+
+  // filter Address token
+  const filterAddressToken = address => {
+    return currentList.filter(i => i.tokenAddress === address)
+  }
+
+  // select token
+  const selectTokenItem = currency => {
+    let item = type === 1 ? { to: { ...to, ...current, currency, tokenValue: '' } } : currency?.systemType === to?.networkType ? { to: {tokenValue:''},from:{ ...from, ...current,tokenValue:from.tokenValue, currency }}  : {from:{ ...from, ...current, tokenValue:from.tokenValue, currency }}
+    setState(item)
+    onClose(false)
+  }
+
+  const cleanSearch = () => {
+    setSearchKey('')
+  }
+
+  const addCustomHanle = () => {
+    cleanSearch()
+    const newItem = { ...token, tokenAddress: token.address }
+    const allLocal = [...customToken, newItem]
+    setCustomToken(allLocal)
+    setAllToken([...pools,...allLocal])
+    setIsActive(true)
+  }
+
+  useLayoutEffect(() => {
+    initList()
+  }, [visible])
 
   useEffect(() => {
     searchTokenActions(searchKey)
-  }, [searchKey,current])
+  }, [searchKey])
+
+  useEffect(() => {
+    cleanSearch()
+  }, [onClose])
 
   useEffect(() => {
     if (allToken && current) {
       getCurrentList(current)
     }
+    if (current && searchKey) {
+      searchTokenActions(searchKey)
+    }
   }, [allToken, current])
 
-  useLayoutEffect(() => {
-    initList()
-  }, [visible])
-  
   useEffect(() => {
     if(token) setIsActive(allToken.some(i=>i.tokenAddress === token?.address))
   }, [token])

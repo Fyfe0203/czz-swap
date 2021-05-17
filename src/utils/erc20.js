@@ -40,53 +40,6 @@ export const getBalanceEth = async (provider, tokenAddress) => {
   }
 }
 
-// 查询代币符号
-export const getSymbol = async (provider, tokenAddress, accounts,abi) => {
-  const lpContract = getContract(provider, tokenAddress, abi)
-  try {
-    const symbol = await lpContract.methods
-      .symbol({ from: accounts })
-      .call()
-    return symbol
-  } catch (error) {
-    console.warn(error)
-  }
-}
-
-// 查询代币名称
-export const getName = async (provider, tokenAddress, accounts) => {
-  const lpContract = getContract(provider, tokenAddress)
-  try {
-    const name = await lpContract.methods.name().call()
-    return name
-  } catch (error) {
-    console.log(error)
-  }
-  
-}
-
-// 查询代币名称
-export const getDecimals = async (provider, tokenAddress, accounts) => {
-  const lpContract = getContract(provider, tokenAddress)
-  try {
-    const decimals = await lpContract.methods
-      .decimals()
-      .call()
-      debugger
-    
-    return decimals
-  } catch (e) {
-    return ''
-  }
-}
-
-// "chainId": 128,
-// "name": "COMPLUS",
-// "symbol": "COM",
-// "decimals": 18,
-// "logoURI":
-
-
 // getowner 
 // tokenAddress :from token
 // provider: from provider

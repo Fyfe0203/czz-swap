@@ -141,7 +141,6 @@ export default React.memo( function SelectId({ types, pool }) {
         </div>
         <div className="ico ico-chevron-down" />
       </div>
-      {/* {tokenModal} */}
       <TokenList pool={pool} type={types} visible={listStatus} onClose={ () => setListStatus(false)} />
     </Fragment>
   )

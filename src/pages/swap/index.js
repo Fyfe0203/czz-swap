@@ -13,9 +13,8 @@ import styled from 'styled-components'
 import SwapPending from './SwapPending'
 import useWallet from '../../hooks/useWallet'
 import {decToBn,bnToDec,toNonExponential} from '../../utils'
-import './swap.scss'
 import intl from 'react-intl-universal'
-import TokenSearch from './TokenSearch'
+import './swap.scss'
 
 const SwapConfirmItem = ({item,status,index}) => {
   return (
@@ -181,7 +180,7 @@ export default function Swap() {
         return null
     }
   }
-
+  console.log(from,to)
   return (
     <Fragment>
       <SwapWrap className="swap-wrap">
