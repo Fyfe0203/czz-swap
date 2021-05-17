@@ -6,6 +6,7 @@ import BSC from '../constants/token/bsc.json'
 import ETH from '../constants/token/eth.json'
 
 export default function useToken() {
+  // const { pools } = useGlobal()
   const isAddress = (value) => {
     try {
       return getAddress(value)
@@ -13,10 +14,13 @@ export default function useToken() {
       return false
     }
   }
-  
   const [token,setToken] = useState({})
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const tokenList = { HECO, BSC, ETH }
+  // const activeAction = item => {
+  //   setToken(pools.some(i=>i.tokenAddress === item?.address))
+  // }
+
   const findToken = async ({ provider, address }) => {
     try {
       setLoading(true)
@@ -44,5 +48,5 @@ export default function useToken() {
     }
   }
 
-  return {isAddress, token, loading, searchToken}
+  return {isAddress, token, setToken, loading, searchToken}
 }

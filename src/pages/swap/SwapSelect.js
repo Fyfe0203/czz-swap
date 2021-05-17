@@ -5,6 +5,7 @@ import { Scrollbars } from 'rc-scrollbars'
 import styled from 'styled-components'
 import intl from 'react-intl-universal'
 import TokenSearch from './TokenSearch'
+import TokenList from './TokenList'
 
 const SearchInput = styled.input``
 const AddButton = styled.a`
@@ -140,7 +141,8 @@ export default React.memo( function SelectId({ types, pool }) {
         </div>
         <div className="ico ico-chevron-down" />
       </div>
-      {tokenModal}
+      {/* {tokenModal} */}
+      <TokenList pool={pool} type={types} visible={listStatus} onClose={ () => setListStatus(false)} />
     </Fragment>
   )
 })

@@ -1,4 +1,4 @@
-import {useEffect,useCallback,useState} from 'react'
+import {useEffect,useCallback,useState,useMemo} from 'react'
 import useGlobal from './useGlobal'
 import {getBalanceNumber} from '../utils'
 import {getBalance} from '../utils/erc20'
@@ -31,6 +31,7 @@ export default function useBalabce(pool) {
   
   // pools balance
   const [itemLoading,setItemLoading] = useState(false)
+  const [poolBalance,setPoolBalance] = useState(0)
   const getPoolBalance = async (item) => {
     // debugger
     const pools = networks.filter(i => i.networkType === item.systemType)[0]
@@ -39,15 +40,15 @@ export default function useBalabce(pool) {
         setItemLoading(true)
         const res = pools && item.tokenAddress ? await getBalance(pools.provider, item.tokenAddress, accounts) : await new Web3(pools.provider).eth.getBalance(accounts)
         const tokenBalance = getBalanceNumber(new BigNumber(Number(res)), item.decimals)
+        setPoolBalance(tokenBalance)
         setItemLoading(false)
-        return { ...item, balance: tokenBalance }
+        return tokenBalance
       } catch (error) {
-        console.log(error)
-        return { ...item, balance: "0.00" }
+        return '0'
       } finally {
         setItemLoading(false)
       }
     }
   }
-  return { balance, loading, getBalanceValue, getPoolBalance, itemLoading }
+  return { balance, loading, getBalanceValue, getPoolBalance,poolBalance, itemLoading }
 }

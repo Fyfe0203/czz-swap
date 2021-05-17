@@ -1,14 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export default function Image({ icon, src, ...rest }) {
-  return <ImageContainer {...rest} style={{backgroundImage:`url(${src})`,backgroundColor: src ? '': 'blue'}}>
-    { !src && '?' }
+export default function Image(props) {
+  const { ...rest } = props
+  return <ImageContainer {...rest}>
+    { props.src ? '' : '?'}
   </ImageContainer>
 }
 const ImageContainer = styled.div`
   background-size:100%;
   margin:0 auto;
+  background-image:${props => `url(${props.src || null})`};
+  background-color:${props => `${props.src ?'' : 'blue'}`};
   background-repeat:no-repeat;
   background-position: center center;
   width: ${props => `${props.width}px` || '200px'};
