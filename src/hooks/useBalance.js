@@ -28,7 +28,7 @@ export default function useBalabce(pool) {
   useEffect(() => {
     getBalanceValue(pool)
   }, [pool])
-  
+
   // pools balance
   const [itemLoading,setItemLoading] = useState(false)
   const [poolBalance,setPoolBalance] = useState(0)
@@ -42,9 +42,8 @@ export default function useBalabce(pool) {
         const tokenBalance = getBalanceNumber(new BigNumber(Number(res)), item.decimals)
         setPoolBalance(tokenBalance)
         setItemLoading(false)
-        return tokenBalance
       } catch (error) {
-        return '0'
+        setPoolBalance(0)
       } finally {
         setItemLoading(false)
       }

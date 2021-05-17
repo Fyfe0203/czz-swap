@@ -73,6 +73,9 @@ const SearchContainer = styled.div`
   align-items:center;
   padding:0 10px;
   margin:20px 0 10px;
+  .close{
+    cursor: pointer;
+  }
 `
 const SearchBox = styled.div`
   flex:1;
@@ -147,6 +150,7 @@ const ItemBalance = styled.div`
 const ListItem = props => {
   const { image, symbol, name, ...rest } = props
   const { itemLoading, getPoolBalance, poolBalance } = useBalance()
+
   useEffect(() => {
     getPoolBalance(props)
   }, [])
@@ -197,20 +201,17 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   }
 
   const addCustom = () => {
-    const { networkName:networkType } = currentNetworks
+    const { networkName: networkType } = currentNetworks
     const newItem = { ...token, networkType, tokenAddress: token.address }
-    setCustomToken([...customToken,newItem])
+    setCustomToken([...customToken, newItem])
     setIsActive(true)
     setSearchKey('')
     setToken({})
+    setAllToken([...pools, ...JSON.parse(window.localStorage.getItem('customToken'))])
   }
-  
   // get coustom token list for localStorage
-  useEffect(() => {
-    setAllToken([...pools,...customToken])
-  }, [customToken])
-
   const initList = () => {
+    setAllToken([...pools,...customToken])
     const currentItem = type === 1 ? networks.filter(i => from.chainId !== i.chainId) : networks
     setCurrentNetworks(currentItem)
     const currentPool = networks.filter(i => i.networkId === pool.networkId)
@@ -226,7 +227,6 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     try {
       setLoading(true)
       const res = await getToken({ provider, address })
-      debugger
       setToken(res)
       return res
     } catch (error) {
@@ -264,13 +264,12 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     setToken(null)
     setSearchKey('')
   }
-
-  useLayoutEffect(() => {
+  
+  const searchToken = () => {
     if (searchKey.length > 0) {
       const address = isAddress(searchKey)
       if (address) {
         const filterList = filterAddressToken(address)
-        debugger
         filterList.length === 0 ? queryToken({ provider: current.provider, address }) : setCurrentList(filterList)
       } else {
         filterToken(searchKey)
@@ -278,9 +277,28 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     } else if (searchKey === '') {
       initList()
     }
+  }
+
+  useLayoutEffect(() => {
+    searchToken()
   }, [searchKey])
 
-  
+  useLayoutEffect(() => {
+    if (searchKey.length > 0) {
+      const address = isAddress(searchKey)
+      if (address) {
+        const filterList = filterAddressToken(address)
+        filterList.length === 0 ? queryToken({ provider: current.provider, address }) : setCurrentList(filterList)
+      } else {
+        filterToken(searchKey)
+      }
+    }
+  }, [current.networkId])
+
+  useEffect(() => {
+    filterNetwork(current)
+  }, [allToken])
+
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
       {currentList.length ? currentList.map(item => <ListItem onClick={ ()=> selectTokenItem(item) } key={item.name} {...item} />) : <EmptyBlock text="None Token" />}
@@ -294,7 +312,6 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
         <ResultText>
           <h2>{token?.symbol}</h2>
           <span>{token?.name}</span>
-          <span>{token?.address}</span>
         </ResultText>
       </ResultInfo>
       {isActive ? <AddCustom><Icon type="check-circle" />Active</AddCustom> : <AddCustomButton onClick={addCustom}>Add</AddCustomButton>}
@@ -310,7 +327,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
         <SearchBox>
           <SearchTokenInput placeholder="Search Name or Paste Address" value={searchKey} onChange={e => setSearchKey(e.target.value)} />
         </SearchBox>
-        {searchKey.length ? <Icon type="x" onClick={cleanSearchKey} /> : null}
+        {searchKey.length ? <Icon className="close" type="x" onClick={cleanSearchKey} /> : null}
       </SearchContainer>
       <ListContainer>
         {searchKey ? <Fragment>
