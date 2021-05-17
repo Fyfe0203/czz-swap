@@ -22,11 +22,15 @@ export default function useToken() {
   // }
 
   const findToken = async ({ provider, address }) => {
-    try {
-      const res = await getToken({ provider, address })
-      return res
-    } catch (error) {
-      return { }
+    if (provider && address) {
+      try {
+        const res = await getToken({ provider, address })
+        return res
+      } catch (error) {
+        return {}
+      }
+    } else {
+      return {}
     }
   }
   const searchToken = async ({ current, tokenAddress }) => {

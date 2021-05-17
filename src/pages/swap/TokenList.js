@@ -50,7 +50,7 @@ const TokenItem = styled.div`
     background-color:#eee;
   }
   &:hover{
-    background:rgba(90,90,90,.1);
+    background:#f2f2f2;
   }
 `
 const ItemBlock = styled.div`
