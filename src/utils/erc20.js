@@ -24,7 +24,7 @@ export const getToken = async ({ provider, address }) => {
     contract.methods.decimals().call(),
     contract.methods.totalSupply().call(),
   ])
-  return { name, symbol, decimals, totalSupply }
+  return { name, symbol, decimals, totalSupply, address }
 }
 
 // 查询主币余额

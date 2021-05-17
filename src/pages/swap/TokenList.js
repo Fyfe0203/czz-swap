@@ -137,6 +137,7 @@ const SearchEmpty = styled.div`
   flex-direction:column;
   font-size:14px;
   color:blue;
+  height:480px;
 `
 const ItemBalance = styled.div`
   font-size:12px;
@@ -200,6 +201,8 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     const newItem = { ...token, networkType, tokenAddress: token.address }
     setCustomToken([...customToken,newItem])
     setIsActive(true)
+    setSearchKey('')
+    setToken({})
   }
   
   // get coustom token list for localStorage
@@ -277,6 +280,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     }
   }, [searchKey])
 
+  
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
       {currentList.length ? currentList.map(item => <ListItem onClick={ ()=> selectTokenItem(item) } key={item.name} {...item} />) : <EmptyBlock text="None Token" />}
@@ -290,6 +294,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
         <ResultText>
           <h2>{token?.symbol}</h2>
           <span>{token?.name}</span>
+          <span>{token?.address}</span>
         </ResultText>
       </ResultInfo>
       {isActive ? <AddCustom><Icon type="check-circle" />Active</AddCustom> : <AddCustomButton onClick={addCustom}>Add</AddCustomButton>}
@@ -310,7 +315,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
       <ListContainer>
         {searchKey ? <Fragment>
             {currentList.length ? listBlock : <EmptyBlock text="Not Found Token" />}
-            {token?.name ? tokenBlock : <EmptyBlock text="Enter valid token address" />}
+            {token?.name ? tokenBlock : null}
           </Fragment> : listBlock
         }
       </ListContainer>
