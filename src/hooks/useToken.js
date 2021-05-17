@@ -27,13 +27,15 @@ export default function useToken() {
         const res = await getToken({ provider, address })
         return res
       } catch (error) {
-        return {}
+        debugger
+        setLoading(false)
       } finally {
+        setToken({})
         setLoading(false)
       }
     } else {
+      setToken({})
       setLoading(false)
-      return {}
     }
   }
 
@@ -50,7 +52,6 @@ export default function useToken() {
           setToken({ ...tokenResult[0], custom: true, systemType: networkType, image: tokenResult[0]?.logoURI })
         } else {
           const res = await findToken({ provider, address })
-          debugger
           setToken( { ...res, systemType: networkType, custom: true, image: null })
         }
       }

@@ -63,6 +63,8 @@ const ItemName = styled.div`
   transform:scale(.8);
   transform-origin:0;
   margin-top:3px;
+  display:flex;
+  align-items:center;
 `
 const ItemSymbol = styled.div`
   font-size:15px;
@@ -163,12 +165,22 @@ const Tips = styled.div`
 const CustomInfo = styled.div`
   font-size:12px;
 `
+const CustomTag = styled.div`
+  font-size:12px;
+  padding:4px 6px;
+  border-radius:3px;
+  background:#444;
+  margin-right:4px;
+  color:#fff;
+  transform:scale(.7);
+  transform-origin:100% 50%;
+`
 const ListItem = props => {
   const { image, symbol, name, ...rest } = props
   const { getPoolBalance, poolBalance } = useBalance()
   useEffect(() => {
     getPoolBalance(props)
-  }, [])
+  }, [name])
   return (
     <TokenItem {...rest}>
       <Image className="img" src={image} size="34" />
@@ -176,6 +188,7 @@ const ListItem = props => {
         <ItemSymbol>{symbol}</ItemSymbol>
         <ItemName>{name}</ItemName>
       </ItemBlock>
+      { props.custom ? <CustomTag>CUSTOM</CustomTag> : null}
       <ItemBalance>{poolBalance.toFixed(4)}</ItemBalance>
     </TokenItem>
   )
@@ -216,10 +229,9 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
       const address = isAddress(key)
       if (address) {
         const filterList = filterAddressToken(address)
-        debugger
+        setLoading(false)
         if (filterList.length > 0) {
           setCurrentList(filterList)
-          setLoading(false)
         } else {
           searchToken({ current, tokenAddress: address })
         }
@@ -311,7 +323,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
-      {currentList.length ? currentList.map(item => <ListItem onClick={ ()=> selectTokenItem(item) } key={item.name} {...item} />) : <EmptyBlock text="None Token" />}
+      {currentList.length ? currentList.map((item,index) => <ListItem onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
     </Scrollbars>
   )
 
