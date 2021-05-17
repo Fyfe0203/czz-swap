@@ -180,7 +180,6 @@ export default function Swap() {
         return null
     }
   }
-  console.log(from,to)
   return (
     <Fragment>
       <SwapWrap className="swap-wrap">

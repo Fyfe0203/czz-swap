@@ -181,6 +181,11 @@ const ListItem = props => {
   useEffect(() => {
     getPoolBalance(props)
   }, [name])
+
+  useLayoutEffect(() => {
+    props.balanceChange(poolBalance)
+  }, [poolBalance])
+  
   return (
     <TokenItem {...rest}>
       <Image className="img" src={image} size="34" />
@@ -219,7 +224,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   const [loading, setLoading] = useState(false)
 
   const getCurrentList = item => {
-    setCurrentList(allToken.filter(i => i.systemType === item.networkType))
+    setCurrentList(allToken.filter(i => i.systemType === item.networkType).map(i => { i.balance = 0; return i}))
   }
 
   const searchTokenActions = useCallback( async(key,current) => {
@@ -322,9 +327,17 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     if(token) setIsActive(allToken.some(i=>i.tokenAddress === token?.address))
   }, [token])
   
+
+  const balanceChange = (val,index) => {
+    let arr = [...currentList]
+    //arr.splice(index, 1, { ...currentList[index], balance: val })
+    arr[index].balance = val
+    setCurrentList(arr)
+  }
+
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
-      {currentList.length ? currentList.map((item,index) => <ListItem onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
+      {currentList.length ? currentList.sort((a,b)=>b.balance - a.balance).map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
     </Scrollbars>
   )
 
