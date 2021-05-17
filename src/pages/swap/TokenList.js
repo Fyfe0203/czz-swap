@@ -236,8 +236,6 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     return currentList.filter(i => i.tokenAddress === address)
   }
 
-
-
   // select token
   const selectTokenItem = currency => {
     const item = type === 1 ? { ...to, ...current, currency, tokenValue: '' } : { ...from,...current, currency }
@@ -274,8 +272,6 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
         }
       } else {
         const selfFilter = filterToken(key)
-        // const searchLocal = await searchToken({ current, tokenAddress: key })
-        console.log(selfFilter)
         setCurrentList(selfFilter)
         setLoading(false)
       }
