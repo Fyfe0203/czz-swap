@@ -6,6 +6,7 @@ import useLocalStorage from '../../hooks/useLocalStorage'
 import { Scrollbars } from 'rc-scrollbars'
 import useBalance from '../../hooks/useBalance'
 import useToken from '../../hooks/useToken'
+import intl from 'react-intl-universal'
 
 const ListTab = styled.div`
   display:flex;
@@ -20,7 +21,7 @@ const TabItem = styled.div`
   text-align:center;
   padding:10px;
   cursor: pointer;
-  font-size:15px;
+  font-size:16px;
   font-weight:800;
   &.selected{
     color:blue;
@@ -77,6 +78,11 @@ const SearchContainer = styled.div`
   align-items:center;
   padding:0 10px;
   margin:20px 0 10px;
+  .search{
+    font-size:16px;
+    margin-right:10px;
+    opacity:.4;
+  }
   .close{
     cursor: pointer;
   }
@@ -360,17 +366,23 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   return (
     <Modal onClose={onClose} visible={visible} style={{ padding: '15px 15px 0' }} maskClose={ false }>
       <ListTab>
-        {currentNetworks.map((item, index) => <TabItem className={ `${current?.networkId === item.networkId ? 'selected':''}`} key={index} {...item} onClick={() => filterNetwork(item)} >{ item.networkType }</TabItem>)}
+        {currentNetworks.map((item, index) =>
+          <TabItem className={`${current?.networkId === item.networkId ? 'selected' : ''}`} key={index} {...item} onClick={() => filterNetwork(item)} >
+            {/* <Image className="img" src={ item.image } size="16" /> */}
+            {item.networkType}
+          </TabItem>
+        )}
       </ListTab>
       <SearchContainer>
+        <Icon type="search" className="search" />
         <SearchBox>
-          <SearchTokenInput placeholder="Search Name or Paste Address" value={searchKey} onChange={e => setSearchKey(e.target.value)} />
+          <SearchTokenInput placeholder={intl.get('SearchTokenPasteAddress')} value={searchKey} onChange={e => setSearchKey(e.target.value)} />
         </SearchBox>
         {searchKey.length ? <Icon className="close" type="x" onClick={cleanSearch} /> : null}
       </SearchContainer>
       <ListContainer>
         {searchKey ? <Fragment>
-            {token?.name ? tokenBlock : (currentList.length ? listBlock : <EmptyBlock loading={ searchLoading || loading } text="Not Found Token" />)}
+          {token?.name ? tokenBlock : (currentList.length ? listBlock : <EmptyBlock loading={searchLoading || loading} text={intl.get('NotFoundToken')} />)}
           </Fragment> : listBlock
         }
       </ListContainer>

@@ -2,7 +2,7 @@ import React, { useState,useEffect, Fragment } from 'react'
 import useGlobal from '../../hooks/useGlobal'
 import useWalletConnect from '../../hooks/useWalletConnect'
 import { formatAddress, getBalanceNumber,  } from '../../utils'
-import { CopyButton ,Loading, Modal} from '../../compontent'
+import { CopyButton ,Loading, Modal, Image} from '../../compontent'
 import Pending from './Pending'
 import NetworkError from './NetworkError'
 import Web3 from 'web3'
@@ -10,12 +10,28 @@ import BigNumber from 'bignumber.js'
 import { Jazzicon } from '@ukstv/jazzicon-react'
 import Recent from './Recent'       
 import NetworkModal from '../swap/NetworkModal'
+import styled from 'styled-components'
 import './index.scss'
 // https://chainid.network/chains.json
 
 import useWallet from '../../hooks/useWallet'
 import intl from 'react-intl-universal'
 
+const NetworkBlock = styled.div`
+display:flex;
+align-items:center;
+background:#fff;
+border-radius:90px;
+font-size:12px;
+height:27px;
+padding:0 10px 0 5px;
+margin-right:10px;
+.img{
+  border-radius:90px;
+  margin-right:5px;
+  background-size:contain;
+}
+`
 export default function Connect(props) {
   const { accounts,wallet, networkStatus, networks, pending, from, to, explorer, showConnectWallet, setState } = useGlobal()
   const { connectWallet, buttonText, disConnect } = useWallet()
@@ -56,7 +72,9 @@ export default function Connect(props) {
     try {
       setNetworkLoading(true)
       const networkItem = networks.filter(i => i.chainId === from.chainId)
-      setCurrentNetwork(networkItem[0] || {})
+      // debugger
+      const networksNode = networkItem.length ? networkItem[0] : {}
+      setCurrentNetwork(networksNode)
       if (networkItem[0]?.provider) {
         const res = await new Web3(networkItem[0]?.provider).eth.getBalance(accounts)
         const _balance = getBalanceNumber(new BigNumber(Number(res))).toFixed(4)
@@ -75,7 +93,7 @@ export default function Connect(props) {
 
   const accountBlock = (
     <Fragment>
-      {currentNetwork.networkName && <div className="c-wallet c-connect-link network">{ currentNetwork?.networkName}</div>}
+      {currentNetwork?.networkName ? <NetworkBlock><Image className="img" size="15" src={currentNetwork?.image } />{ currentNetwork?.networkName}</NetworkBlock> : null}
       <div className="c-wallet f-c">
         {networkLoading && <Loading size="small" mask={true} />}
           <div className="f-c">

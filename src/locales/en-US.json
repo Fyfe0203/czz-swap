@@ -47,5 +47,6 @@
   "ApproveInPending": "Approve in Pending",
   "SwapInPending": "Swap in Pending",
   "SwichNetworkInPending": "Swich Network in Pending",
-  "InsufficientliquidityForThisTrade": "Insufficient liquidity for this trade."
+  "InsufficientliquidityForThisTrade": "Insufficient liquidity for this trade.",
+  "SearchTokenPasteAddress":"Search Name or Paste Address"
 }
