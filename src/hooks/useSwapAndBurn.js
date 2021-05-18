@@ -107,6 +107,9 @@ export default function useSwapAndBurn() {
         path = [from.currency.tokenAddress, from.currentToken, from.czz]
       }else{
         path = [from.currency.tokenAddress, from.currentToken, from.weth, from.czz]
+        if (from.currency.tokenAddress === from.weth ){
+          path = [from.weth,  from.czz]
+        }
       }
 
       lpContract.methods.swapAndBurnWithPath(

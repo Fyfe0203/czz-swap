@@ -94,6 +94,9 @@ export default function useGetTokenValue() {
         tokenArray =  isFrom ? [tokenAddress, weth, czz] : [czz, weth, tokenAddress]
       }else{
         tokenArray =  isFrom ? [tokenAddress, currentToken, weth, czz] : [czz, weth, currentToken, tokenAddress]
+        if (tokenAddress === weth ){
+          tokenArray =  isFrom ? [weth, czz] : [czz, weth]
+        }
       }
       const tokenamount = Web3.utils.numberToHex(new BigNumber(tokenValue))
       console.log("swapBurnAmount", tokenamount)
@@ -161,6 +164,7 @@ export default function useGetTokenValue() {
         setLoading(true)
         setState({priceStatus:0})
         let changeAmount = 0
+        debugger
         const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
         if (from.currency.tokenAddress !== from.czz) {
           console.log('inAmount == ',inAmount)

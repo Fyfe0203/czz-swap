@@ -191,7 +191,7 @@ const ListItem = props => {
   useLayoutEffect(() => {
     props.balanceChange(poolBalance)
   }, [poolBalance])
-  
+
   return (
     <TokenItem {...rest}>
       <Image className="img" src={image} size="34" />
@@ -256,7 +256,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
       getCurrentList(current)
     }
   }, [searchKey])
-  
+
     // filter network token list
   const filterNetwork = (item) => {
     setCurrent(item)
@@ -332,19 +332,19 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
   useEffect(() => {
     if(token) setIsActive(allToken.some(i=>i.tokenAddress === token?.address))
   }, [token])
-  
+
 
   const balanceChange = (val,index) => {
     let arr = [...currentList]
     arr[index].balance = val
     setCurrentList(arr)
   }
-  
+
   const list = useMemo(() => currentList, [currentList])
-  
+
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
-      {list.length ? list.sort((a,b)=>b.balance - a.balance).map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
+      {list.length ? currentList.map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
     </Scrollbars>
   )
 
