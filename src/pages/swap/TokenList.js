@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useCallback,Fragment } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useCallback,Fragment,useMemo } from 'react'
 import styled from 'styled-components'
 import { Modal,Image, Icon, Loading } from '../../compontent'
 import useGlobal from '../../hooks/useGlobal'
@@ -330,14 +330,15 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
 
   const balanceChange = (val,index) => {
     let arr = [...currentList]
-    //arr.splice(index, 1, { ...currentList[index], balance: val })
     arr[index].balance = val
     setCurrentList(arr)
   }
-
+  
+  const list = useMemo(() => currentList, [currentList])
+  
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
-      {currentList.length ? currentList.sort((a,b)=>b.balance - a.balance).map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
+      {list.length ? list.sort((a,b)=>b.balance - a.balance).map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
     </Scrollbars>
   )
 
