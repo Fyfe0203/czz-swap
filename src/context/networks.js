@@ -35,8 +35,8 @@ const networks = [
     currentToken: '0x5545153ccfca01fbd7dd11c0b23ba694d9509a6f',
     czz:'0x112489c758D405874e9Ece0586FD50B315216fcA',
     explorerUrl:'https://hecoinfo.com/',
-    rpcUrls:'https://http-mainnet.hecochain.com',
-    provider: new Web3.providers.HttpProvider("https://http-mainnet.hecochain.com"),
+    rpcUrls:'https://http-mainnet-node.huobichain.com',
+    provider: new Web3.providers.HttpProvider("https://http-mainnet-node.huobichain.com"),
     image:'https://cryptologos.cc/logos/huobi-token-ht-logo.svg'
   },
   {
