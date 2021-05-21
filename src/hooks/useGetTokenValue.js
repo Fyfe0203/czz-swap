@@ -26,7 +26,7 @@ export default function useGetTokenValue() {
   // approve && authorization
   const approveActions = async () => {
     const {currency,router:spender,explorerUrl} = from
-    const recentInfo = {content:`Approved ${currency?.symbol}`,accounts,types:'Approved'}
+    const recentInfo = {content:`Approve ${currency?.symbol}`,accounts,types:'Approve'}
     try {
       setApproveLoading(true)
       setButtonText('APPROVE_ING')
@@ -41,7 +41,7 @@ export default function useGetTokenValue() {
       setButtonText('SWAP')
       message({
         icon: 'award',
-        title: `Approved White ${currency?.symbol}`,
+        title: `Approve White ${currency?.symbol}`,
         content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Explorer</LinkItem>
       })
     } catch (error) {
@@ -164,7 +164,6 @@ export default function useGetTokenValue() {
         setLoading(true)
         setState({priceStatus:0})
         let changeAmount = 0
-        debugger
         const inAmount = decToBn(from.tokenValue, from.currency.decimals).toString()
         if (from.currency.tokenAddress !== from.czz) {
           console.log('inAmount == ',inAmount)
