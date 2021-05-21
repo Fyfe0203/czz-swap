@@ -344,7 +344,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
 
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
-      {list.length ? currentList.map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
+      {currentList.length ? currentList.map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
     </Scrollbars>
   )
 

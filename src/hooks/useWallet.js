@@ -47,6 +47,11 @@ export default function useWallet() {
       })
       window.ethereum.on('chainChanged',switchChin)
       window.ethereum.on('accountsChanged', handleNewAccounts)
+      window.ethereum.on('chainChanged',async (account) => {
+        const res = await  window.ethereum.request({ method: 'eth_chainId' })
+        console.log('res',res)
+        console.log(account)
+      })
       window.ethereum.on('connect', () => {
         console.log('connect')
       })
