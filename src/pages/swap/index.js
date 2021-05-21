@@ -32,7 +32,7 @@ const SwapConfirmItem = ({item,status,index}) => {
 }
 
 export default function Swap() {
-  const {accounts, networkStatus, from, to, setState, swapButtonText, priceStatus, miniReceived, setButtonText } = useGlobal()
+  const { accounts, networkStatus, from, to, setState, swapButtonText, priceStatus, miniReceived, setButtonText } = useGlobal()
   const { status } = useSwap()
   const { loading: valueLoading, approveActions, approveLoading, authorization } = useGetTokenValue()
   const { loading: pirceLoading, impactPrice, swapStatusList } = useMidPrice()
@@ -102,14 +102,13 @@ export default function Swap() {
   const swapActions = () => {
     networkStatus ? setConfirmStatus(true) : networkMessage()
   }
-  
+  const feePrice = from?.currency && from?.currency?.symbol.indexOf('CZZ') !== -1 ? 0.001 : 0.007;
   const exchangeButton = (<div className="swap-exchange f-c"><div onClick={reverseExchange} className="ico ico-repeat" /></div>)
-
   const swapFooter = (
     <div className="swap-footer">
       <div className="f-c"><span>{intl.get('MinimunReceived')}</span><span className={miniReceived === 0 ? 'red' : ''}><b>{miniReceived}</b> {to.currency?.symbol}</span></div>
       <div className="f-c"><span>{intl.get('PriceImpact')}</span> <span className={`price-${priceStatus}`}>{impactPrice} %</span> </div>
-      <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && toNonExponential(bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(0.007))))}</b> {from.currency?.symbol}</span> </div>
+      <div className="f-c"><span>{intl.get('LiquidityProviderFee')}</span><span><b>{from.tokenValue && toNonExponential(bnToDec(decToBn(from.tokenValue).multipliedBy(new BigNumber(feePrice))))}</b> {from.currency?.symbol}</span> </div>
     </div>
   )
   const [confirmStatus, setConfirmStatus] = useState(false)

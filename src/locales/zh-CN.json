@@ -43,7 +43,7 @@
   "InsufficientBalance": "余额不足",
   "EnteraAmount": "输入一个数量",
   "UnlockWallet": "打开钱包",
-  "Appove": "批准",
+  "Approve": "批准",
   "ApproveInPending": "等待批准",
   "SwapInPending": "等待交换",
   "SwichNetworkInPending": "交换机网络等待中",

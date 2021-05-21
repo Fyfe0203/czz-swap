@@ -41,7 +41,7 @@ export default function useGetTokenValue() {
       setButtonText('SWAP')
       message({
         icon: 'award',
-        title: `Approvd White ${currency?.symbol}`,
+        title: `Approved White ${currency?.symbol}`,
         content: <LinkItem target="_blank" href={ `${explorerUrl}tx/${res?.transactionHash}`}>View on Explorer</LinkItem>
       })
     } catch (error) {
