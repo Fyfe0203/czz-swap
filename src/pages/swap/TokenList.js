@@ -50,9 +50,13 @@ const TokenItem = styled.div`
     border-radius:90px;
     background-color:#eee;
   }
-  &:hover{
-    background:#f2f2f2;
+  &:hover,&.active{
+    background:#f4f4f4;
   }
+  &:hover{
+    background: #eee;
+  }
+  
 `
 const ItemBlock = styled.div`
   flex:1;
@@ -182,7 +186,7 @@ const CustomTag = styled.div`
   transform-origin:100% 50%;
 `
 const ListItem = props => {
-  const { image, symbol, name, ...rest } = props
+  const { image, symbol, name, tokenAddress,selected, ...rest } = props
   const { getPoolBalance, poolBalance } = useBalance()
   useEffect(() => {
     getPoolBalance(props)
@@ -193,8 +197,8 @@ const ListItem = props => {
   }, [poolBalance])
 
   return (
-    <TokenItem {...rest}>
-      <Image className="img" src={image} size="34" />
+    <TokenItem {...rest} className={`${selected ? 'active' : ''}`}>
+      <Image className="img" src={image} size="32" />
       <ItemBlock>
         <ItemSymbol>{symbol}</ItemSymbol>
         <ItemName>{name}</ItemName>
@@ -217,7 +221,7 @@ function EmptyBlock({text,loading}) {
   )
 }
 
-export default function TokenList({ pool, onSelect, onClose, type, visible}) {
+export default function TokenList({ pool, onClose, type, visible}) {
   const [customToken, setCustomToken] = useLocalStorage('customToken', [])
   const { pools, from, to, networks, setState } = useGlobal()
   const {loading:searchLoading, searchToken, isAddress, token} = useToken()
@@ -233,7 +237,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     setCurrentList(allToken.filter(i => i.systemType === item.networkType).map(i => { i.balance = 0; return i}))
   }
 
-  const searchTokenActions = useCallback( async(key,current) => {
+  const searchTokenActions = async(key,current) => {
     if (searchKey.length > 0 && current) {
       setCurrentList([])
       setLoading(true)
@@ -244,7 +248,6 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
         if (filterList.length > 0) {
           setCurrentList(filterList)
         } else {
-          debugger
           searchToken({ current, tokenAddress: address })
         }
       } else {
@@ -255,7 +258,7 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     } else if (key === '') {
       getCurrentList(current)
     }
-  }, [searchKey])
+  }
 
     // filter network token list
   const filterNetwork = (item) => {
@@ -269,13 +272,14 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
 
   // get coustom token list for localStorage
   const initList = () => {
+    setAllToken([...pools,...customToken])
     setSearchKey('')
     setLoading(false)
     const currentItem = type === 1 ? networks.filter(i => from.chainId !== i.chainId) : networks
     setCurrentNetworks(currentItem)
     let currentPool = networks.filter(i => i.networkId === pool.networkId)
-    filterNetwork(currentPool.length ? currentPool[0] : networks[0])
-    setAllToken([...pools,...customToken])
+    const item = currentPool && currentPool.length > 0 ? currentPool[0] : currentItem[0]
+    filterNetwork(item)
   }
 
   // filter token
@@ -340,11 +344,10 @@ export default function TokenList({ pool, onSelect, onClose, type, visible}) {
     setCurrentList(arr)
   }
 
-  const list = useMemo(() => currentList, [currentList])
-
+  // const list = useMemo(() => currentList, [currentList])
   const listBlock = (
     <Scrollbars style={{ maxHeight: 450, height: 450 }}>
-      {currentList.length ? currentList.map((item, index) => <ListItem balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
+      {currentList.length ? currentList.map((item, index) => <ListItem selected={pool?.currency?.tokenAddress === item.tokenAddress} balanceChange={val => balanceChange(val,index) } onClick={ ()=> selectTokenItem(item) } key={index} {...item} />) : <EmptyBlock text="None Token" />}
     </Scrollbars>
   )
 

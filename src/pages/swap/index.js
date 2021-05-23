@@ -15,6 +15,7 @@ import useWallet from '../../hooks/useWallet'
 import {decToBn,bnToDec,toNonExponential} from '../../utils'
 import intl from 'react-intl-universal'
 import './swap.scss'
+import detectEthereumProvider from '@metamask/detect-provider'
 
 const SwapConfirmItem = ({item,status,index}) => {
   return (
@@ -42,8 +43,26 @@ export default function Swap() {
   const [buttonLoading, setButtonLoading] = useState(false)
   const [hasBalance, setHasBalance] = useState(true)
   const { addEthereum } = useWallet()
-  
+ 
+  const actionAccount = async () => {
+
+  const provider = await detectEthereumProvider()
+  if (provider) {
+    console.log('Ethereum successfully detected!')
+    const chainId = await provider.request({
+      method: 'eth_chainId'
+    })
+    console.log(chainId)
+  } else {
+    // if the provider is not detected, detectEthereumProvider resolves to null
+    console.error('Please install MetaMask!')
+  }
+
+    const accountst = await window.ethereum.request({ method: 'eth_requestAccounts' })
+    console.log(accountst)
+  }
   useEffect(() => {
+    actionAccount()
     setHasBalance(Number(balance) >= Number(from.tokenValue))
   }, [balance,from.tokenValue])
 
@@ -145,7 +164,7 @@ export default function Swap() {
         <SwapConfirmItem index={1} item={to} status={priceStatus} />
       </div>
       <div className="confirm-warn-text">
-        {`Output is estimated.You will recive at least ${to.tokenValue} ${to.currency?.symbol} or the transaction will revert.`}
+        {`Output is estimated.You will recive at least ${miniReceived} ${to.currency?.symbol} or the transaction will revert.`}
       </div>
       {confirmButton}
       {swapFooter}

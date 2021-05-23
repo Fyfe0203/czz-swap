@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@metamask/contract-metadata": "^1.23.0",
+    "@metamask/detect-provider": "^1.2.0",
     "@metamask/jazzicon": "^2.0.0",
     "@metamask/onboarding": "^1.0.0",
     "@ukstv/jazzicon-react": "^1.0.0",

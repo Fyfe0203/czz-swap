@@ -93,9 +93,9 @@ export default function Connect(props) {
 
   const accountBlock = (
     <Fragment>
-      {currentNetwork?.networkName ? <NetworkBlock><Image className="img" size="15" src={currentNetwork?.image } />{ currentNetwork?.networkName}</NetworkBlock> : null}
+      {currentNetwork?.networkName && networkStatus ? <NetworkBlock><Image className="img" size="15" src={currentNetwork?.image } />{ currentNetwork?.networkName}</NetworkBlock> : null}
       <div className="c-wallet f-c">
-        {networkLoading && <Loading size="small" mask={true} />}
+        {/* {networkLoading && <Loading size="small" mask={true} />} */}
           <div className="f-c">
             {balance && <div className="c-balance">{balance} { from?.symbolName }</div>}
             <div className="c-accounts f-c" onClick={() => setShowAccount(!showAccount)}>

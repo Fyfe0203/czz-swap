@@ -15,7 +15,6 @@ export default function ConfirmSwap() {
       <div>
         {`Output is estimated.You will recive at least ${to.tokenValue} ${to.currency?.symbol} or the transaction will revert.`}
       </div>
-      
     </div>
   )
 }

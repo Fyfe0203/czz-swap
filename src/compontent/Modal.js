@@ -2,10 +2,9 @@ import React, { Fragment, useRef } from 'react'
 import styled from 'styled-components'
 const Titles = styled.div`
   flex:1;
-  padding:10px;
 `
 const ModalHead = styled.div`
-  padding:10px;
+  padding:10px 0 20px;
   display:flex;
   align-items:center;
 `
