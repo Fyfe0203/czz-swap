@@ -44,25 +44,25 @@ export default function Swap() {
   const [hasBalance, setHasBalance] = useState(true)
   const { addEthereum } = useWallet()
  
-  const actionAccount = async () => {
+  // const actionAccount = async () => {
 
-  const provider = await detectEthereumProvider()
-  if (provider) {
-    console.log('Ethereum successfully detected!')
-    const chainId = await provider.request({
-      method: 'eth_chainId'
-    })
-    console.log(chainId)
-  } else {
-    // if the provider is not detected, detectEthereumProvider resolves to null
-    console.error('Please install MetaMask!')
-  }
+  // const provider = await detectEthereumProvider()
+  // if (provider) {
+  //   console.log('Ethereum successfully detected!')
+  //   const chainId = await provider.request({
+  //     method: 'eth_chainId'
+  //   })
+  //   console.log(chainId)
+  // } else {
+  //   // if the provider is not detected, detectEthereumProvider resolves to null
+  //   console.error('Please install MetaMask!')
+  // }
 
-    const accountst = await window.ethereum.request({ method: 'eth_requestAccounts' })
-    console.log(accountst)
-  }
+  //   const accountst = await window.ethereum.request({ method: 'eth_requestAccounts' })
+  //   console.log(accountst)
+  // }
   useEffect(() => {
-    actionAccount()
+    // actionAccount()
     setHasBalance(Number(balance) >= Number(from.tokenValue))
   }, [balance,from.tokenValue])
 

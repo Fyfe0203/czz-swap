@@ -13,7 +13,7 @@ export default function useSwap() {
     NONE_BALANCE: intl.get('InsufficientBalance'),
     NONE_NETWORK: intl.get('UnlockWallet'),
     NONE_WALLET: intl.get('ConnectWallet'),
-    APPROVE: intl.get('Appove'),
+    APPROVE: intl.get('Approve'),
     APPROVE_ING: intl.get('ApproveInPending'),
     SWAP: intl.get('SWAPNOW'),
     SWAP_ING: intl.get('SwapInPending'),
