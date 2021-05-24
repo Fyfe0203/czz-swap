@@ -27,7 +27,6 @@ export default function useToken() {
         const res = await getToken({ provider, address })
         return res
       } catch (error) {
-        debugger
         setLoading(false)
       } finally {
         setToken({})
@@ -45,9 +44,9 @@ export default function useToken() {
       setLoading(true)
       const { provider, networkType } = current
       const address = isAddress(tokenAddress)
+      debugger
       if (tokenList[networkType]) {
         const tokenResult = tokenList[networkType].filter(i => i.address === address)
-        debugger
         if (tokenResult.length > 0) {
           setToken({ ...tokenResult[0], custom: true, systemType: networkType, image: tokenResult[0]?.logoURI })
         } else {

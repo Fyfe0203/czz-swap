@@ -307,7 +307,7 @@ export default function TokenList({ pool, onClose, type, visible}) {
 
   const addCustomHanle = () => {
     cleanSearch()
-    const newItem = { ...token, tokenAddress: token.address }
+    const newItem = { ...token, tokenAddress: token.address.toLowerCase() }
     const allLocal = [...customToken, newItem]
     setCustomToken(allLocal)
     setAllToken([...pools,...allLocal])
