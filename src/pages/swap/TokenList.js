@@ -243,13 +243,14 @@ export default function TokenList({ pool, onClose, type, visible}) {
       setLoading(true)
       const address = isAddress(key)
       if (address) {
-        const filterList = filterAddressToken(address)
-        setLoading(false)
-        if (filterList.length > 0) {
-          setCurrentList(filterList)
+        const filterList = allToken.filter(i => i.systemType === current.networkType)
+        const filterItem = filterList.filter(i => i.tokenAddress === address.toLocaleLowerCase())
+        if (filterItem && filterItem.length > 0) {
+          setCurrentList(filterItem)
         } else {
           searchToken({ current, tokenAddress: address })
         }
+        setLoading(false)
       } else {
         const selfFilter = filterToken(key)
         setCurrentList(selfFilter)
@@ -289,8 +290,8 @@ export default function TokenList({ pool, onClose, type, visible}) {
   }
 
   // filter Address token
-  const filterAddressToken = address => {
-    return currentList.filter(i => i.tokenAddress === address)
+  const filterAddressToken = (address,current) => {
+    return getCurrentList(current).filter(i => i.tokenAddress === address)
   }
 
   // select token
